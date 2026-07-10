@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marakova Daria — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Darumadrop+One&family=Fascinate&family=Julius+Sans+One&family=Racing+Sans+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260710b" />
+</head>
+<body>
+  <canvas id="starCanvas" aria-hidden="true"></canvas>
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand magnetic" href="#home">Marakova Daria/3D Artist/</a>
+    <nav class="nav" aria-label="Main navigation">
+      <a class="magnetic" href="#about">ABOUT</a>
+      <a class="magnetic" href="#work">WORK</a>
+      <a class="magnetic" href="#contacts">CONTACTS</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero section reveal">
+      <div class="hero-copy">
+        <h1 class="mega-title">PORTFOLIO</h1>
+        <p class="role">3D Artist</p>
+      </div>
+      <div class="base-art hero-face floaty" role="img" aria-label="Animated 3D character illustration">
+        <img class="hero-face__layer hero-face__eye-whites" src="main page/eyes_apple.png" alt="" aria-hidden="true" />
+        <img class="hero-face__layer hero-face__pupil hero-face__left-eye" src="main page/left_eye.png" alt="" aria-hidden="true" />
+        <img class="hero-face__layer hero-face__pupil hero-face__right-eye" src="main page/right_eye.png" alt="" aria-hidden="true" />
+        <img class="hero-face__layer hero-face__head" id="headFrame" src="main page/animation_head/base_00000.png" alt="" aria-hidden="true" />
+      </div>
+    </section>
+
+    <section id="work" class="work section reveal">
+      <h2 class="section-title orange">WORK</h2>
+      <div class="work-head">
+        <h3 id="workTitle">SHOWREEL</h3>
+      </div>
+
+      <div class="slider-shell">
+        <button class="slider-btn magnetic" id="prevWork" aria-label="Previous work">&lt;</button>
+        <a class="work-card" id="workCard" href="work files/SHOWREEL/" aria-label="Open work page">
+          <img id="workImage" src="work files/SHOWREEL/showreel.png" alt="SHOWREEL preview" />
+          <span class="click-hint">open project</span>
+        </a>
+        <button class="slider-btn magnetic" id="nextWork" aria-label="Next work">&gt;</button>
+      </div>
+
+      <div class="work-tabs" id="workTabs" aria-label="Work categories"></div>
+    </section>
+
+    <section id="about" class="about section reveal">
+      <h2 class="section-title cyan">ABOUT</h2>
+      <div class="about-intro">
+        <img class="portrait magnetic" src="main page/photo_of_me.png" alt="Daria portrait" />
+        <div class="bio-text">
+          <p>HI, I'M DARIA.</p>
+          <p> I started my journey in a technical field, graduating in Mechanical Engineering, but quickly realized I was drawn to creating rather than just building systems. That curiosity led me into the world of 3D, where I found the perfect balance between logic and creativity.</p>
+          <p>NOW I WORK AS A 3D ARTIST, FOCUSING ON 3D MOTION DESIGN, VISUALIZATION AND FOOTWEAR DEVELOPMENT.</p>
+          <p>I’m deeply interested in everything related to 3D — from modeling and animation to design development — and I also explore web development. This website, by the way, is something I designed and built myself.</p>
+          <p>I’m constantly learning, exploring new tools and approaches, and improving my skills in the areas I already work in. Growth is a big part of who I am as a creator.
+            I love turning ideas into clean, visually strong, and practical results — whether it’s a complex system or a small detail.</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <article>
+          <h4>SOFTWARE</h4>
+          <ul>
+            <li>Blender</li><li>iCAD+</li><li>Substance 3D Painter</li><li>After Effects</li><li>Marvelous Designer</li><li>Adobe Illustrator</li><li>CLO3D</li><li>Houdini</li><li>Fusion 360</li><li>SolidWorks</li><li>Cinema4D</li><li>ZBrush</li><li>Photoshop</li><li>Nuke</li>
+          </ul>
+        </article>
+        <article>
+          <h4>EXPERIENCE</h4>
+          <p>Sportmaster<br>3D Designer (Feb 2025 — present)</p>
+          <p>Pilgrims studio<br>3D Motion Designer (May 2024 — Nov 2024)</p>
+          <p>Frame Decor studio<br>Visualizer (2023 — 2024)</p>
+          <p>Amico company<br>3D modeler (2022 - 2023)</p>
+          <h4>EDUCATION</h4>
+          <p>Bauman Moscow State Technical University (2016–2022)</p>
+        </article>
+      </div>
+
+      <div class="skills">
+        <h4>SKILLS</h4>
+        <p>3D modeling, texturing, animation, rigging, motion design, visual storytelling, footwear development (iCAD+), product visualization, VFX, particle systems, cloth simulation, procedural workflows, full CGI pipeline (concept to final render), lighting, rendering, color grading, tracking, compositing, form and material understanding, strong sense of visual aesthetics, design thinking, problem solving, foundational web development, creative coding, technical precision, artistic vision, continuous learning and professional growth</p>
+      </div>
+    </section>
+
+    <section id="contacts" class="contact section reveal">
+      <h2 class="section-title coral">CONTACT</h2>
+      <nav class="contact-links" aria-label="Social links">
+        <a class="magnetic" href="https://www.instagram.com/tripledaria?igsh=cnoxd2V1ZTIxaGNo" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+        <a class="magnetic" href="https://pin.it/1slYtVRg7" target="_blank" rel="noopener noreferrer">PINTEREST</a>
+        <a class="magnetic" href="https://t.me/tripledaria" target="_blank" rel="noopener noreferrer">TELEGRAM</a>
+        <a class="magnetic" href="https://www.linkedin.com/in/daria-marakova-99039a235?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+        <a class="magnetic" href="mailto:tripledaria3d@gmail.com">MAIL</a>
+      </nav>
+      <img class="contact-art" src="main page/contact-page.png" alt="Decorative contact page artwork" />
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
