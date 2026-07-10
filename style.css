@@ -417,7 +417,7 @@ body.cursor-big .cursor-dot{
 @media (max-width:760px){
   :root{--header:66px}
   body{cursor:auto}
-  .cursor,.cursor-dot,#starCanvas{display:none}
+  .cursor,.cursor-dot{display:none}
   .topbar{grid-template-columns:1fr;justify-items:center;gap:4px;padding:6px 12px 7px}
   .brand{display:block;font-size:13px;line-height:1;color:var(--violet);justify-self:start;max-width:100%;white-space:nowrap}
   .nav{grid-column:auto;justify-content:center;gap:18px;font-size:18px;width:100%}

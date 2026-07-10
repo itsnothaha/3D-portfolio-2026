@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Darumadrop+One&family=Fascinate&family=Julius+Sans+One&family=Racing+Sans+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260710b" />
+  <link rel="stylesheet" href="style.css?v=20260710c" />
 </head>
 <body>
   <canvas id="starCanvas" aria-hidden="true"></canvas>
@@ -30,10 +30,10 @@
         <p class="role">3D Artist</p>
       </div>
       <div class="base-art hero-face floaty" role="img" aria-label="Animated 3D character illustration">
-        <img class="hero-face__layer hero-face__eye-whites" src="main page/eyes_apple.png" alt="" aria-hidden="true" />
-        <img class="hero-face__layer hero-face__pupil hero-face__left-eye" src="main page/left_eye.png" alt="" aria-hidden="true" />
-        <img class="hero-face__layer hero-face__pupil hero-face__right-eye" src="main page/right_eye.png" alt="" aria-hidden="true" />
-        <img class="hero-face__layer hero-face__head" id="headFrame" src="main page/animation_head/base_00000.png" alt="" aria-hidden="true" />
+        <img class="hero-face__layer hero-face__eye-whites" src="main page/eyes_apple.png" alt="" aria-hidden="true" decoding="async" />
+        <img class="hero-face__layer hero-face__pupil hero-face__left-eye" src="main page/left_eye.png" alt="" aria-hidden="true" decoding="async" />
+        <img class="hero-face__layer hero-face__pupil hero-face__right-eye" src="main page/right_eye.png" alt="" aria-hidden="true" decoding="async" />
+        <img class="hero-face__layer hero-face__head" id="headFrame" src="main page/animation_head/base_00000.png" alt="" aria-hidden="true" decoding="async" fetchpriority="high" />
       </div>
     </section>
 
@@ -46,7 +46,7 @@
       <div class="slider-shell">
         <button class="slider-btn magnetic" id="prevWork" aria-label="Previous work">&lt;</button>
         <a class="work-card" id="workCard" href="work files/SHOWREEL/" aria-label="Open work page">
-          <img id="workImage" src="work files/SHOWREEL/showreel.png" alt="SHOWREEL preview" />
+          <img id="workImage" src="work files/SHOWREEL/showreel.png" alt="SHOWREEL preview" decoding="async" />
           <span class="click-hint">open project</span>
         </a>
         <button class="slider-btn magnetic" id="nextWork" aria-label="Next work">&gt;</button>
@@ -58,7 +58,7 @@
     <section id="about" class="about section reveal">
       <h2 class="section-title cyan">ABOUT</h2>
       <div class="about-intro">
-        <img class="portrait magnetic" src="main page/photo_of_me.png" alt="Daria portrait" />
+        <img class="portrait magnetic" src="main page/photo_of_me.png" alt="Daria portrait" loading="lazy" decoding="async" />
         <div class="bio-text">
           <p>HI, I'M DARIA.</p>
           <p> I started my journey in a technical field, graduating in Mechanical Engineering, but quickly realized I was drawn to creating rather than just building systems. That curiosity led me into the world of 3D, where I found the perfect balance between logic and creativity.</p>
@@ -102,10 +102,10 @@
         <a class="magnetic" href="https://www.linkedin.com/in/daria-marakova-99039a235?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
         <a class="magnetic" href="mailto:tripledaria3d@gmail.com">MAIL</a>
       </nav>
-      <img class="contact-art" src="main page/contact-page.png" alt="Decorative contact page artwork" />
+      <img class="contact-art" src="main page/contact-page.png" alt="Decorative contact page artwork" loading="lazy" decoding="async" />
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260710c"></script>
 </body>
 </html>

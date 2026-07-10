@@ -87,16 +87,22 @@ const canvas = document.querySelector('#starCanvas');
 const ctx = canvas?.getContext('2d');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = window.matchMedia('(pointer: fine)').matches;
+const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+const touchCapable = coarsePointer || navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+const canUseParticles = !reduceMotion && (finePointer || touchCapable);
 const heroFace = document.querySelector('.hero-face');
 const headFrame = document.querySelector('#headFrame');
 
 if(headFrame && !reduceMotion){
   const frameCount = 360;
-  const frameRate = 24;
+  const smallScreen = window.matchMedia('(max-width: 760px)').matches;
+  const frameRate = smallScreen ? 12 : 18;
+  const preloadWindow = smallScreen ? 4 : 8;
   const frameDelay = 1000 / frameRate;
   const cachedFrames = [];
   let currentFrame = 0;
   let lastFrameTime = 0;
+  let headInView = true;
 
   const framePath = frame => `main page/animation_head/base_${String(frame).padStart(5,'0')}.png`;
 
@@ -109,11 +115,11 @@ if(headFrame && !reduceMotion){
   }
 
   function preloadAhead(frame){
-    for(let i=1;i<=10;i++) preloadFrame(frame + i);
+    for(let i=1;i<=preloadWindow;i++) preloadFrame(frame + i);
   }
 
   function animateHeadFrame(time){
-    if(time - lastFrameTime >= frameDelay){
+    if(headInView && !document.hidden && time - lastFrameTime >= frameDelay){
       currentFrame = (currentFrame + 1) % frameCount;
       headFrame.src = framePath(currentFrame);
       preloadAhead(currentFrame);
@@ -122,6 +128,12 @@ if(headFrame && !reduceMotion){
     requestAnimationFrame(animateHeadFrame);
   }
 
+  if(heroFace && 'IntersectionObserver' in window){
+    const headObserver = new IntersectionObserver(entries=>{
+      headInView = entries[0]?.isIntersecting ?? true;
+    },{threshold:.05});
+    headObserver.observe(heroFace);
+  }
   preloadAhead(currentFrame);
   requestAnimationFrame(animateHeadFrame);
 }
@@ -132,6 +144,9 @@ let cx = x;
 let cy = y;
 let lastX = x;
 let lastY = y;
+let lastTouchX = x;
+let lastTouchY = y;
+let lastTouchStarTime = 0;
 let stars = [];
 
 function updateHeroEyes(px,py){
@@ -161,6 +176,35 @@ function resetHeroEyes(){
 
 window.addEventListener('mousemove',e=>updateHeroEyes(e.clientX,e.clientY));
 window.addEventListener('mouseleave',resetHeroEyes);
+window.addEventListener('touchstart',event=>{
+  const touch = event.touches[0];
+  if(!touch) return;
+  lastTouchX = touch.clientX;
+  lastTouchY = touch.clientY;
+  updateHeroEyes(touch.clientX,touch.clientY);
+  for(let i=0;i<8;i++) addStar(touch.clientX+(Math.random()-.5)*26,touch.clientY+(Math.random()-.5)*26,1);
+},{passive:true});
+window.addEventListener('touchmove',event=>{
+  const touch = event.touches[0];
+  if(!touch) return;
+  x = touch.clientX;
+  y = touch.clientY;
+  updateHeroEyes(x,y);
+  const now = performance.now();
+  const distance = Math.hypot(x-lastTouchX,y-lastTouchY);
+  if(distance > 8 && now - lastTouchStarTime > 28){
+    const count = Math.min(3, Math.floor(distance/26)+1);
+    for(let i=0;i<count;i++){
+      addStar(x+(Math.random()-.5)*18,y+(Math.random()-.5)*18,Math.min(1.25,distance/90));
+    }
+    lastTouchX = x;
+    lastTouchY = y;
+    lastTouchStarTime = now;
+  }
+},{passive:true});
+window.addEventListener('touchend',()=>{
+  window.setTimeout(resetHeroEyes,450);
+},{passive:true});
 
 function resizeCanvas(){
   if(!canvas || !ctx) return;
@@ -173,7 +217,7 @@ function resizeCanvas(){
 }
 
 function addStar(px,py,force=1){
-  if(!finePointer || reduceMotion) return;
+  if(!canUseParticles) return;
   stars.push({
     x:px,
     y:py,
@@ -186,7 +230,8 @@ function addStar(px,py,force=1){
     decay:Math.random() * .015 + .015,
     points:Math.random() > .55 ? 4 : 5
   });
-  if(stars.length > 120) stars.splice(0,stars.length - 120);
+  const maxStars = finePointer ? 120 : 72;
+  if(stars.length > maxStars) stars.splice(0,stars.length - maxStars);
 }
 
 function drawStar(star){
@@ -237,7 +282,7 @@ function animateCursor(){
   requestAnimationFrame(animateCursor);
 }
 
-if(canvas && ctx && finePointer && !reduceMotion){
+if(canvas && ctx && canUseParticles){
   resizeCanvas();
   addEventListener('resize',resizeCanvas);
   window.addEventListener('mousemove',e=>{
