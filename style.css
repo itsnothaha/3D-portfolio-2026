@@ -380,7 +380,7 @@ body.cursor-big .cursor-dot{
 }
 .contact-links{
   position:absolute;
-  top:clamp(156px,24vh,258px);
+  top:clamp(214px,31vh,328px);
   right:clamp(32px,8vw,135px);
   display:flex;
   flex-direction:column;
@@ -440,7 +440,7 @@ body.cursor-big .cursor-dot{
   .about-intro,.info-grid{grid-template-columns:1fr}
   .portrait{max-width:240px}
   .contact,.section.contact{min-height:100svh;padding-top:70px;padding-bottom:118px}
-  .contact-links{top:23vh;right:18px;gap:clamp(18px,5vh,32px)}
+  .contact-links{top:29vh;right:18px;gap:clamp(18px,5vh,32px)}
   .contact-links a{font-size:clamp(28px,9vw,44px)}
   .contact-art{width:100vw;height:100%;object-fit:cover;object-position:42% bottom}
 }
@@ -450,7 +450,7 @@ body.cursor-big .cursor-dot{
   .base-art{top:49%;width:min(96vw,590px,70svh)}
   .work-card{height:300px}
   .work-tabs button{font-size:11px;padding:7px 8px}
-  .contact-links{top:24vh}
+  .contact-links{top:30vh}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
