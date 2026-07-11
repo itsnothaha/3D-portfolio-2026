@@ -17,6 +17,14 @@ const nextWork = document.querySelector('#nextWork');
 
 const projectPath = item => `work files/${item.folder}/`;
 const imagePath = item => `work files/${item.folder}/${item.image}`;
+const fillPreviewFolders = new Set(['CGI','AI']);
+
+function preloadWorkImages(){
+  works.forEach(item=>{
+    const preview = new Image();
+    preview.src = imagePath(item);
+  });
+}
 
 function renderTabs(){
   if(!tabs) return;
@@ -32,19 +40,17 @@ function setWork(next){
   if(!card || !title || !image) return;
   index = (next + works.length) % works.length;
   const item = works[index];
-  card.classList.add('changing');
-  window.setTimeout(()=>{
-    title.textContent = item.title;
-    image.src = imagePath(item);
-    image.alt = `${item.title} preview`;
-    card.href = projectPath(item);
-    renderTabs();
-    card.classList.remove('changing');
-  },180);
+  title.textContent = item.title;
+  image.src = imagePath(item);
+  image.alt = `${item.title} preview`;
+  card.href = projectPath(item);
+  card.classList.toggle('fill-preview', fillPreviewFolders.has(item.folder));
+  renderTabs();
 }
 
 prevWork?.addEventListener('click',()=>setWork(index-1));
 nextWork?.addEventListener('click',()=>setWork(index+1));
+preloadWorkImages();
 renderTabs();
 
 document.addEventListener('keydown',e=>{
