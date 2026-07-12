@@ -17,7 +17,7 @@ const nextWork = document.querySelector('#nextWork');
 
 const projectPath = item => `work files/${item.folder}/`;
 const imagePath = item => `work files/${item.folder}/${item.image}`;
-const fillPreviewFolders = new Set(['CGI','AI']);
+const fillPreviewFolders = new Set(works.map(item=>item.folder));
 
 function preloadWorkImages(){
   works.forEach(item=>{

@@ -25,7 +25,7 @@
     .image-tile{aspect-ratio:848/1264;border:0;border-radius:18px;padding:0;background:#2b2b2b;overflow:hidden;cursor:none;display:block}
     .image-tile img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .3s ease,filter .3s ease}
     .image-tile:hover img{transform:scale(1.035);filter:brightness(1.08) saturate(1.04)}
-    .copy{font-size:clamp(16px,1.65vw,24px);line-height:1.10;letter-spacing:.06em;text-transform:uppercase}
+    .copy{font-size:clamp(16px,1.65vw,24px);line-height:1.10;letter-spacing:.06em}
     .copy p{margin:0 0 .34em}
     .video-frame{margin-top:clamp(14px,2vw,20px);border:4px solid var(--line);border-radius:38px;padding:clamp(22px,3vw,38px);display:grid;grid-template-columns:minmax(180px,.72fr) minmax(220px,360px);gap:clamp(24px,4vw,54px);align-items:center;min-height:clamp(260px,28vw,380px)}
     .tool-list{font-size:clamp(19px,2.1vw,30px);line-height:1.16;letter-spacing:.05em;text-transform:uppercase;justify-self:center}
@@ -57,6 +57,9 @@
       .video-frame{grid-template-columns:1fr;border-width:3px;border-radius:26px;padding:22px;gap:22px}
       .tool-list{justify-self:start}
       .video-card{width:min(72vw,260px)}
+      .modal{padding:28px}
+      .modal-inner{max-width:82vw;max-height:78vh}
+      .modal video{max-width:82vw;max-height:78vh;border-radius:18px}
     }
     @media (max-width:520px){
       .image-grid{grid-template-columns:repeat(2,1fr)}
@@ -86,11 +89,10 @@
         </div>
         <div>
           <div class="copy">
-            <p>A fast project I created just to use AI and try some new things</p>
-            <p>First of all I decided how I want it eventually look</p>
-            <p>Then I prepared some generated photos in Nano Banana based on chosen style and made some videos with material I got</p>
-            <p>At the end I united all frames in After Effects and added some transitions</p>
-            <p>I still prefer 3D and life footage but maybe somewhere it would useful</p>
+            <p>A quick project I created to experiment with AI and try out some new techniques.</p>
+            <p>First, I defined the overall look and style I wanted to achieve. Then, I generated a series of images in Nano Banana based on the chosen visual direction and used them to create the video clips.</p>
+            <p>Finally, I brought all the shots together in After Effects and added transitions.</p>
+            <p>I still prefer working with 3D and live-action footage, but I think AI can be a useful tool for certain projects.</p>
           </div>
           <div class="video-frame">
             <div class="tool-list" aria-label="Tools used">
