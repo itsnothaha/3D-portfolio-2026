@@ -1,10 +1,10 @@
 const works = [
-  { title: 'SHOWREEL', label: 'Showreel', folder: 'SHOWREEL', image: 'showreel.png' },
-  { title: 'CGI Animation', label: 'CGI', folder: 'CGI', image: 'cgi.png' },
-  { title: 'Character Animation', label: 'Character Animation', folder: 'character animation', image: 'character animation.png' },
-  { title: 'VFX', label: 'VFX', folder: 'VFX', image: 'vfx.png' },
-  { title: 'Footwear and cloth', label: 'Footwear + Cloth', folder: 'SHOES_AND_CLOSES', image: 'footwear-and-cloth.png' },
-  { title: 'AI', label: 'AI', folder: 'AI', image: 'ai.png' }
+  { title: 'SHOWREEL', label: 'Showreel', folder: 'SHOWREEL', image: 'showreel.png', aspect: 1.777 },
+  { title: 'CGI Animation', label: 'CGI', folder: 'CGI', image: 'cgi.png', aspect: 1.5 },
+  { title: 'Character Animation', label: 'Character Animation', folder: 'character animation', image: 'character animation.png', aspect: 1.777 },
+  { title: 'VFX', label: 'VFX', folder: 'VFX', image: 'vfx.png', aspect: 1.777 },
+  { title: 'Footwear and cloth', label: 'Footwear + Cloth', folder: 'SHOES_AND_CLOSES', image: 'footwear-and-cloth.png', aspect: .802 },
+  { title: 'AI', label: 'AI', folder: 'AI', image: 'ai.png', aspect: 1.5 }
 ];
 
 let index = 0;
@@ -14,10 +14,22 @@ const card = document.querySelector('#workCard');
 const tabs = document.querySelector('#workTabs');
 const prevWork = document.querySelector('#prevWork');
 const nextWork = document.querySelector('#nextWork');
+const pageLoader = document.querySelector('#pageLoader');
 
 const projectPath = item => `work files/${item.folder}/`;
 const imagePath = item => `work files/${item.folder}/${item.image}`;
 const fillPreviewFolders = new Set(works.map(item=>item.folder));
+
+function hidePageLoader(){
+  if(!pageLoader) return;
+  pageLoader.classList.add('is-hidden');
+  document.body.classList.remove('is-loading');
+}
+
+function setWorkAspectFromImage(){
+  if(!card || !image || !image.naturalWidth || !image.naturalHeight) return;
+  card.style.setProperty('--work-aspect',(image.naturalWidth / image.naturalHeight).toFixed(4));
+}
 
 function preloadWorkImages(){
   works.forEach(item=>{
@@ -41,15 +53,19 @@ function setWork(next){
   index = (next + works.length) % works.length;
   const item = works[index];
   title.textContent = item.title;
+  card.style.setProperty('--work-aspect',item.aspect.toFixed(4));
   image.src = imagePath(item);
   image.alt = `${item.title} preview`;
   card.href = projectPath(item);
   card.classList.toggle('fill-preview', fillPreviewFolders.has(item.folder));
+  if(image.complete) setWorkAspectFromImage();
   renderTabs();
 }
 
 prevWork?.addEventListener('click',()=>setWork(index-1));
 nextWork?.addEventListener('click',()=>setWork(index+1));
+image?.addEventListener('load',setWorkAspectFromImage);
+if(image?.complete) setWorkAspectFromImage();
 preloadWorkImages();
 renderTabs();
 
@@ -73,8 +89,9 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const section = document.querySelector(id);
     if(!section) return;
     event.preventDefault();
+    const target = id === '#about' ? (section.querySelector('.section-title') || section) : section;
     const headerOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header')) || 54;
-    const top = section.getBoundingClientRect().top + window.scrollY - headerOffset;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset - 4;
     window.scrollTo({top, behavior:'smooth'});
     history.replaceState(null,'',id);
   });
@@ -102,10 +119,12 @@ const headFrame = document.querySelector('#headFrame');
 if(headFrame && !reduceMotion){
   const frameCount = 360;
   const smallScreen = window.matchMedia('(max-width: 760px)').matches;
-  const frameRate = smallScreen ? 12 : 18;
-  const preloadWindow = smallScreen ? 4 : 8;
+  const frameRate = smallScreen ? 15 : 18;
+  const preloadWindow = smallScreen ? 10 : 8;
+  const initialPreloadCount = smallScreen ? 18 : 12;
   const frameDelay = 1000 / frameRate;
   const cachedFrames = [];
+  const framePromises = [];
   let currentFrame = 0;
   let lastFrameTime = 0;
   let headInView = true;
@@ -114,10 +133,17 @@ if(headFrame && !reduceMotion){
 
   function preloadFrame(frame){
     const normalized = frame % frameCount;
-    if(cachedFrames[normalized]) return;
+    if(cachedFrames[normalized]) return framePromises[normalized] || Promise.resolve(cachedFrames[normalized]);
     const image = new Image();
+    const promise = new Promise(resolve=>{
+      image.onload = resolve;
+      image.onerror = resolve;
+    });
+    image.decoding = 'async';
     image.src = framePath(normalized);
     cachedFrames[normalized] = image;
+    framePromises[normalized] = promise;
+    return promise;
   }
 
   function preloadAhead(frame){
@@ -126,10 +152,15 @@ if(headFrame && !reduceMotion){
 
   function animateHeadFrame(time){
     if(headInView && !document.hidden && time - lastFrameTime >= frameDelay){
-      currentFrame = (currentFrame + 1) % frameCount;
-      headFrame.src = framePath(currentFrame);
-      preloadAhead(currentFrame);
-      lastFrameTime = time;
+      const nextFrame = (currentFrame + 1) % frameCount;
+      const nextImage = cachedFrames[nextFrame];
+      preloadFrame(nextFrame);
+      if(nextImage?.complete && nextImage.naturalWidth){
+        currentFrame = nextFrame;
+        headFrame.src = framePath(currentFrame);
+        preloadAhead(currentFrame);
+        lastFrameTime = time;
+      }
     }
     requestAnimationFrame(animateHeadFrame);
   }
@@ -140,8 +171,16 @@ if(headFrame && !reduceMotion){
     },{threshold:.05});
     headObserver.observe(heroFace);
   }
+  Promise
+    .all([
+      Promise.all(Array.from({length:initialPreloadCount},(_,frame)=>preloadFrame(frame))),
+      new Promise(resolve=>window.setTimeout(resolve,650))
+    ])
+    .then(hidePageLoader);
   preloadAhead(currentFrame);
   requestAnimationFrame(animateHeadFrame);
+}else{
+  window.addEventListener('load',()=>window.setTimeout(hidePageLoader,350),{once:true});
 }
 
 let x = innerWidth / 2;

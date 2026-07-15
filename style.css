@@ -120,6 +120,39 @@ body.cursor-big .cursor-dot{
   transform:translate(-50%,-42%) rotate(45deg) scale(1.12);
   opacity:1;
 }
+.loader{
+  position:fixed;
+  inset:0;
+  z-index:10002;
+  display:grid;
+  place-items:center;
+  background:var(--bg);
+  transition:opacity .36s ease,visibility .36s ease;
+}
+.loader.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.loader-word{
+  display:flex;
+  gap:.08em;
+  font-family:'Darumadrop One','Racing Sans One',sans-serif;
+  font-size:clamp(44px,8vw,104px);
+  line-height:1;
+  color:var(--beige);
+}
+.loader-word span{
+  display:inline-block;
+  animation:loadingDrop 1.15s ease-in-out infinite;
+}
+.loader-word span:nth-child(1){color:var(--rosy-brown);animation-delay:0s}
+.loader-word span:nth-child(2){color:var(--beige);animation-delay:.08s}
+.loader-word span:nth-child(3){color:var(--moss-green);animation-delay:.16s}
+.loader-word span:nth-child(4){color:var(--midnight-green);animation-delay:.24s}
+.loader-word span:nth-child(5){color:var(--rosy-brown);animation-delay:.32s}
+.loader-word span:nth-child(6){color:var(--beige);animation-delay:.40s}
+.loader-word span:nth-child(7){color:var(--moss-green);animation-delay:.48s}
 .magnetic{transition:transform .25s ease,filter .25s ease,text-shadow .25s ease}
 .magnetic:hover{transform:translateY(-3px) scale(1.04);filter:drop-shadow(0 0 8px currentColor)}
 .topbar{
@@ -243,7 +276,7 @@ body.cursor-big .cursor-dot{
 }
 .slider-shell{
   display:grid;
-  grid-template-columns:auto minmax(260px,680px) auto;
+  grid-template-columns:auto auto auto;
   align-items:center;
   justify-content:center;
   gap:clamp(14px,2.4vw,34px);
@@ -264,8 +297,11 @@ body.cursor-big .cursor-dot{
 }
 .slider-btn:hover{filter:drop-shadow(0 0 10px rgba(211,150,140,.8))}
 .work-card{
+  --work-aspect:1.7778;
   position:relative;
-  height:clamp(285px,48vh,430px);
+  width:min(68vw,calc(58vh * var(--work-aspect)),920px);
+  aspect-ratio:var(--work-aspect);
+  height:auto;
   border-radius:clamp(28px,4vw,58px);
   background:var(--bg-soft);
   display:grid;
@@ -426,6 +462,10 @@ body.cursor-big .cursor-dot{
 @keyframes float{0%,100%{transform:translateX(-50%) translateY(0) rotate(0)}50%{transform:translateX(-50%) translateY(-18px) rotate(1deg)}}
 @keyframes swim{0%,100%{transform:translate(0,0) rotate(-4deg)}50%{transform:translate(30px,-16px) rotate(3deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(35px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes loadingDrop{
+  0%,100%{transform:translateY(-8px) rotate(-3deg);opacity:.62}
+  45%{transform:translateY(11px) rotate(3deg);opacity:1}
+}
 @media (max-width:760px){
   :root{--header:52px}
   body{cursor:auto}
@@ -493,8 +533,9 @@ body.cursor-big .cursor-dot{
     text-shadow:none;
   }
   .work-card{
+    width:100%;
     height:auto;
-    aspect-ratio:1.52;
+    aspect-ratio:var(--work-aspect);
     border-radius:clamp(30px,9vw,48px);
     border-width:4px;
     border-color:var(--rosy-brown);
