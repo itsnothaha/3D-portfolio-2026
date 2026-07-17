@@ -1,10 +1,10 @@
 const works = [
-  { title: 'SHOWREEL', label: 'Showreel', folder: 'SHOWREEL', image: 'showreel.png', aspect: 1.777 },
-  { title: 'CGI Animation', label: 'CGI', folder: 'CGI', image: 'cgi.png', aspect: 1.5 },
-  { title: 'Character Animation', label: 'Character Animation', folder: 'character animation', image: 'character animation.png', aspect: 1.777 },
-  { title: 'VFX', label: 'VFX', folder: 'VFX', image: 'vfx.png', aspect: 1.777 },
-  { title: 'Footwear and cloth', label: 'Footwear + Cloth', folder: 'SHOES_AND_CLOSES', image: 'footwear-and-cloth.png', aspect: .802 },
-  { title: 'AI', label: 'AI', folder: 'AI', image: 'ai.png', aspect: 1.5 }
+  { title: 'SHOWREEL', label: 'Showreel', folder: 'SHOWREEL', image: 'showreel.webp', aspect: 1.777 },
+  { title: 'CGI Animation', label: 'CGI', folder: 'CGI', image: 'cgi.webp', aspect: 1.5 },
+  { title: 'Character Animation', label: 'Character Animation', folder: 'character animation', image: 'character-animation.webp', aspect: 1.777 },
+  { title: 'VFX', label: 'VFX', folder: 'VFX', image: 'vfx.webp', aspect: 1.777 },
+  { title: 'Footwear and cloth', label: 'Footwear + Cloth', folder: 'SHOES_AND_CLOSES', image: 'footwear-and-cloth.webp', aspect: 1.6 },
+  { title: 'AI', label: 'AI', folder: 'AI', image: 'ai.webp', aspect: 1.5 }
 ];
 
 let index = 0;
@@ -17,7 +17,7 @@ const nextWork = document.querySelector('#nextWork');
 const pageLoader = document.querySelector('#pageLoader');
 
 const projectPath = item => `work files/${item.folder}/`;
-const imagePath = item => `work files/${item.folder}/${item.image}`;
+const imagePath = item => `work files/home_previews/${item.image}`;
 const fillPreviewFolders = new Set(works.map(item=>item.folder));
 
 function hidePageLoader(){
@@ -129,7 +129,7 @@ if(headFrame && !reduceMotion){
   let lastFrameTime = 0;
   let headInView = true;
 
-  const framePath = frame => `main page/animation_head/base_${String(frame).padStart(5,'0')}.png`;
+  const framePath = frame => `main page/animation_head_webp/base_${String(frame).padStart(5,'0')}.webp`;
 
   function preloadFrame(frame){
     const normalized = frame % frameCount;
