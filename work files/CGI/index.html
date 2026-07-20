@@ -296,25 +296,54 @@
       .case-layout{grid-template-columns:1fr;gap:18px}
       .thumb-grid,.thumb-grid.three,.thumb-grid.four,.thumb-grid.single{grid-template-columns:repeat(2,minmax(0,1fr))}
       .media-carousel .video-card,.media-carousel .still-card{flex-basis:clamp(132px,42vw,176px)}
-      .form-case .case-main{width:100%}
+      .process-grid,.process-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .process-grid.six{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .form-case .case-layout{
+        grid-template-columns:1fr;
+        gap:14px;
+        align-items:start;
+      }
+      .form-case .case-main{
+        display:block;
+        width:100%;
+        height:auto;
+      }
       .form-case .media-carousel{
-        width:fit-content;
+        width:100%;
         max-width:100%;
-        margin:0 auto;
+        margin:0;
+        justify-content:center;
+        padding:clamp(8px,2.6vw,12px);
       }
       .form-case .media-carousel .video-card{
-        flex:0 0 clamp(142px,46vw,185px);
+        flex:0 0 clamp(205px,58vw,270px);
+        width:auto;
+        max-width:100%;
       }
       .form-case .process-grid.six{
         grid-template-columns:repeat(2,minmax(0,1fr));
         grid-template-rows:auto;
+        gap:clamp(10px,3vw,16px);
+        width:100%;
+        height:auto;
         min-height:0;
+        align-self:auto;
+        align-content:start;
       }
       .form-case .process-grid.six .process-cell{
         aspect-ratio:1.1/1;
+        width:100%;
+        height:auto;
+        min-height:0;
+        background:rgba(247,244,213,.16);
+        border:1px solid rgba(247,244,213,.28);
       }
-      .process-grid,.process-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .process-grid.six{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .form-case .process-grid.six .process-cell img{border-radius:13px}
+      .form-case .case-copy{
+        grid-column:auto;
+        margin-top:0;
+        padding-top:0;
+      }
       .case-copy{font-size:11px}
       .modal{padding:28px}
       .modal-inner{max-width:82vw;max-height:78vh}
