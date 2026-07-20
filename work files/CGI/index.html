@@ -297,8 +297,22 @@
       .thumb-grid,.thumb-grid.three,.thumb-grid.four,.thumb-grid.single{grid-template-columns:repeat(2,minmax(0,1fr))}
       .media-carousel .video-card,.media-carousel .still-card{flex-basis:clamp(132px,42vw,176px)}
       .form-case .case-main{width:100%}
-      .form-case .media-carousel{width:100%}
-      .form-case .media-carousel .video-card{flex-basis:100%}
+      .form-case .media-carousel{
+        width:fit-content;
+        max-width:100%;
+        margin:0 auto;
+      }
+      .form-case .media-carousel .video-card{
+        flex:0 0 clamp(142px,46vw,185px);
+      }
+      .form-case .process-grid.six{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-rows:auto;
+        min-height:0;
+      }
+      .form-case .process-grid.six .process-cell{
+        aspect-ratio:1.1/1;
+      }
       .process-grid,.process-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
       .process-grid.six{grid-template-columns:repeat(2,minmax(0,1fr))}
       .case-copy{font-size:11px}
