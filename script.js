@@ -1,7 +1,6 @@
 const works = [
   { title: 'SHOWREEL', label: 'Showreel', folder: 'SHOWREEL', image: 'showreel.webp', aspect: 1.777 },
   { title: 'CGI Animation', label: 'CGI', folder: 'CGI', image: 'cgi.webp', aspect: 1.5 },
-  { title: 'Character Animation', label: 'Character Animation', folder: 'character animation', image: 'character-animation.webp', aspect: 1.777 },
   { title: 'VFX', label: 'VFX', folder: 'VFX', image: 'vfx.webp', aspect: 1.777 },
   { title: 'Footwear and cloth', label: 'Footwear + Cloth', folder: 'SHOES_AND_CLOSES', image: 'footwear-and-cloth.webp', aspect: 1.6 },
   { title: 'AI', label: 'AI', folder: 'AI', image: 'ai.webp', aspect: 1.5 }
@@ -91,7 +90,8 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
     event.preventDefault();
     const target = id === '#about' ? (section.querySelector('.section-title') || section) : section;
     const headerOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header')) || 54;
-    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset - 4;
+    const extraOffset = id === '#work' ? 10 : -4;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset + extraOffset;
     window.scrollTo({top, behavior:'smooth'});
     history.replaceState(null,'',id);
   });

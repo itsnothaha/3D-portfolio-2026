@@ -3,29 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CGI Animation — Marakova Daria</title>
+  <title>CGI Animation - Marakova Daria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Julius+Sans+One&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#202020;
-      --panel:#202020;
       --line:#F7F4D5;
       --text:#F7F4D5;
-      --muted:#cfc8bc;
-      --violet:#D3968C;
-      --silver:#f4f4f4;
+      --muted:rgba(247,244,213,.72);
+      --pink:#D3968C;
+      --green:#105666;
       --header:52px;
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--panel)}
+    html{scroll-behavior:smooth;background:var(--bg)}
     body{
       margin:0;
       min-height:100vh;
       color:var(--text);
       font-family:'Julius Sans One',system-ui,sans-serif;
-      background:var(--panel);
+      background:var(--bg);
       overflow-x:hidden;
       cursor:none;
     }
@@ -45,61 +44,212 @@
     .brand{
       pointer-events:auto;
       font-family:'Darumadrop One',cursive;
-      color:var(--violet);
+      color:var(--pink);
       font-size:clamp(14px,1.3vw,18px);
       line-height:1;
-      text-shadow:0 1px 0 rgba(255,255,255,.35);
       transition:transform .25s ease,filter .25s ease;
     }
     .brand:hover{transform:translateY(-2px);filter:drop-shadow(0 0 8px rgba(211,150,140,.5))}
     main{
-      width:min(100%,780px);
-      margin:clamp(54px,7vh,74px) auto clamp(34px,6vh,70px);
-      background:var(--panel);
-      padding:clamp(38px,4.8vw,86px) clamp(22px,2.8vw,36px) clamp(42px,6vw,84px);
-      box-shadow:none;
-      position:relative;
-      overflow:visible;
+      width:100%;
+      margin:clamp(62px,7vh,86px) 0 clamp(56px,8vh,96px);
+      padding:0 clamp(18px,2.4vw,42px) 90px;
     }
-    .video-group{margin:0 0 clamp(41px,6vw,62px)}
-    .video-group h2{
-      margin:0 0 10px 12px;
+    .intro-copy{
+      width:100%;
+      margin:0 0 clamp(44px,7vw,78px);
+      color:rgba(247,244,213,.78);
+      font-size:clamp(9px,.78vw,13px);
+      line-height:1.32;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+    }
+    .intro-copy p{margin:0 0 10px}
+    .case-section{margin:0 0 clamp(46px,6vw,72px)}
+    .case-title{
+      margin:0 0 12px 14px;
       font-family:'Darumadrop One',cursive;
       color:var(--text);
-      font-size:clamp(36px,5.3vw,55px);
-      line-height:.9;
-      text-transform:uppercase;
-      letter-spacing:.03em;
+      font-size:clamp(22px,3.2vw,38px);
+      line-height:.92;
+      letter-spacing:.02em;
     }
-    .frame-scroll{
+    .case-frame{
       border:3px solid var(--line);
       border-radius:24px;
+      padding:clamp(14px,1.6vw,22px);
+      min-height:0;
+      background:rgba(255,255,255,.015);
+      box-shadow:0 22px 44px rgba(0,0,0,.24);
+    }
+    .case-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(300px,.76fr);
+      gap:clamp(18px,2.4vw,34px);
+      align-items:start;
+    }
+    .case-main{min-width:0}
+    .thumb-grid{
+      display:grid;
+      grid-template-columns:repeat(2,clamp(105px,9.4vw,150px));
+      gap:clamp(10px,1vw,16px);
+    }
+    .thumb-grid.three{grid-template-columns:repeat(3,clamp(105px,9.4vw,150px))}
+    .thumb-grid.four{grid-template-columns:repeat(4,clamp(105px,9.4vw,150px))}
+    .thumb-grid.single{grid-template-columns:repeat(2,clamp(115px,10vw,165px));max-width:none}
+    .media-carousel{
+      --carousel-gap:clamp(12px,1.15vw,18px);
+      display:flex;
+      gap:var(--carousel-gap);
       overflow-x:auto;
       overflow-y:hidden;
-      padding:24px 26px;
-      scrollbar-width:thin;
-      scrollbar-color:rgba(240,238,230,.55) transparent;
-      overscroll-behavior-inline:contain;
-      -webkit-overflow-scrolling:touch;
-    }
-    .frame-scroll::-webkit-scrollbar{height:8px}
-    .frame-scroll::-webkit-scrollbar-thumb{background:rgba(240,238,230,.48);border-radius:999px}
-    .video-row{display:flex;gap:29px;width:max-content;min-width:100%;align-items:center}
-    .video-card{
-      width:clamp(134px,18vw,192px);
-      aspect-ratio:9/16;
-      border:2px solid rgba(240,238,230,.82);
+      width:100%;
+      padding:clamp(8px,1vw,13px) clamp(8px,1vw,13px) clamp(12px,1.2vw,16px);
+      border:2px solid rgba(247,244,213,.86);
       border-radius:22px;
-      overflow:hidden;
-      padding:0;
-      background:#2b2b2b;
-      cursor:none;
-      flex:0 0 auto;
-      box-shadow:0 15px 24px rgba(0,0,0,.25);
-      transition:transform .25s ease,filter .25s ease,border-color .25s ease;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(247,244,213,.55) transparent;
+      -webkit-overflow-scrolling:touch;
+      box-shadow:0 12px 24px rgba(0,0,0,.16);
     }
-    .video-card:hover{transform:translateY(-6px) rotate(-1deg);filter:brightness(1.06) saturate(1.05);border-color:#fff}
-    .video-card img{width:100%;height:100%;object-fit:cover}
+    .media-carousel::-webkit-scrollbar{height:8px}
+    .media-carousel::-webkit-scrollbar-thumb{background:rgba(247,244,213,.52);border-radius:999px}
+    .media-carousel .video-card,
+    .media-carousel .still-card{
+      flex:0 0 clamp(150px,38%,250px);
+    }
+    .video-card,.still-card{
+      width:100%;
+      border:0;
+      padding:0;
+      overflow:hidden;
+      border-radius:18px;
+      background:#181818;
+      box-shadow:0 12px 20px rgba(0,0,0,.25);
+      align-self:start;
+    }
+    .video-card{
+      transition:transform .25s ease,filter .25s ease;
+    }
+    .video-card:hover{transform:translateY(-5px);filter:brightness(1.08) saturate(1.04)}
+    .wide{width:min(100%,420px)}
+    .video-card img,.still-card img{
+      width:100%;
+      height:auto;
+      object-fit:contain;
+      object-position:center;
+    }
+    .case-copy{
+      max-width:760px;
+      margin-top:clamp(16px,2.1vw,30px);
+      color:var(--text);
+      font-size:clamp(9px,.82vw,13px);
+      line-height:1.28;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+    .case-copy p{margin:0 0 10px}
+    .case-copy ul{margin:0;padding-left:18px}
+    .case-copy li{margin:0 0 10px}
+    .process-label{
+      margin:18px 0 8px;
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .process-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:clamp(10px,1.1vw,16px);
+    }
+    .process-grid.six{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .process-cell{
+      aspect-ratio:1.1/1;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      border-radius:14px;
+      background:rgba(247,244,213,.18);
+    }
+    .process-cell img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+    .process-cell:has(img){background:transparent}
+    .process-placeholder{
+      border:1px dashed rgba(247,244,213,.42);
+      border-radius:16px;
+      min-height:72px;
+      display:grid;
+      place-items:center;
+      color:rgba(247,244,213,.5);
+      font-size:12px;
+      text-align:center;
+      padding:20px;
+      text-transform:uppercase;
+    }
+    .personal-case .case-layout{align-items:stretch}
+    .personal-case .case-main{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    .personal-case .media-carousel .video-card{
+      flex-basis:100%;
+      aspect-ratio:16/9;
+    }
+    .personal-case .media-carousel .video-card img{
+      height:100%;
+    }
+    .personal-case .case-copy{
+      margin-top:auto;
+      padding-top:clamp(28px,7vw,112px);
+    }
+    .form-case .case-layout{
+      grid-template-columns:max-content minmax(0,1fr);
+      align-items:stretch;
+    }
+    .form-case .case-main{
+      width:clamp(250px,24vw,390px);
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    .form-case .media-carousel{
+      display:inline-flex;
+      width:fit-content;
+      max-width:none;
+      align-self:start;
+      overflow:hidden;
+      padding:clamp(7px,.75vw,10px);
+    }
+    .form-case .media-carousel .video-card{
+      flex:0 0 clamp(235px,22vw,360px);
+    }
+    .form-case .case-copy{
+      grid-column:1 / -1;
+      margin-top:clamp(12px,1.4vw,20px);
+      padding-top:clamp(10px,1.2vw,18px);
+      max-width:100%;
+    }
+    .form-case .process-grid.six{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-template-rows:repeat(2,minmax(0,1fr));
+      align-self:stretch;
+      min-height:clamp(390px,38vw,650px);
+    }
+    .form-case .process-grid.six .process-cell{
+      aspect-ratio:auto;
+      min-height:0;
+    }
+    .form-case .process-grid.six .process-cell img{
+      object-fit:cover;
+    }
     .modal{
       position:fixed;
       inset:0;
@@ -139,11 +289,19 @@
       body{cursor:auto}
       #starCanvas,.cursor,.cursor-dot{display:none}
       .page-head{position:sticky;background:rgba(32,32,32,.88);backdrop-filter:blur(10px)}
-      main{width:min(100% - 24px,744px);margin:14px auto 28px;padding:34px 14px 42px}
-      .video-group h2{font-size:clamp(34px,10.8vw,46px);margin-left:10px}
-      .frame-scroll{border-width:2px;border-radius:22px;padding:19px 19px}
-      .video-row{gap:19px}
-      .video-card{width:clamp(134px,45vw,180px);border-radius:20px}
+      main{width:100%;margin:18px 0 40px;padding:0 11px 52px}
+      .intro-copy{font-size:10px;line-height:1.3;margin-bottom:42px}
+      .case-title{font-size:clamp(28px,10vw,44px);margin-left:8px}
+      .case-frame{border-width:2px;border-radius:22px;padding:18px;min-height:0}
+      .case-layout{grid-template-columns:1fr;gap:18px}
+      .thumb-grid,.thumb-grid.three,.thumb-grid.four,.thumb-grid.single{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .media-carousel .video-card,.media-carousel .still-card{flex-basis:clamp(132px,42vw,176px)}
+      .form-case .case-main{width:100%}
+      .form-case .media-carousel{width:100%}
+      .form-case .media-carousel .video-card{flex-basis:100%}
+      .process-grid,.process-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .process-grid.six{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .case-copy{font-size:11px}
       .modal{padding:28px}
       .modal-inner{max-width:82vw;max-height:78vh}
       .modal video{max-width:82vw;max-height:78vh;border-radius:18px}
@@ -159,99 +317,264 @@
     <a class="brand magnetic" href="../../index.html#work">Marakova Daria 3d artist</a>
   </header>
 
-  <main aria-label="CGI animation portfolio videos">
-      <section class="video-group" aria-labelledby="meshki">
-        <h2 id="meshki">MESHKI</h2>
-        <div class="frame-scroll" tabindex="0" aria-label="MESHKI horizontal video previews">
-          <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="video cgi/MESHKI_NYC.mp4" aria-label="Open video MESHKI NYC">
-            <img src="video cgi/preview/MESHKI_NYC.png" alt="MESHKI NYC preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/MeshkiROAM.mp4" aria-label="Open video MeshkiROAM">
-            <img src="video cgi/preview/MeshkiROAM.png" alt="MeshkiROAM preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/MeshkiClawMachine.mp4" aria-label="Open video MeshkiClawMachine">
-            <img src="video cgi/preview/MeshkiClawMachine.png" alt="MeshkiClawMachine preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/meshki_dresses.mp4" aria-label="Open video meshki dresses">
-            <img src="video cgi/preview/meshki_dresses.png" alt="meshki dresses preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/MESHKI_F1.mp4" aria-label="Open video MESHKI F1">
-            <img src="video cgi/preview/MESHKI_F1.png" alt="MESHKI F1 preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/Meshki_Summer_LEMON.mp4" aria-label="Open video Meshki Summer LEMON">
-            <img src="video cgi/preview/Meshki_Summer_LEMON.png" alt="Meshki Summer LEMON preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/Meshki_Winter_2.mp4" aria-label="Open video Meshki Winter 2">
-            <img src="video cgi/preview/Meshki_Winter_2.png" alt="Meshki Winter 2 preview" loading="lazy" />
-          </button>
+  <main aria-label="CGI animation portfolio">
+    <section class="intro-copy" aria-label="CGI workflow description">
+      <p>For each project I choose the workflow and tools that best suit its specific creative and technical requirements. I do not limit myself to a single production pipeline, as I believe that different tasks require different approaches.</p>
+      <p>I create clothing and fabric simulations in CLO 3D, while Blender is my primary tool for 3D modeling, animation, lighting and rendering. For projects that require more organic and detailed forms, I also work with ZBrush. For complex particle work or lighting to create realistic bakery products, I use Houdini and Blender depending on the task.</p>
+      <p>When a project involves fluid simulations, particle systems, procedural animation or other computationally complex effects, I usually work in Houdini. I enjoy its flexibility and the level of control it provides when building simulations and procedural systems.</p>
+      <p>For texturing, I primarily use Substance 3D Painter. However, when a project does not require baked texture maps or a complex texturing pipeline, I may create materials directly in Blender or in the software used for the final render, depending on the project requirements. I have also worked in Cinema 4D with Arnold and Redshift.</p>
+      <p>For camera and object tracking, I have experience with SynthEyes, but I also enjoy experimenting with alternative solutions. For one of my projects, I created a facial tracking setup directly in Blender, which allowed me to explore a more customized approach to the task.</p>
+      <p>I use After Effects and DaVinci Resolve for compositing, editing, colour correction and final post-production.</p>
+      <p>My workflow is flexible and constantly evolving. For every project, I try to find the most efficient and visually effective solution rather than following the same process each time. Whenever the schedule allows, I also use projects as an opportunity to experiment with new software, techniques and production methods. This approach helps me expand my technical skills while continuing to develop my own visual style.</p>
+    </section>
+
+    <section class="case-section" aria-labelledby="csb-title">
+      <h2 class="case-title" id="csb-title">CGI for CSB</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="CSB video carousel">
+              <button class="video-card magnetic" type="button" data-video="video cgi/CSB_Soho.mp4" aria-label="Open CSB Soho video">
+                <img src="video cgi/preview/CSB_Soho.png" alt="CSB Soho preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/CSB_PLANE.mp4" aria-label="Open CSB Plane video">
+                <img src="video cgi/preview/CSB_PLANE.png" alt="CSB Plane preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/CSB_black friday.mp4" aria-label="Open CSB Black Friday video">
+                <img src="video cgi/preview/CSB_black friday.png" alt="CSB Black Friday preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/CSB_Game.mp4" aria-label="Open CSB Game video">
+                <img src="video cgi/preview/CSB_Game.png" alt="CSB Game preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>An independently produced commercial CGI series developed from my original concepts. I created all assets and handled modelling, look development, animation, lighting and Cycles rendering in Blender, using Houdini for the bag's fabric simulation. I also completed the editing and sound design.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="CSB process images">
+            <div class="process-cell"><img src="video cgi/process/CSB/1.png" alt="CSB process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/CSB/2.png" alt="CSB process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/CSB/3.png" alt="CSB process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/CSB/4.png" alt="CSB process 4" loading="lazy" /></div>
           </div>
         </div>
-      </section>
-      <section class="video-group" aria-labelledby="csb">
-        <h2 id="csb">CSB</h2>
-        <div class="frame-scroll" tabindex="0" aria-label="CSB horizontal video previews">
-          <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="video cgi/CSB_PLANE.mp4" aria-label="Open video CSB PLANE">
-            <img src="video cgi/preview/CSB_PLANE.png" alt="CSB PLANE preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/CSB_Soho.mp4" aria-label="Open video CSB Soho">
-            <img src="video cgi/preview/CSB_Soho.png" alt="CSB Soho preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/CSB_Game.mp4" aria-label="Open video CSB Game">
-            <img src="video cgi/preview/CSB_Game.png" alt="CSB Game preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/CSB_black friday.mp4" aria-label="Open video CSB black friday">
-            <img src="video cgi/preview/CSB_black friday.png" alt="CSB black friday preview" loading="lazy" />
-          </button>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="demix-title">
+      <h2 class="case-title" id="demix-title">CGI video for Demix</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="Demix video carousel">
+              <button class="video-card magnetic" type="button" data-video="video cgi/DEMIX_1.mp4" aria-label="Open Demix first video">
+                <img src="video cgi/preview/DEMIX_1.png" alt="Demix orange shoe preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/DEMIX_2.mp4" aria-label="Open Demix second video">
+                <img src="video cgi/preview/DEMIX_2.png" alt="Demix green shoe preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>Created in-house for Demix, with the complete creative and production process handled solely by me. Depending on the project, I used CLO 3D, Houdini and Blender for footwear creation, procedural effects, animation and rendering, followed by final editing and sound design.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="Demix process images">
+            <div class="process-cell"><img src="video cgi/process/demix/1.png" alt="Demix process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/demix/2.png" alt="Demix process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/demix/3.png" alt="Demix process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/demix/4.png" alt="Demix process 4" loading="lazy" /></div>
           </div>
         </div>
-      </section>
-      <section class="video-group" aria-labelledby="the-runaway-label">
-        <h2 id="the-runaway-label">THE RUNAWAY LABEL</h2>
-        <div class="frame-scroll" tabindex="0" aria-label="THE RUNAWAY LABEL horizontal video previews">
-          <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="video cgi/TheRunaway_wedding.mp4" aria-label="Open video TheRunaway wedding">
-            <img src="video cgi/preview/TheRunaway_wedding.png" alt="TheRunaway wedding preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/TheRunawayParis.mp4" aria-label="Open video TheRunawayParis">
-            <img src="video cgi/preview/TheRunawayParis.png" alt="TheRunawayParis preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/TheRunaway_AIRPORT.mp4" aria-label="Open video TheRunaway AIRPORT">
-            <img src="video cgi/preview/TheRunaway_AIRPORT.png" alt="TheRunaway AIRPORT preview" loading="lazy" />
-          </button>
+      </div>
+    </section>
+
+    <section class="case-section form-case" aria-labelledby="form-title">
+      <h2 class="case-title" id="form-title">CGI for FORM</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="FORM video">
+              <button class="video-card magnetic" type="button" data-video="video cgi/FORM.mp4" aria-label="Open FORM video">
+                <img src="video cgi/preview/FORM.png" alt="FORM preview" loading="lazy" />
+              </button>
+            </div>
+          </div>
+          <div class="process-grid six" aria-label="FORM process images">
+            <div class="process-cell"><img src="video%20cgi/process/form/1.png" alt="FORM process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video%20cgi/process/form/2.png" alt="FORM process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video%20cgi/process/form/3.png" alt="FORM process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video%20cgi/process/form/4.png" alt="FORM process 4" loading="lazy" /></div>
+            <div class="process-cell"><img src="video%20cgi/process/form/5.PNG" alt="FORM process 5" loading="lazy" /></div>
+            <div class="process-cell"><img src="video%20cgi/process/form/6.PNG" alt="FORM process 6" loading="lazy" /></div>
+          </div>
+          <div class="case-copy">
+            <p>A self-directed commercial fashion project based on my own concept and storyboard. I created and animated the characters in Blender, designed and simulated their garments in CLO 3D, rendered the final scenes in Cycles, and completed the post-production and sound design.</p>
           </div>
         </div>
-      </section>
-      <section class="video-group" aria-labelledby="demix">
-        <h2 id="demix">DEMIX</h2>
-        <div class="frame-scroll" tabindex="0" aria-label="DEMIX horizontal video previews">
-          <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="video cgi/DEMIX_1.mp4" aria-label="Open video DEMIX 1">
-            <img src="video cgi/preview/DEMIX_1.png" alt="DEMIX 1 preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/DEMIX_2.mp4" aria-label="Open video DEMIX 2">
-            <img src="video cgi/preview/DEMIX_2.png" alt="DEMIX 2 preview" loading="lazy" />
-          </button>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="meshki-title">
+      <h2 class="case-title" id="meshki-title">Meshki</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="Meshki video carousel">
+              <button class="video-card magnetic" type="button" data-video="video cgi/MESHKI_NYC.mp4" aria-label="Open Meshki NYC video">
+                <img src="video cgi/preview/MESHKI_NYC.png" alt="Meshki NYC preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/MeshkiROAM.mp4" aria-label="Open Meshki ROAM video">
+                <img src="video cgi/preview/MeshkiROAM.png" alt="Meshki ROAM preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/MeshkiClawMachine.mp4" aria-label="Open Meshki Claw Machine video">
+                <img src="video cgi/preview/MeshkiClawMachine.png" alt="Meshki Claw Machine preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/meshki_dresses.mp4" aria-label="Open Meshki dresses video">
+                <img src="video cgi/preview/meshki_dresses.png" alt="Meshki dresses preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/MESHKI_F1.mp4" aria-label="Open Meshki F1 video">
+                <img src="video cgi/preview/MESHKI_F1.png" alt="Meshki F1 preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/Meshki_Summer_LEMON.mp4" aria-label="Open Meshki Summer Lemon video">
+                <img src="video cgi/preview/Meshki_Summer_LEMON.png" alt="Meshki Summer Lemon preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/Meshki_Winter_2.mp4" aria-label="Open Meshki Winter video">
+                <img src="video cgi/preview/Meshki_Winter_2.png" alt="Meshki Winter preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>An ongoing independent commercial collaboration for which I develop each film from the initial idea to final delivery. My work includes concept development, visual storytelling, modelling, garment simulation in CLO 3D, animation and rendering in Blender, as well as editing and sound design.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="Meshki process images">
+            <div class="process-cell"><img src="video cgi/process/MESHKI/1.png" alt="Meshki process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/MESHKI/2.png" alt="Meshki process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/MESHKI/3.png" alt="Meshki process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/MESHKI/4.png" alt="Meshki process 4" loading="lazy" /></div>
           </div>
         </div>
-      </section>
-      <section class="video-group" aria-labelledby="more-work">
-        <h2 id="more-work">MORE WORK</h2>
-        <div class="frame-scroll" tabindex="0" aria-label="MORE WORK horizontal video previews">
-          <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="video cgi/HK_Render.mp4" aria-label="Open video HK Render">
-            <img src="video cgi/preview/HK_Render.png" alt="HK Render preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/FORM.mp4" aria-label="Open video FORM">
-            <img src="video cgi/preview/FORM.png" alt="FORM preview" loading="lazy" />
-          </button>
-          <button class="video-card magnetic" type="button" data-video="video cgi/render_Balibody.mp4" aria-label="Open video render Balibody">
-            <img src="video cgi/preview/render_Balibody.png" alt="render Balibody preview" loading="lazy" />
-          </button>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="runaway-title">
+      <h2 class="case-title" id="runaway-title">The Runaway Label</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="The Runaway Label video carousel">
+              <button class="video-card magnetic" type="button" data-video="video cgi/TheRunaway_wedding.mp4" aria-label="Open The Runaway wedding video">
+                <img src="video cgi/preview/TheRunaway_wedding.png" alt="The Runaway wedding preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/TheRunawayParis.mp4" aria-label="Open The Runaway Paris video">
+                <img src="video cgi/preview/TheRunawayParis.png" alt="The Runaway Paris preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/TheRunaway_AIRPORT.mp4" aria-label="Open The Runaway airport video">
+                <img src="video cgi/preview/TheRunaway_AIRPORT.png" alt="The Runaway airport preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>A fully self-produced commercial fashion CGI project combining surreal environments with animated garments and accessories. I created the concept and all visual assets, built and simulated the clothing and bags in CLO 3D, assembled and rendered the scenes in Blender Cycles, and handled the final edit and sound design.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="The Runaway Label process placeholders">
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+
+    <section class="case-section personal-case" aria-labelledby="personal-title">
+      <h2 class="case-title" id="personal-title">Personal Project</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="Personal project video carousel">
+              <button class="video-card magnetic" type="button" data-video="character animation/renderfull.mp4" aria-label="Open Renderfull video">
+                <img src="character animation/renderfull.png" alt="Renderfull preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>A self-initiated project created primarily to explore new software workflows and use render passes for the first time. I created the character and animated every movement by hand in Blender, then rendered the scene in separate passes for compositing in Nuke. The project allowed me to experiment with greater control in post-production, including masks, motion blur and individual pass adjustments.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="Personal project process images">
+            <div class="process-cell"><img src="video cgi/process/personal project/1.png" alt="Personal project process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/personal project/2.png" alt="Personal project process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/personal project/3.png" alt="Personal project process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/personal project/4.png" alt="Personal project process 4" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="bushe-title">
+      <h2 class="case-title" id="bushe-title">Bushe Bakery</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="Bushe Bakery video carousel">
+              <button class="video-card magnetic" type="button" data-video="character animation/Gym animation.mp4" aria-label="Open Bushe gym animation">
+                <img src="character animation/gym animation.png" alt="Bushe gym animation preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="character animation/beauty shop animation.mp4" aria-label="Open Bushe beauty shop animation">
+                <img src="character animation/beauty shop animation.png" alt="Bushe beauty shop animation preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="character animation/construction animation.mp4" aria-label="Open Bushe construction animation">
+                <img src="character animation/construction animation.png" alt="Bushe construction animation preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="character animation/tartalet.mp4" aria-label="Open Bushe tartalet animation">
+                <img src="character animation/tartalet.png" alt="Bushe tartalet animation preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>A series of commercial CGI videos developed around original characters and product-led storytelling. I designed, modelled, rigged and animated the characters in Blender, created the environments and developed the actions for each scene to communicate the story and personality of the featured product.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="Bushe Bakery process images">
+            <div class="process-cell"><img src="video cgi/process/bushe/1.png" alt="Bushe process 1" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/bushe/2.png" alt="Bushe process 2" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/bushe/3.png" alt="Bushe process 3" loading="lazy" /></div>
+            <div class="process-cell"><img src="video cgi/process/bushe/4.png" alt="Bushe process 4" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="other-title">
+      <h2 class="case-title" id="other-title">Other</h2>
+      <div class="case-frame">
+        <div class="case-layout">
+          <div class="case-main">
+            <div class="media-carousel" aria-label="Other video carousel">
+              <button class="video-card magnetic" type="button" data-video="video cgi/HK_Render.MP4" aria-label="Open Helen Kaminski video">
+                <img src="video cgi/preview/HK_Render.png" alt="Helen Kaminski preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="video cgi/render_Balibody.mp4" aria-label="Open Bali Body video">
+                <img src="video cgi/preview/render_Balibody.png" alt="Bali Body preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="character animation/ami.mp4" aria-label="Open AMI video">
+                <img src="character animation/ami-poster.png" alt="AMI animation preview" loading="lazy" />
+              </button>
+              <button class="video-card magnetic" type="button" data-video="character animation/fall.mp4" aria-label="Open Fall video">
+                <img src="character animation/fall-poster.png" alt="Fall animation preview" loading="lazy" />
+              </button>
+            </div>
+            <div class="case-copy">
+              <p>There are many more projects I have not added here, but these are a few I would still like to share. I handled each one from the initial concept through to the final animation, rendering, editing and sound design. Most of the work was created in Blender, including the floral disintegration effect, which I developed while exploring Geometry Nodes. For the Bali Body video, I created the liquid simulation in Houdini. Although the effect could also have been made in Blender, I had enough time to use this relatively simple task as an opportunity to explore a new program and learn its simulation workflow.</p>
+            </div>
+          </div>
+          <div class="process-grid" aria-label="Other process placeholders">
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
+            <div class="process-cell"></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <div class="modal" id="videoModal" aria-hidden="true" role="dialog" aria-label="Video player">
@@ -265,7 +588,7 @@
     const modalVideo = document.querySelector('#modalVideo');
 
     function openVideo(src) {
-      if (!modal || !modalVideo) return;
+      if (!modal || !modalVideo || !src) return;
       modalVideo.src = src;
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
@@ -295,7 +618,7 @@
     const ctx = canvas?.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(pointer: fine)').matches;
-    let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, lastX = x, lastY = y, stars = [];
+    let x = innerWidth / 2, y = innerHeight / 2, lastX = x, lastY = y, stars = [];
 
     function resizeCanvas() {
       if (!canvas || !ctx) return;
@@ -337,7 +660,6 @@
       resizeCanvas(); addEventListener('resize', resizeCanvas);
       window.addEventListener('mousemove', event => {
         x = event.clientX; y = event.clientY;
-        if (dot) { dot.style.left = `${x}px`; dot.style.top = `${y}px`; }
         const distance = Math.hypot(x - lastX, y - lastY);
         if (distance > 10) { for (let i = 0; i < Math.min(4, Math.floor(distance / 22) + 1); i++) addStar(x + (Math.random()-.5)*18, y + (Math.random()-.5)*18, Math.min(1.5, distance / 80)); lastX = x; lastY = y; }
       });
