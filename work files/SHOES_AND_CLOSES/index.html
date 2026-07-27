@@ -1,1 +1,636 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Footwear and cloth</title><link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Julius+Sans+One&display=swap" rel="stylesheet"><style>body{margin:0;background:#202020;color:#F7F4D5;font-family:'Julius Sans One',sans-serif;display:grid;place-items:center;min-height:100vh;text-align:center}h1{font-family:'Darumadrop One',cursive;color:#41644A;font-size:clamp(54px,10vw,140px)}a{color:#D3968C}</style></head><body><main><h1>Footwear and cloth</h1><p>Здесь позже будет видео и описание проекта.</p><a href="../../index.html#work">← back to portfolio</a></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Footwear + Cloth - Marakova Daria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&amp;family=Julius+Sans+One&amp;display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#202020;
+      --line:#F7F4D5;
+      --text:#F7F4D5;
+      --pink:#D3968C;
+      --green:#105666;
+      --panel:#232323;
+      --header:52px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      margin:0;
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--text);
+      background:var(--bg);
+      font-family:'Julius Sans One',system-ui,sans-serif;
+      cursor:none;
+    }
+    a,button{cursor:none}
+    button{font:inherit;color:inherit}
+    img{display:block;max-width:100%}
+    .page-head{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:20;
+      min-height:var(--header);
+      display:flex;
+      align-items:center;
+      padding:9px clamp(14px,2.2vw,30px);
+      pointer-events:none;
+      background:linear-gradient(to bottom,rgba(32,32,32,.96),rgba(32,32,32,0));
+    }
+    .brand{
+      pointer-events:auto;
+      color:var(--pink);
+      font-family:'Darumadrop One',cursive;
+      font-size:clamp(14px,1.3vw,18px);
+      line-height:1;
+      text-decoration:none;
+      transition:transform .25s ease,filter .25s ease;
+    }
+    .brand:hover{transform:translateY(-2px);filter:drop-shadow(0 0 8px rgba(211,150,140,.5))}
+    .visually-hidden{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+    main{
+      width:100%;
+      padding:clamp(64px,7vh,86px) clamp(18px,2.4vw,42px) clamp(58px,8vh,98px);
+    }
+    .portfolio-section{
+      width:100%;
+      margin:0 0 clamp(68px,9vw,120px);
+      content-visibility:auto;
+      contain-intrinsic-size:900px;
+    }
+    .section-title{
+      margin:0 0 12px 12px;
+      color:var(--text);
+      font-family:'Darumadrop One',cursive;
+      font-size:clamp(25px,3.1vw,42px);
+      line-height:.95;
+      letter-spacing:.02em;
+    }
+    .section-frame{
+      width:100%;
+      border:2px solid rgba(247,244,213,.9);
+      border-radius:22px;
+      padding:clamp(14px,1.7vw,26px);
+      background:rgba(255,255,255,.012);
+      box-shadow:0 22px 44px rgba(0,0,0,.2);
+    }
+    .solidworks-layout{
+      display:grid;
+      grid-template-columns:minmax(0,2.25fr) minmax(250px,.8fr);
+      gap:clamp(16px,2.2vw,34px);
+      align-items:stretch;
+    }
+    .technical-grid{
+      display:grid;
+      grid-template-rows:repeat(2,minmax(0,1fr));
+      grid-auto-flow:column;
+      grid-auto-columns:calc((100% - clamp(8px,1vw,14px))/2);
+      gap:clamp(8px,1vw,14px);
+      height:clamp(430px,47vw,700px);
+      overflow-x:auto;
+      overflow-y:hidden;
+      padding-bottom:8px;
+      scroll-snap-type:x proximity;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(247,244,213,.55) transparent;
+    }
+    .technical-grid::-webkit-scrollbar{height:7px}
+    .technical-grid::-webkit-scrollbar-thumb{background:rgba(247,244,213,.5);border-radius:999px}
+    .technical-grid .gallery-item{scroll-snap-align:start}
+    .sole-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:clamp(8px,1vw,14px);
+      align-content:center;
+    }
+    .sole-grid .gallery-item:nth-child(n+3){grid-column:1 / -1}
+    .gallery-item{
+      min-width:0;
+      min-height:0;
+      border:0;
+      border-radius:8px;
+      padding:0;
+      overflow:hidden;
+      background:#f5f5f5;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      transition:transform .2s ease,filter .2s ease;
+    }
+    .gallery-item:hover{transform:translateY(-3px);filter:brightness(1.04)}
+    .gallery-item img{
+      width:100%;
+      height:100%;
+      max-height:clamp(210px,23vw,390px);
+      object-fit:contain;
+      object-position:center;
+    }
+    .technical-grid .gallery-item img{aspect-ratio:auto}
+    .sole-grid .gallery-item img{aspect-ratio:1.15/1}
+    .dual-carousel{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:clamp(26px,4vw,66px);
+      align-items:start;
+    }
+    .image-carousel{
+      min-width:0;
+      display:grid;
+      gap:10px;
+    }
+    .carousel-stage{
+      display:grid;
+      grid-template-columns:clamp(34px,3.5vw,54px) minmax(0,1fr) clamp(34px,3.5vw,54px);
+      align-items:center;
+      min-width:0;
+    }
+    .carousel-image-button{
+      width:100%;
+      height:clamp(280px,34vw,540px);
+      border:0;
+      padding:0;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:transparent;
+    }
+    .carousel-image-button img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      filter:drop-shadow(0 14px 22px rgba(0,0,0,.22));
+      transition:opacity .16s ease,transform .22s ease;
+    }
+    .carousel-image-button:hover img{transform:scale(1.015)}
+    .carousel-image-button.is-changing img{opacity:.2}
+    .carousel-arrow{
+      width:clamp(34px,3.5vw,54px);
+      height:clamp(46px,5vw,72px);
+      border:0;
+      padding:0;
+      display:grid;
+      place-items:center;
+      background:transparent;
+      color:var(--line);
+      font-family:Arial,sans-serif;
+      font-size:clamp(40px,5vw,72px);
+      line-height:1;
+      transition:transform .2s ease,color .2s ease,filter .2s ease;
+    }
+    .carousel-arrow:hover{
+      color:var(--pink);
+      transform:scale(1.12);
+      filter:drop-shadow(0 0 10px rgba(211,150,140,.34));
+    }
+    .carousel-label{
+      margin:0;
+      color:var(--text);
+      font-family:'Darumadrop One',cursive;
+      font-size:clamp(19px,2.1vw,28px);
+      line-height:1;
+      text-align:center;
+      letter-spacing:.02em;
+    }
+    .lightbox{
+      position:fixed;
+      inset:0;
+      z-index:60;
+      display:grid;
+      place-items:center;
+      padding:clamp(24px,4vw,56px);
+      background:rgba(0,0,0,.82);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
+    }
+    .lightbox.is-open{opacity:1;pointer-events:auto}
+    .lightbox img{
+      width:auto;
+      height:auto;
+      max-width:88vw;
+      max-height:86vh;
+      object-fit:contain;
+      border:2px solid var(--line);
+      border-radius:14px;
+      background:var(--panel);
+      box-shadow:0 28px 80px rgba(0,0,0,.5);
+    }
+    #starCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:100;pointer-events:none}
+    .cursor,.cursor-dot{position:fixed;left:0;top:0;z-index:101;pointer-events:none}
+    .cursor{
+      width:34px;
+      height:50px;
+      transform:translate(-50%,-42%);
+      transform-origin:50% 42%;
+      filter:drop-shadow(0 0 8px rgba(255,255,255,.92)) drop-shadow(0 0 18px rgba(128,143,255,.78)) drop-shadow(0 0 36px rgba(58,68,170,.66));
+      transition:transform .16s ease,filter .16s ease;
+    }
+    .cursor::before,.cursor::after{content:"";position:absolute}
+    .cursor::before{
+      inset:-11px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(255,255,255,.46) 0 10%,rgba(133,150,255,.34) 28%,rgba(62,76,178,.24) 48%,transparent 72%);
+      filter:blur(3px);
+    }
+    .cursor::after{
+      inset:0;
+      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
+      background:radial-gradient(circle at 50% 42%,#fff 0 28%,#fff8f3 38%,#dfe6ff 54%,#8f9be9 74%,#29336f 100%);
+    }
+    .cursor-dot{
+      z-index:102;
+      width:18px;
+      height:26px;
+      transform:translate(-50%,-42%) rotate(45deg);
+      transform-origin:50% 42%;
+      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
+      background:radial-gradient(circle at 50% 42%,#fff 0 30%,#fff7f0 42%,#dfe6ff 63%,#8c9bea 100%);
+      filter:drop-shadow(0 0 7px rgba(255,255,255,.82)) drop-shadow(0 0 16px rgba(128,143,255,.55));
+      transition:transform .16s ease;
+    }
+    body.cursor-big .cursor{transform:translate(-50%,-42%) scale(1.12)}
+    body.cursor-big .cursor-dot{transform:translate(-50%,-42%) rotate(45deg) scale(1.12)}
+    @media (max-width:900px){
+      .solidworks-layout{grid-template-columns:1fr}
+      .sole-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .sole-grid .gallery-item:nth-child(n+3){grid-column:auto}
+      .gallery-item img{max-height:none}
+      .dual-carousel{gap:24px}
+      .carousel-image-button{height:clamp(230px,40vw,370px)}
+    }
+    @media (max-width:680px){
+      :root{--header:58px}
+      body{cursor:auto}
+      a,button{cursor:auto}
+      #starCanvas,.cursor,.cursor-dot{display:none}
+      .page-head{
+        position:sticky;
+        background:rgba(32,32,32,.92);
+        backdrop-filter:blur(10px);
+      }
+      main{padding:18px 11px 52px}
+      .portfolio-section{margin-bottom:64px;contain-intrinsic-size:1100px}
+      .section-title{margin-left:8px;font-size:clamp(28px,9vw,40px)}
+      .section-frame{padding:14px;border-radius:18px}
+      .technical-grid{
+        grid-auto-columns:calc((100% - 8px)/2);
+        height:min(86vw,330px);
+      }
+      .sole-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .dual-carousel{grid-template-columns:1fr;gap:48px}
+      .carousel-stage{grid-template-columns:38px minmax(0,1fr) 38px}
+      .carousel-arrow{width:38px;height:56px;font-size:48px}
+      .carousel-image-button{height:min(84vw,390px)}
+      .carousel-label{font-size:24px}
+      .lightbox{padding:30px}
+      .lightbox img{max-width:84vw;max-height:80vh}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starCanvas" aria-hidden="true"></canvas>
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <header class="page-head">
+    <a class="brand magnetic" href="../../index.html#work">Marakova Daria 3d artist</a>
+  </header>
+
+  <main aria-label="Footwear and cloth portfolio">
+    <h1 class="visually-hidden">Footwear and Cloth</h1>
+
+    <section class="portfolio-section" aria-labelledby="solidworks-title">
+      <h2 class="section-title" id="solidworks-title">SOLIDWORKS + CLO</h2>
+      <div class="section-frame">
+        <div class="solidworks-layout">
+          <div class="technical-grid" aria-label="Solidworks and CLO process gallery">
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/1.png" alt="Tent model and CLO pattern development" loading="eager" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/3.png" alt="Tent model and pattern development in CLO" loading="eager" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/Скриншот 14-05-2025 095649.jpg" alt="Tent construction in Solidworks" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/Скриншот 14-05-2025 100446.jpg" alt="Solidworks final technical view" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/Скриншот 14-05-2025 095734.jpg" alt="Solidworks development screenshot" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/Скриншот 14-05-2025 100237.jpg" alt="Solidworks project screenshot" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/Скриншот 14-05-2025 100327.jpg" alt="Solidworks technical development" loading="lazy" /></button>
+          </div>
+          <div class="sole-grid" aria-label="Footwear sole development gallery">
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/IMG_7986.JPG" alt="Footwear sole technical drawing" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/IMG_7987.JPG" alt="Footwear sole technical view" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/IMG_7988.JPG" alt="Footwear sole side view" loading="lazy" /></button>
+            <button class="gallery-item magnetic" type="button"><img src="solidworksClo/IMG_7989.JPG" alt="Footwear sole construction view" loading="lazy" /></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio-section" aria-labelledby="icad-title">
+      <h2 class="section-title" id="icad-title">ICAD+</h2>
+      <div class="section-frame">
+        <div class="dual-carousel">
+          <article class="image-carousel" data-carousel="icadViewport">
+            <div class="carousel-stage">
+              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous ICAD viewport image">&#10094;</button>
+              <button class="carousel-image-button magnetic" type="button" aria-label="Open ICAD viewport image">
+                <img alt="" decoding="async" />
+              </button>
+              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next ICAD viewport image">&#10095;</button>
+            </div>
+            <h3 class="carousel-label">viewport</h3>
+          </article>
+
+          <article class="image-carousel" data-carousel="icadRender">
+            <div class="carousel-stage">
+              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous ICAD render">&#10094;</button>
+              <button class="carousel-image-button magnetic" type="button" aria-label="Open ICAD render">
+                <img alt="" decoding="async" />
+              </button>
+              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next ICAD render">&#10095;</button>
+            </div>
+            <h3 class="carousel-label">render</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio-section" aria-labelledby="clo-title">
+      <h2 class="section-title" id="clo-title">CLO</h2>
+      <div class="section-frame">
+        <div class="dual-carousel">
+          <article class="image-carousel" data-carousel="cloRender">
+            <div class="carousel-stage">
+              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous CLO render">&#10094;</button>
+              <button class="carousel-image-button magnetic" type="button" aria-label="Open CLO render">
+                <img alt="" decoding="async" />
+              </button>
+              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next CLO render">&#10095;</button>
+            </div>
+            <h3 class="carousel-label">render</h3>
+          </article>
+
+          <article class="image-carousel" data-carousel="cloViewport">
+            <div class="carousel-stage">
+              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous CLO viewport image">&#10094;</button>
+              <button class="carousel-image-button magnetic" type="button" aria-label="Open CLO viewport image">
+                <img alt="" decoding="async" />
+              </button>
+              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next CLO viewport image">&#10095;</button>
+            </div>
+            <h3 class="carousel-label">viewport</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Expanded project image">
+    <img id="lightboxImage" alt="" />
+  </div>
+
+  <script>
+    const carouselSets = {
+      icadViewport: [
+        ['ICAD/Снимок экрана 2026-07-12 130600.jpg', 'ICAD viewport 1'],
+        ['ICAD/Снимок экрана 2026-07-12 130622.jpg', 'ICAD viewport 2'],
+        ['ICAD/Снимок экрана 2026-07-12 130850.jpg', 'ICAD viewport 3'],
+        ['ICAD/Снимок экрана 2026-07-12 131104.jpg', 'ICAD viewport 4'],
+        ['ICAD/Снимок экрана 2026-07-12 131156.jpg', 'ICAD viewport 5'],
+        ['ICAD/Снимок экрана 2026-07-12 131213.jpg', 'ICAD viewport 6'],
+        ['ICAD/Снимок экрана 2026-07-12 131247.jpg', 'ICAD viewport 7'],
+        ['ICAD/Снимок экрана 2026-07-12 131316.jpg', 'ICAD viewport 8'],
+        ['ICAD/Снимок экрана 2026-07-12 131501.jpg', 'ICAD viewport 9']
+      ],
+      icadRender: [
+        ['ICAD/RENDER/demix1.png', 'ICAD Demix render 1'],
+        ['ICAD/RENDER/demix2.png', 'ICAD Demix render 2'],
+        ['ICAD/RENDER/demix3.png', 'ICAD Demix render 3'],
+        ['ICAD/RENDER/demix4.png', 'ICAD Demix render 4'],
+        ['ICAD/RENDER/sensana1.png', 'ICAD Sensana render 1'],
+        ['ICAD/RENDER/sensana2.png', 'ICAD Sensana render 2']
+      ],
+      cloRender: [
+        ['CLO/render/demix137250__Final for PRESENTATION_2.png', 'CLO footwear render 1'],
+        ['CLO/render/136394_Final for PRESENTATION 2.png', 'CLO footwear render 2'],
+        ['CLO/render/140535_khaki - Y3 5.png', 'CLO footwear render 3'],
+        ['CLO/render/122370 Northland_Final for PRESENTATION_NEW OPTION.png', 'CLO footwear render 4'],
+        ['CLO/render/118493 green-beige 5.png', 'CLO footwear render 5'],
+        ['CLO/render/136439_FILA_Final for PRESENTATION 2.png', 'CLO footwear render 6'],
+        ['CLO/render/140509_grey - 91 5.png', 'CLO footwear render 7']
+      ],
+      cloViewport: [
+        ['CLO/demix137250__Final for PRESENTATION.png', 'CLO viewport 1'],
+        ['CLO/118493 Fila_Final for PRESENTATION.png', 'CLO viewport 2'],
+        ['CLO/136439_FILA_Final for PRESENTATION.png', 'CLO viewport 3'],
+        ['CLO/122370 Northland_Final for PRESENTATION.png', 'CLO viewport 4'],
+        ['CLO/136394_Final for PRESENTATION.png', 'CLO viewport 5'],
+        ['CLO/137250_new.png', 'CLO viewport 6'],
+        ['CLO/140535____Final for PRESENTATION.png', 'CLO viewport 7'],
+        ['CLO/140509____Final for PRESENTATION.png', 'CLO viewport 8']
+      ]
+    };
+
+    const lightbox = document.querySelector('#imageLightbox');
+    const lightboxImage = document.querySelector('#lightboxImage');
+
+    function openLightbox(src, alt) {
+      if (!lightbox || !lightboxImage || !src) return;
+      lightboxImage.src = src;
+      lightboxImage.alt = alt || '';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      if (!lightbox || !lightboxImage) return;
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.removeAttribute('src');
+      lightboxImage.alt = '';
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.gallery-item').forEach(button => {
+      button.addEventListener('click', () => {
+        const image = button.querySelector('img');
+        if (image) openLightbox(image.currentSrc || image.src, image.alt);
+      });
+    });
+
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+      const items = carouselSets[carousel.dataset.carousel] || [];
+      const imageButton = carousel.querySelector('.carousel-image-button');
+      const image = imageButton?.querySelector('img');
+      let index = 0;
+      let pointerStart = null;
+
+      function preload(position) {
+        if (!items.length) return;
+        const nextImage = new Image();
+        nextImage.src = items[(position + items.length) % items.length][0];
+      }
+
+      function render(animate = false) {
+        if (!image || !items.length) return;
+        const [src, alt] = items[index];
+        if (animate) imageButton.classList.add('is-changing');
+        image.src = src;
+        image.alt = alt;
+        image.onload = () => imageButton.classList.remove('is-changing');
+        preload(index + 1);
+        preload(index - 1);
+      }
+
+      function move(step) {
+        index = (index + step + items.length) % items.length;
+        render(true);
+      }
+
+      carousel.querySelectorAll('[data-step]').forEach(button => {
+        button.addEventListener('click', () => move(Number(button.dataset.step)));
+      });
+
+      imageButton?.addEventListener('click', () => openLightbox(image.currentSrc || image.src, image.alt));
+      imageButton?.addEventListener('pointerdown', event => { pointerStart = event.clientX; });
+      imageButton?.addEventListener('pointerup', event => {
+        if (pointerStart === null) return;
+        const delta = event.clientX - pointerStart;
+        pointerStart = null;
+        if (Math.abs(delta) > 42) move(delta < 0 ? 1 : -1);
+      });
+      carousel.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft') move(-1);
+        if (event.key === 'ArrowRight') move(1);
+      });
+
+      render();
+    });
+
+    lightbox?.addEventListener('click', event => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeLightbox();
+    });
+
+    const cursor = document.querySelector('.cursor');
+    const dot = document.querySelector('.cursor-dot');
+    const canvas = document.querySelector('#starCanvas');
+    const ctx = canvas?.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    let x = innerWidth / 2;
+    let y = innerHeight / 2;
+    let lastX = x;
+    let lastY = y;
+    let stars = [];
+
+    function resizeCanvas() {
+      if (!canvas || !ctx) return;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(innerWidth * ratio);
+      canvas.height = Math.floor(innerHeight * ratio);
+      canvas.style.width = `${innerWidth}px`;
+      canvas.style.height = `${innerHeight}px`;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function addStar(px, py, force = 1) {
+      if (!finePointer || reduceMotion) return;
+      stars.push({
+        x:px,
+        y:py,
+        size:(Math.random() * 5 + 3) * force,
+        vx:(Math.random() - .5) * 1.8,
+        vy:(Math.random() - .5) * 1.8 - .35,
+        rotation:Math.random() * Math.PI,
+        spin:(Math.random() - .5) * .12,
+        life:1,
+        decay:Math.random() * .015 + .015
+      });
+      if (stars.length > 120) stars.splice(0, stars.length - 120);
+    }
+
+    function drawStar(star) {
+      if (!ctx) return;
+      ctx.save();
+      ctx.translate(star.x, star.y);
+      ctx.rotate(star.rotation);
+      ctx.beginPath();
+      for (let i = 0; i <= 8; i++) {
+        const radius = i % 2 === 0 ? star.size : star.size * .42;
+        const angle = Math.PI * 2 * i / 8 - Math.PI / 2;
+        const px = Math.cos(angle) * radius;
+        const py = Math.sin(angle) * radius;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = `rgba(244,244,244,${.7 * star.life})`;
+      ctx.shadowColor = `rgba(244,244,244,${.65 * star.life})`;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function animateCursor() {
+      if (cursor) {
+        cursor.style.left = `${x}px`;
+        cursor.style.top = `${y}px`;
+      }
+      if (dot) {
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+      }
+      if (ctx) {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        stars.forEach(star => {
+          star.x += star.vx;
+          star.y += star.vy;
+          star.rotation += star.spin;
+          star.life -= star.decay;
+          drawStar(star);
+        });
+        stars = stars.filter(star => star.life > 0);
+      }
+      requestAnimationFrame(animateCursor);
+    }
+
+    if (canvas && ctx && finePointer && !reduceMotion) {
+      resizeCanvas();
+      addEventListener('resize', resizeCanvas);
+      addEventListener('mousemove', event => {
+        x = event.clientX;
+        y = event.clientY;
+        const distance = Math.hypot(x - lastX, y - lastY);
+        if (distance > 10) {
+          addStar(x, y, Math.min(1.5, distance / 80));
+          lastX = x;
+          lastY = y;
+        }
+      });
+      animateCursor();
+    }
+
+    document.querySelectorAll('a,button').forEach(element => {
+      element.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
+      element.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
+    });
+  </script>
+</body>
+</html>
