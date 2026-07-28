@@ -3,56 +3,285 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VFX — Marakova Daria</title>
+  <title>VFX - Marakova Daria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Julius+Sans+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&amp;family=Julius+Sans+One&amp;display=swap" rel="stylesheet">
   <style>
-    :root{--panel:#202020;--line:#F7F4D5;--text:#F7F4D5;--violet:#D3968C;--header:52px}
+    :root{
+      --bg:#202020;
+      --line:#8E8E8E;
+      --text:#8E8E8E;
+      --pink:#D3968C;
+      --header:52px;
+    }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--panel)}
-    body{margin:0;min-height:100vh;color:var(--text);font-family:'Julius Sans One',system-ui,sans-serif;background:var(--panel);overflow-x:hidden;cursor:none}
-    a,button,[role="button"],video{cursor:none}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      margin:0;
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--text);
+      background:var(--bg);
+      font-family:'Julius Sans One',system-ui,sans-serif;
+      cursor:none;
+    }
+    a,button,video{cursor:none}
     a{color:inherit;text-decoration:none}
-    .page-head{position:fixed;inset:0 0 auto 0;min-height:var(--header);z-index:20;display:flex;align-items:center;padding:9px clamp(14px,2.2vw,30px);pointer-events:none}
-    .brand{pointer-events:auto;font-family:'Darumadrop One',cursive;color:var(--violet);font-size:clamp(14px,1.3vw,18px);line-height:1;text-shadow:0 1px 0 rgba(255,255,255,.35);transition:transform .25s ease,filter .25s ease}
-    .brand:hover{transform:translateY(-2px);filter:drop-shadow(0 0 8px rgba(211,150,140,.5))}
-    main{width:min(100%,780px);margin:clamp(54px,7vh,74px) auto clamp(34px,6vh,70px);padding:clamp(38px,4.8vw,86px) clamp(22px,2.8vw,36px) clamp(42px,6vw,84px)}
-    .video-group{margin:0 0 clamp(41px,6vw,62px)}
-    .video-group h1{margin:0 0 10px 12px;font-family:'Darumadrop One',cursive;color:var(--text);font-size:clamp(46px,7vw,78px);line-height:.88;text-transform:uppercase;letter-spacing:.03em}
-    .frame-scroll{border:3px solid var(--line);border-radius:24px;overflow-x:auto;overflow-y:hidden;padding:24px 26px;scrollbar-width:thin;scrollbar-color:rgba(240,238,230,.55) transparent;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
-    .frame-scroll::-webkit-scrollbar{height:8px}
-    .frame-scroll::-webkit-scrollbar-thumb{background:rgba(240,238,230,.48);border-radius:999px}
-    .video-row{display:flex;gap:29px;width:max-content;min-width:100%;align-items:center}
-    .video-card{width:clamp(134px,18vw,192px);aspect-ratio:9/16;border:2px solid rgba(240,238,230,.82);border-radius:22px;overflow:hidden;padding:0;background:#2b2b2b;cursor:none;flex:0 0 auto;box-shadow:0 15px 24px rgba(0,0,0,.25);transition:transform .25s ease,filter .25s ease,border-color .25s ease}
-    .video-card:hover{transform:translateY(-6px) rotate(-1deg);filter:brightness(1.06) saturate(1.05);border-color:#fff}
-    .video-card img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none;background:#000}
-    .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:clamp(18px,4vw,54px);background:rgba(0,0,0,.78);opacity:0;pointer-events:none;transition:opacity .22s ease}
+    button{font:inherit;color:inherit}
+    img{display:block;max-width:100%}
+    .visually-hidden{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+    .page-head{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:20;
+      min-height:var(--header);
+      display:flex;
+      align-items:center;
+      padding:9px clamp(14px,2.2vw,30px);
+      pointer-events:none;
+    }
+    .brand{
+      pointer-events:auto;
+      color:var(--pink);
+      font-family:'Darumadrop One',cursive;
+      font-size:clamp(14px,1.3vw,18px);
+      line-height:1;
+      transition:transform .25s ease,filter .25s ease;
+    }
+    .brand:hover{
+      transform:translateY(-2px);
+      filter:drop-shadow(0 0 8px rgba(211,150,140,.5));
+    }
+    main{
+      width:100%;
+      padding:clamp(68px,7vh,92px) clamp(18px,2.25vw,40px) clamp(62px,8vh,100px);
+    }
+    .case-section{
+      width:100%;
+      margin:0 0 clamp(52px,7vw,96px);
+      content-visibility:auto;
+      contain-intrinsic-size:650px;
+    }
+    .case-frame{
+      min-height:clamp(470px,62vh,650px);
+      border:2px solid var(--line);
+      border-radius:18px;
+      padding:clamp(14px,1.65vw,26px);
+      background:rgba(255,255,255,.012);
+      box-shadow:0 20px 42px rgba(0,0,0,.2);
+    }
+    .case-title{
+      margin:0 0 clamp(14px,1.7vw,24px);
+      color:var(--text);
+      font-family:'Darumadrop One',cursive;
+      font-size:clamp(22px,2.35vw,34px);
+      line-height:.95;
+      letter-spacing:.02em;
+    }
+    .case-layout{
+      display:grid;
+      grid-template-columns:clamp(205px,21vw,330px) minmax(0,1fr);
+      gap:clamp(24px,3.4vw,58px);
+      align-items:stretch;
+    }
+    .video-card{
+      width:100%;
+      aspect-ratio:9/16;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:0;
+      overflow:hidden;
+      background:#181818;
+      box-shadow:0 14px 26px rgba(0,0,0,.25);
+      transition:transform .24s ease,filter .24s ease,border-color .24s ease;
+    }
+    .video-card:hover{
+      transform:translateY(-4px);
+      filter:brightness(1.06) saturate(1.04);
+      border-color:var(--pink);
+    }
+    .video-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      pointer-events:none;
+    }
+    .case-content{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      height:100%;
+    }
+    .case-copy{
+      max-width:900px;
+      margin:clamp(8px,1vw,16px) 0 0;
+      color:var(--text);
+      font-size:clamp(11px,1.15vw,17px);
+      line-height:1.6;
+      letter-spacing:.01em;
+    }
+    .case-copy p{margin:0}
+    .process-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:clamp(14px,2vw,30px);
+      margin-top:auto;
+      padding-top:clamp(28px,5vw,76px);
+    }
+    .process-cell{
+      aspect-ratio:1.13/1;
+      border-radius:7px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#292929;
+      box-shadow:0 12px 24px rgba(0,0,0,.2);
+    }
+    .process-cell img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+    }
+    .case-section:not(.has-process) .case-content{min-height:0}
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding:clamp(18px,4vw,54px);
+      background:rgba(0,0,0,.8);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .22s ease;
+    }
     .modal.is-open{opacity:1;pointer-events:auto}
-    .modal-inner{width:fit-content;max-width:min(92vw,980px);max-height:88vh;display:grid;place-items:center}
-    .modal video{display:block;width:auto;height:auto;max-width:min(92vw,980px);max-height:88vh;background:#000;border:3px solid var(--line);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.55)}
-    #starCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:100;pointer-events:none}
-    .cursor,.cursor-dot{position:fixed;left:0;top:0;z-index:101;pointer-events:none}
-    .cursor{width:34px;height:50px;transform:translate(-50%,-42%);transform-origin:50% 42%;background:none;filter:drop-shadow(0 0 8px rgba(255,255,255,.92)) drop-shadow(0 0 18px rgba(128,143,255,.78)) drop-shadow(0 0 36px rgba(58,68,170,.66));transition:transform .16s ease,opacity .16s ease,filter .16s ease}
+    .modal-inner{
+      width:fit-content;
+      max-width:min(92vw,980px);
+      max-height:88vh;
+      display:grid;
+      place-items:center;
+    }
+    .modal video{
+      display:block;
+      width:auto;
+      height:auto;
+      max-width:min(92vw,980px);
+      max-height:88vh;
+      border:2px solid var(--line);
+      border-radius:18px;
+      background:#000;
+      box-shadow:0 30px 90px rgba(0,0,0,.55);
+    }
+    #starCanvas{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+    .cursor,.cursor-dot{
+      position:fixed;
+      left:0;
+      top:0;
+      z-index:101;
+      pointer-events:none;
+    }
+    .cursor{
+      width:34px;
+      height:50px;
+      transform:translate(-50%,-42%);
+      transform-origin:50% 42%;
+      filter:drop-shadow(0 0 8px rgba(255,255,255,.92)) drop-shadow(0 0 18px rgba(128,143,255,.78)) drop-shadow(0 0 36px rgba(58,68,170,.66));
+      transition:transform .16s ease,filter .16s ease;
+    }
     .cursor::before,.cursor::after{content:"";position:absolute}
-    .cursor::before{inset:-11px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.46) 0 10%,rgba(133,150,255,.34) 28%,rgba(62,76,178,.24) 48%,transparent 72%);filter:blur(3px)}
-    .cursor::after{inset:0;clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);background:radial-gradient(circle at 50% 42%,#fff 0 28%,#fff8f3 38%,#dfe6ff 54%,#8f9be9 74%,#29336f 100%)}
-    .cursor-dot{z-index:102;width:18px;height:26px;transform:translate(-50%,-42%) rotate(45deg);transform-origin:50% 42%;clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);background:radial-gradient(circle at 50% 42%,#fff 0 30%,#fff7f0 42%,#dfe6ff 63%,#8c9bea 100%);filter:drop-shadow(0 0 7px rgba(255,255,255,.82)) drop-shadow(0 0 16px rgba(128,143,255,.55));transition:transform .16s ease,opacity .16s ease,filter .16s ease}
-    body.cursor-big .cursor{transform:translate(-50%,-42%) scale(1.12);filter:drop-shadow(0 0 10px rgba(255,255,255,.96)) drop-shadow(0 0 24px rgba(128,143,255,.86)) drop-shadow(0 0 46px rgba(58,68,170,.74))}
-    body.cursor-big .cursor-dot{transform:translate(-50%,-42%) rotate(45deg) scale(1.12);opacity:1}
+    .cursor::before{
+      inset:-11px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(255,255,255,.46) 0 10%,rgba(133,150,255,.34) 28%,rgba(62,76,178,.24) 48%,transparent 72%);
+      filter:blur(3px);
+    }
+    .cursor::after{
+      inset:0;
+      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
+      background:radial-gradient(circle at 50% 42%,#fff 0 28%,#fff8f3 38%,#dfe6ff 54%,#8f9be9 74%,#29336f 100%);
+    }
+    .cursor-dot{
+      z-index:102;
+      width:18px;
+      height:26px;
+      transform:translate(-50%,-42%) rotate(45deg);
+      transform-origin:50% 42%;
+      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
+      background:radial-gradient(circle at 50% 42%,#fff 0 30%,#fff7f0 42%,#dfe6ff 63%,#8c9bea 100%);
+      filter:drop-shadow(0 0 7px rgba(255,255,255,.82)) drop-shadow(0 0 16px rgba(128,143,255,.55));
+      transition:transform .16s ease;
+    }
+    body.cursor-big .cursor{transform:translate(-50%,-42%) scale(1.12)}
+    body.cursor-big .cursor-dot{transform:translate(-50%,-42%) rotate(45deg) scale(1.12)}
     @media (max-width:760px){
       :root{--header:58px}
       body{cursor:auto}
+      a,button,video{cursor:auto}
       #starCanvas,.cursor,.cursor-dot{display:none}
-      .page-head{position:sticky;background:rgba(32,32,32,.88);backdrop-filter:blur(10px)}
-      main{width:min(100% - 24px,744px);margin:14px auto 28px;padding:34px 14px 42px}
-      .video-group h1{font-size:clamp(42px,14vw,62px);margin-left:10px}
-      .frame-scroll{border-width:2px;border-radius:22px;padding:19px}
-      .video-row{gap:19px}
-      .video-card{width:clamp(134px,45vw,180px);border-radius:20px}
-      .modal{padding:28px}
+      .page-head{
+        position:sticky;
+        background:rgba(32,32,32,.9);
+        backdrop-filter:blur(10px);
+      }
+      main{padding:18px 10px 52px}
+      .case-section{
+        margin-bottom:54px;
+        contain-intrinsic-size:900px;
+      }
+      .case-frame{
+        min-height:0;
+        padding:14px;
+        border-radius:16px;
+      }
+      .case-title{font-size:clamp(24px,8vw,34px);margin-bottom:14px}
+      .case-layout{
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+      .video-card{
+        width:clamp(190px,58vw,250px);
+        justify-self:center;
+      }
+      .case-content{min-height:0}
+      .case-copy{
+        margin-top:0;
+        font-size:11px;
+        line-height:1.5;
+      }
+      .process-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:8px;
+        margin-top:0;
+        padding-top:20px;
+      }
+      .modal{padding:30px}
       .modal-inner{max-width:82vw;max-height:78vh}
-      .modal video{max-width:82vw;max-height:78vh;border-radius:18px}
+      .modal video{max-width:82vw;max-height:78vh;border-radius:14px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;transition:none!important}
     }
   </style>
 </head>
@@ -60,44 +289,231 @@
   <canvas id="starCanvas" aria-hidden="true"></canvas>
   <div class="cursor" aria-hidden="true"></div>
   <div class="cursor-dot" aria-hidden="true"></div>
+
   <header class="page-head">
     <a class="brand magnetic" href="../../index.html#work">Marakova Daria 3d artist</a>
   </header>
-  <main aria-label="VFX portfolio videos">
-    <section class="video-group" aria-labelledby="vfx">
-      <h1 id="vfx">VFX</h1>
-      <div class="frame-scroll" tabindex="0" aria-label="VFX horizontal video previews">
-        <div class="video-row">
-          <button class="video-card magnetic" type="button" data-video="renderFullSound.mp4" aria-label="Open video renderFullSound"><img src="renderFullSoundposter.png" alt="renderFullSound preview" loading="eager" /></button>
-          <button class="video-card magnetic" type="button" data-video="renderPuma.mp4" aria-label="Open video renderPuma"><img src="renderPuma poster.png" alt="renderPuma preview" loading="lazy" /></button>
-          <button class="video-card magnetic" type="button" data-video="train.mp4" aria-label="Open video train"><img src="train-poster.jpg" alt="train preview" loading="lazy" /></button>
-          <button class="video-card magnetic" type="button" data-video="plants.mp4" aria-label="Open video plants"><img src="plants-poster.png" alt="plants preview" loading="lazy" /></button>
-          <button class="video-card magnetic" type="button" data-video="onestwear.mp4" aria-label="Open video onestwear"><img src="onewear-poster.jpg" alt="onestwear preview" loading="lazy" /></button>
-          <button class="video-card magnetic" type="button" data-video="motion capture blender.MOV" aria-label="Open video motion capture blender"><img src="motion capture poster.png" alt="motion capture blender preview" loading="lazy" /></button>
+
+  <main aria-label="VFX portfolio">
+    <h1 class="visually-hidden">VFX</h1>
+
+    <section class="case-section has-process" aria-labelledby="facetrack-title">
+      <div class="case-frame">
+        <h2 class="case-title" id="facetrack-title">Facial Tracking in Blender</h2>
+        <div class="case-layout">
+          <button class="video-card magnetic" type="button" data-video="section1_facetrack/motion capture blender.MOV" aria-label="Open Facial Tracking in Blender video">
+            <img src="section1_facetrack/motion capture poster.png" alt="Facial Tracking in Blender preview" loading="eager" />
+          </button>
+          <div class="case-content">
+            <div class="case-copy">
+              <p>A personal project created as a tracking exercise. I usually work with SynthEyes, but I wanted to experiment with Blender's tracking tools and see what results I could achieve directly inside the software. This is an older project from 2023, but I decided to keep it in my portfolio as part of my learning process and creative experimentation.</p>
+            </div>
+            <div class="process-grid" aria-label="Facial Tracking in Blender process images">
+              <div class="process-cell"><img src="section1_facetrack/process/1.png" alt="Facial tracking process 1" loading="lazy" /></div>
+              <div class="process-cell"><img src="section1_facetrack/process/2.png" alt="Facial tracking process 2" loading="lazy" /></div>
+              <div class="process-cell"><img src="section1_facetrack/process/3.png" alt="Facial tracking process 3" loading="lazy" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section has-process" aria-labelledby="plants-title">
+      <div class="case-frame">
+        <h2 class="case-title" id="plants-title">Personal Project</h2>
+        <div class="case-layout">
+          <button class="video-card magnetic" type="button" data-video="section2_plants/plants.mp4" aria-label="Open Personal Project video">
+            <img src="section2_plants/plants-poster.png" alt="Personal project with ivy animation preview" loading="lazy" />
+          </button>
+          <div class="case-content">
+            <div class="case-copy">
+              <p>Another personal project. I created the ivy animation in Blender and used fSpy to match the camera perspective, since no full camera tracking was required. The final compositing and editing were completed in DaVinci Resolve.</p>
+            </div>
+            <div class="process-grid" aria-label="Personal Project process images">
+              <div class="process-cell"><img src="section2_plants/1.jpg" alt="Ivy animation process 1" loading="lazy" /></div>
+              <div class="process-cell"><img src="section2_plants/2.jpg" alt="Ivy animation process 2" loading="lazy" /></div>
+              <div class="process-cell"><img src="section2_plants/3.jpg" alt="Ivy animation process 3" loading="lazy" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="superstep-title">
+      <div class="case-frame">
+        <h2 class="case-title" id="superstep-title">SuperStep</h2>
+        <div class="case-layout">
+          <button class="video-card magnetic" type="button" data-video="section3_puma/renderPuma.mp4" aria-label="Open SuperStep video">
+            <img src="section3_puma/renderPuma poster.png" alt="SuperStep animation preview" loading="lazy" />
+          </button>
+          <div class="case-content">
+            <div class="case-copy">
+              <p>An animation created for the SuperStep store. The sneakers, animal paw, rigging, and animation were produced in Blender. The final render was composited with the live-action footage in After Effects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="onestwear-title">
+      <div class="case-frame">
+        <h2 class="case-title" id="onestwear-title">Onestwear</h2>
+        <div class="case-layout">
+          <button class="video-card magnetic" type="button" data-video="Section4_onestwear/onestwear.mp4" aria-label="Open Onestwear video">
+            <img src="Section4_onestwear/onewear-poster.jpg" alt="Onestwear animation preview" loading="lazy" />
+          </button>
+          <div class="case-content">
+            <div class="case-copy">
+              <p>An animation created for the lingerie brand ONESTWEAR. The footage was tracked in SynthEyes, while the garment and cloth simulation were created in CLO3D. The final scene was rendered in Blender and composited in After Effects.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
+
   <div class="modal" id="videoModal" aria-hidden="true" role="dialog" aria-label="Video player">
-    <div class="modal-inner"><video id="modalVideo" controls playsinline preload="metadata"></video></div>
+    <div class="modal-inner">
+      <video id="modalVideo" controls playsinline preload="metadata"></video>
+    </div>
   </div>
+
   <script>
-    const modal=document.querySelector('#videoModal');
-    const modalVideo=document.querySelector('#modalVideo');
-    function openVideo(src){if(!modal||!modalVideo)return;modalVideo.src=src;modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';modalVideo.play().catch(()=>{});}
-    function closeVideo(){if(!modal||!modalVideo)return;modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');modalVideo.pause();modalVideo.removeAttribute('src');modalVideo.load();document.body.style.overflow='';}
-    document.querySelectorAll('.video-card').forEach(card=>{card.addEventListener('click',()=>openVideo(card.dataset.video));});
-    modalVideo?.addEventListener('click',event=>event.stopPropagation());
-    modal?.addEventListener('click',event=>{if(!event.target.closest('video'))closeVideo();});
-    document.addEventListener('keydown',event=>{if(event.key==='Escape')closeVideo();});
-    const cursor=document.querySelector('.cursor'),dot=document.querySelector('.cursor-dot'),canvas=document.querySelector('#starCanvas'),ctx=canvas?.getContext('2d'),reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches,finePointer=window.matchMedia('(pointer: fine)').matches;
-    let x=innerWidth/2,y=innerHeight/2,cx=x,cy=y,lastX=x,lastY=y,stars=[];
-    function resizeCanvas(){if(!canvas||!ctx)return;const ratio=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.floor(innerWidth*ratio);canvas.height=Math.floor(innerHeight*ratio);canvas.style.width=`${innerWidth}px`;canvas.style.height=`${innerHeight}px`;ctx.setTransform(ratio,0,0,ratio,0,0);}
-    function addStar(px,py,force=1){if(!finePointer||reduceMotion)return;stars.push({x:px,y:py,size:(Math.random()*5+3)*force,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8-.35,rotation:Math.random()*Math.PI,spin:(Math.random()-.5)*.12,life:1,decay:Math.random()*.015+.015,points:Math.random()>.55?4:5});if(stars.length>120)stars.splice(0,stars.length-120);}
-    function drawStar(star){if(!ctx)return;ctx.save();ctx.translate(star.x,star.y);ctx.rotate(star.rotation);ctx.beginPath();const outer=star.size,inner=star.size*.42,steps=star.points*2;for(let i=0;i<=steps;i++){const radius=i%2===0?outer:inner,angle=(Math.PI*2*i/steps)-Math.PI/2,px=Math.cos(angle)*radius,py=Math.sin(angle)*radius;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();ctx.fillStyle=`rgba(244,244,244,${.70*star.life})`;ctx.shadowColor=`rgba(244,244,244,${.65*star.life})`;ctx.shadowBlur=10;ctx.fill();ctx.restore();}
-    function animateCursor(){if(cursor){cursor.style.left=`${x}px`;cursor.style.top=`${y}px`;}if(dot){dot.style.left=`${x}px`;dot.style.top=`${y}px`;}if(ctx){ctx.clearRect(0,0,innerWidth,innerHeight);stars.forEach(star=>{star.x+=star.vx;star.y+=star.vy;star.rotation+=star.spin;star.life-=star.decay;star.size+=.015;drawStar(star);});stars=stars.filter(star=>star.life>0);}requestAnimationFrame(animateCursor);}
-    if(canvas&&ctx&&finePointer&&!reduceMotion){resizeCanvas();addEventListener('resize',resizeCanvas);window.addEventListener('mousemove',event=>{x=event.clientX;y=event.clientY;if(dot){dot.style.left=`${x}px`;dot.style.top=`${y}px`;}const distance=Math.hypot(x-lastX,y-lastY);if(distance>10){for(let i=0;i<Math.min(4,Math.floor(distance/22)+1);i++)addStar(x+(Math.random()-.5)*18,y+(Math.random()-.5)*18,Math.min(1.5,distance/80));lastX=x;lastY=y;}});animateCursor();}
-    document.querySelectorAll('a,button,.video-card').forEach(el=>{el.addEventListener('mouseenter',()=>{document.body.classList.add('cursor-big');for(let i=0;i<10;i++)addStar(x+(Math.random()-.5)*34,y+(Math.random()-.5)*34,1.2);});el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-big'));el.addEventListener('click',()=>{for(let i=0;i<20;i++)addStar(x+(Math.random()-.5)*52,y+(Math.random()-.5)*52,1.6);});});
+    const modal = document.querySelector('#videoModal');
+    const modalVideo = document.querySelector('#modalVideo');
+
+    function openVideo(src) {
+      if (!modal || !modalVideo || !src) return;
+      modalVideo.src = src;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalVideo.play().catch(() => {});
+    }
+
+    function closeVideo() {
+      if (!modal || !modalVideo) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load();
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.video-card').forEach(card => {
+      card.addEventListener('click', () => openVideo(card.dataset.video));
+    });
+    modal?.addEventListener('click', event => {
+      if (!event.target.closest('video')) closeVideo();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeVideo();
+    });
+
+    const cursor = document.querySelector('.cursor');
+    const dot = document.querySelector('.cursor-dot');
+    const canvas = document.querySelector('#starCanvas');
+    const ctx = canvas?.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    let x = innerWidth / 2;
+    let y = innerHeight / 2;
+    let lastX = x;
+    let lastY = y;
+    let stars = [];
+
+    function resizeCanvas() {
+      if (!canvas || !ctx) return;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(innerWidth * ratio);
+      canvas.height = Math.floor(innerHeight * ratio);
+      canvas.style.width = `${innerWidth}px`;
+      canvas.style.height = `${innerHeight}px`;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function addStar(px, py, force = 1) {
+      if (!finePointer || reduceMotion) return;
+      stars.push({
+        x:px,
+        y:py,
+        size:(Math.random() * 5 + 3) * force,
+        vx:(Math.random() - .5) * 1.8,
+        vy:(Math.random() - .5) * 1.8 - .35,
+        rotation:Math.random() * Math.PI,
+        spin:(Math.random() - .5) * .12,
+        life:1,
+        decay:Math.random() * .015 + .015
+      });
+      if (stars.length > 120) stars.splice(0, stars.length - 120);
+    }
+
+    function drawStar(star) {
+      if (!ctx) return;
+      ctx.save();
+      ctx.translate(star.x, star.y);
+      ctx.rotate(star.rotation);
+      ctx.beginPath();
+      for (let i = 0; i <= 8; i++) {
+        const radius = i % 2 === 0 ? star.size : star.size * .42;
+        const angle = Math.PI * 2 * i / 8 - Math.PI / 2;
+        const px = Math.cos(angle) * radius;
+        const py = Math.sin(angle) * radius;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = `rgba(244,244,244,${.7 * star.life})`;
+      ctx.shadowColor = `rgba(244,244,244,${.65 * star.life})`;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function animateCursor() {
+      if (cursor) {
+        cursor.style.left = `${x}px`;
+        cursor.style.top = `${y}px`;
+      }
+      if (dot) {
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+      }
+      if (ctx) {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        stars.forEach(star => {
+          star.x += star.vx;
+          star.y += star.vy;
+          star.rotation += star.spin;
+          star.life -= star.decay;
+          drawStar(star);
+        });
+        stars = stars.filter(star => star.life > 0);
+      }
+      requestAnimationFrame(animateCursor);
+    }
+
+    if (canvas && ctx && finePointer && !reduceMotion) {
+      resizeCanvas();
+      addEventListener('resize', resizeCanvas);
+      addEventListener('mousemove', event => {
+        x = event.clientX;
+        y = event.clientY;
+        const distance = Math.hypot(x - lastX, y - lastY);
+        if (distance > 10) {
+          addStar(x, y, Math.min(1.5, distance / 80));
+          lastX = x;
+          lastY = y;
+        }
+      });
+      animateCursor();
+    }
+
+    document.querySelectorAll('a,button').forEach(element => {
+      element.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
+      element.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
+    });
   </script>
 </body>
 </html>
