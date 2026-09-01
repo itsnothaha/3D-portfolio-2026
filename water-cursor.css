@@ -1,0 +1,59 @@
+@media (hover:hover) and (pointer:fine){
+  html.has-water-cursor,
+  html.has-water-cursor *{cursor:none!important}
+
+  .water-cursor{
+    position:fixed;
+    z-index:10000;
+    left:0;
+    top:0;
+    width:16px;
+    height:16px;
+    border:1.5px solid rgba(66,91,113,.88);
+    border-radius:50%;
+    pointer-events:none;
+    opacity:0;
+    transform:translate3d(-50%,-50%,0);
+    box-shadow:0 0 0 1px rgba(255,255,255,.45),0 2px 8px rgba(74,104,130,.18);
+    transition:width .2s ease,height .2s ease,border-color .2s ease,opacity .18s ease;
+    will-change:left,top,width,height;
+  }
+
+  .water-cursor.is-visible{opacity:1}
+  .water-cursor.is-active{
+    width:24px;
+    height:24px;
+    border-color:rgba(239,116,91,.9);
+  }
+
+  .water-ring{
+    position:fixed;
+    z-index:9999;
+    left:0;
+    top:0;
+    width:var(--ring-width,10px);
+    height:var(--ring-height,10px);
+    border:1px solid rgba(95,137,164,.42);
+    border-radius:var(--ring-radius,48% 52% 46% 54% / 53% 45% 55% 47%);
+    pointer-events:none;
+    transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) scale(.35);
+    box-shadow:0 0 var(--ring-glow,9px) rgba(125,165,190,.18),inset 0 0 5px rgba(255,255,255,.28);
+    animation:water-ring-fade var(--ring-duration,1.12s) cubic-bezier(.17,.67,.3,1) var(--ring-delay,0ms) forwards;
+    will-change:transform,opacity,filter;
+  }
+
+  .water-ring--click{
+    border-color:rgba(239,116,91,.55);
+    animation-duration:1.25s;
+  }
+}
+
+@keyframes water-ring-fade{
+  0%{opacity:.68;transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) scale(.35);filter:blur(0)}
+  68%{opacity:.28}
+  100%{opacity:0;transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 12deg)) scale(var(--ring-end-scale,5.4));filter:blur(1.5px)}
+}
+
+@media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
+  .water-cursor,.water-ring{display:none!important}
+}
