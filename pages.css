@@ -119,7 +119,7 @@ img{display:block;max-width:100%}
   margin:clamp(2px,.5vw,8px) clamp(14px,1.2vw,24px) clamp(10px,1.4vw,26px) -5vw;
   filter:saturate(.9);
 }
-.about-content{min-width:0;font-family:'Just Another Hand',cursive;font-size:clamp(16px,1.15vw,23px);line-height:.92}
+.about-content{min-width:0;font-family:'Grandiflora One',serif;font-size:clamp(13px,.82vw,17px);line-height:1.22}
 .about-bio p{margin:0 0 .2em}
 .about-emphasis{font-size:1.13em;text-transform:none}
 .about-columns{display:grid;grid-template-columns:.8fr 1.2fr 1.2fr;gap:clamp(14px,1.8vw,34px);margin-top:clamp(8px,1vw,18px)}
@@ -144,7 +144,7 @@ img{display:block;max-width:100%}
 .page--work{background:url('main page/WorkFonPage.jpg') center/cover fixed no-repeat}
 .work-page{position:relative;min-height:100svh;padding:clamp(30px,4vw,66px) clamp(24px,2.8vw,58px) clamp(42px,5vw,84px)}
 .work-heading{text-align:center;color:var(--pink)}
-.work-heading h1{margin:0;font-family:'Indie Flower',cursive;font-size:clamp(66px,7vw,132px);font-weight:400;line-height:.82}
+.work-heading h1{margin:0;font-family:'Rock 3D',system-ui,sans-serif;font-size:clamp(66px,7vw,132px);font-weight:400;line-height:.82}
 .work-heading p{margin:.15em 0 0;font-family:'Indie Flower',cursive;font-size:clamp(22px,1.8vw,34px);line-height:1}
 .work-grid{
   width:min(100%,1940px);
@@ -208,7 +208,7 @@ img{display:block;max-width:100%}
   top:0;
   right:0;
 }
-.cgi-intro{margin-top:clamp(20px,2vw,38px);max-width:95%;font-family:'Just Another Hand',cursive;font-size:clamp(18px,1.35vw,27px);line-height:.93;text-transform:uppercase}
+.cgi-intro{margin-top:clamp(20px,2vw,38px);max-width:95%;font-family:'Grandiflora One',serif;font-size:clamp(13px,.86vw,18px);line-height:1.28;text-transform:none}
 .cgi-intro p{margin:0 0 .08em}
 .mosaic-frame{width:min(100%,1940px);margin:0 auto;overflow:visible;background:transparent;box-shadow:none}
 .mosaic{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(12,minmax(0,1fr));gap:clamp(4px,.48vw,10px);aspect-ratio:1.29;overflow:visible;background:transparent}
@@ -268,18 +268,18 @@ img{display:block;max-width:100%}
 @media (max-width:720px){
   .page-home-link{position:fixed;top:14px;right:16px;font-size:24px}
   .site-nav{top:16px;right:14px;gap:14px;font-size:15px}
-  .page--home{background-position:center center;overflow:auto}
-  .home-screen{min-height:100svh;padding:24px 18px}
-  .home-title{position:static;max-width:100%;font-size:clamp(42px,13vw,62px);line-height:.88;white-space:nowrap}
-  .home-nav{top:clamp(112px,20vh,170px);right:18px;left:18px;justify-content:center;gap:clamp(18px,7vw,38px);font-size:clamp(30px,9vw,48px)}
-  .home-role{right:20px;bottom:24px;font-size:clamp(38px,12vw,58px)}
+  .page--home{background-image:url('main page/MobileFonMain.png');background-position:center top;background-size:cover;background-repeat:no-repeat;overflow:hidden}
+  .home-screen{min-height:100svh;padding:0}
+  .home-title{position:absolute;top:clamp(80px,10.5svh,104px);left:18px;max-width:calc(100% - 36px);font-size:clamp(42px,12.8vw,58px);line-height:.88;white-space:nowrap}
+  .home-nav{top:22px;right:16px;left:16px;justify-content:center;gap:clamp(22px,7vw,42px);font-size:clamp(18px,5.6vw,26px)}
+  .home-role{top:clamp(137px,17svh,166px);right:auto;bottom:auto;left:20px;color:var(--coral);font-size:clamp(24px,7.3vw,34px)}
 
   .page--about{background-attachment:scroll;background-size:auto 100%;background-repeat:repeat-y}
   .about-page{padding:58px 18px 40px}
   .about-title{font-size:68px}
   .about-layout{display:block;margin-top:12px}
   .about-portrait{float:none;width:min(100%,520px);margin:0 auto 18px}
-  .about-content{font-size:25px;line-height:.96}
+  .about-content{font-size:16px;line-height:1.25}
   .about-columns{grid-template-columns:1fr 1.25fr;gap:18px;margin-top:24px}
   .about-education{grid-column:1/-1}
   .about-skills{margin-top:24px}
@@ -302,7 +302,7 @@ img{display:block;max-width:100%}
   .cgi-header{margin-bottom:26px;padding:42px 6px 0}
   .cgi-header h1{font-size:62px;max-width:100%}
   .cgi-nav{position:absolute;top:0;right:6px;margin:0}
-  .cgi-intro{max-width:100%;font-size:20px;line-height:.95;margin-top:22px}
+  .cgi-intro{max-width:100%;font-size:14px;line-height:1.3;margin-top:22px}
   .cgi-intro p{margin-bottom:.25em}
   .mosaic-frame{box-shadow:none}
   .mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto;gap:6px;aspect-ratio:auto}
