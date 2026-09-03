@@ -148,7 +148,7 @@
       :root{--header:58px}
       body{cursor:auto}
       #starCanvas,.cursor,.cursor-dot{display:none}
-      .page-head{position:sticky;background:rgba(32,32,32,.88);backdrop-filter:blur(10px)}
+      .page-head{position:absolute;background:transparent;box-shadow:none;backdrop-filter:none}
       .site-nav{gap:14px;font-size:15px}
       main{
         width:min(100% - 24px,744px);
@@ -201,8 +201,8 @@
     .page--showreel .modal video{border-color:#f4f0df;border-radius:8px}
     @media (max-width:760px){
       body.page--showreel{background-attachment:scroll;background-size:auto 100%;background-repeat:repeat-y}
-      .page--showreel .page-head{background:rgba(244,240,223,.86)}
-      .page--showreel main{padding-top:24px}
+      .page--showreel .page-head{background:transparent;box-shadow:none;backdrop-filter:none}
+      .page--showreel main{padding-top:72px}
       .page--showreel .showreel-group h1,
       .page--showreel .showreel-group h2{font-size:clamp(42px,12vw,58px)}
       .page--showreel .showreel-frame{padding:0}

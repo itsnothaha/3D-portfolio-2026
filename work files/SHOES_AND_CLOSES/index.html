@@ -281,9 +281,10 @@
       a,button{cursor:auto}
       #starCanvas,.cursor,.cursor-dot{display:none}
       .page-head{
-        position:sticky;
-        background:rgba(32,32,32,.92);
-        backdrop-filter:blur(10px);
+        position:absolute;
+        background:transparent;
+        box-shadow:none;
+        backdrop-filter:none;
       }
       main{padding:18px 11px 52px}
       .portfolio-section{margin-bottom:64px;contain-intrinsic-size:1100px}
@@ -372,8 +373,8 @@
     .page--footwear .technical-grid::-webkit-scrollbar-thumb{background:rgba(81,104,122,.46)}
     .page--footwear .lightbox img{border-color:#f4f0df;border-radius:8px;background:#f4f0df}
     @media (max-width:680px){
-      .page--footwear .page-head{background:rgba(244,240,223,.88)}
-      .page--footwear main{padding-top:24px}
+      .page--footwear .page-head{background:transparent;box-shadow:none;backdrop-filter:none}
+      .page--footwear main{padding-top:72px}
       .page--footwear .section-title{font-size:clamp(38px,11vw,52px)}
       .page--footwear .section-frame{background:rgba(244,240,223,.38);backdrop-filter:none}
     }
