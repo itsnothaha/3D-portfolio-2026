@@ -1,60 +1,10 @@
-@media (hover:hover) and (pointer:fine){
-  html.has-water-cursor,
-  html.has-water-cursor *{cursor:none!important}
-
-  .water-cursor{
-    position:fixed;
-    z-index:10000;
-    left:0;
-    top:0;
-    width:16px;
-    height:16px;
-    border:1.5px solid rgba(66,91,113,.88);
-    border-radius:50%;
-    pointer-events:none;
-    opacity:0;
-    transform:translate3d(-50%,-50%,0);
-    box-shadow:0 0 0 1px rgba(255,255,255,.45),0 2px 8px rgba(74,104,130,.18);
-    transition:width .2s ease,height .2s ease,border-color .2s ease,opacity .18s ease;
-    will-change:left,top,width,height;
-  }
-
-  .water-cursor.is-visible{opacity:1}
-  .water-cursor.is-active{
-    width:24px;
-    height:24px;
-    border-color:rgba(239,116,91,.9);
-  }
-
-  .water-ring{
-    position:fixed;
-    z-index:9999;
-    left:0;
-    top:0;
-    width:var(--ring-width,10px);
-    height:var(--ring-height,10px);
-    border:1px solid rgba(95,137,164,.42);
-    border-radius:var(--ring-radius-start,48% 52% 46% 54% / 53% 45% 55% 47%);
-    pointer-events:none;
-    transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) skew(var(--ring-skew-x,0deg),var(--ring-skew-y,0deg)) scale(.35) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));
-    box-shadow:0 0 var(--ring-glow,9px) rgba(125,165,190,.18),inset 0 0 5px rgba(255,255,255,.28);
-    animation:water-ring-fade var(--ring-duration,1.12s) cubic-bezier(.17,.67,.3,1) var(--ring-delay,0ms) forwards;
-    will-change:transform,opacity,filter;
-  }
-
-  .water-ring--click{
-    border-color:rgba(239,116,91,.55);
-    animation-duration:1.25s;
-  }
+@media(hover:hover) and (pointer:fine){
+  html.has-water-cursor,html.has-water-cursor *{cursor:none!important}
+  .water-cursor{position:fixed;z-index:10000;left:0;top:0;width:16px;height:16px;border:1.2px solid rgba(66,91,113,.8);border-radius:50%;pointer-events:none;opacity:0;box-shadow:0 0 0 1px rgba(255,255,255,.4);transition:opacity .18s,border-color .18s;will-change:transform}
+  .water-cursor.is-visible{opacity:1}.water-cursor.is-active{border-color:#ef745b}
+  .water-ring{position:fixed;z-index:9999;width:32px;height:28px;pointer-events:none;border:1px solid rgba(95,137,164,.45);border-radius:48% 52% 49% 51% / 51% 47% 53% 49%;box-shadow:0 1px 0 rgba(255,255,255,.5),inset 0 1px 0 rgba(255,255,255,.5);opacity:0;animation:water-ring-fade 1.3s ease-out var(--ring-delay,0ms) forwards;will-change:transform,opacity}
 }
-
-@keyframes water-ring-fade{
-  0%{opacity:.68;border-radius:var(--ring-radius-start);transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) skew(var(--ring-skew-x,0deg),var(--ring-skew-y,0deg)) scale(.35) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));filter:blur(0)}
-  48%{opacity:.42;border-radius:var(--ring-radius-mid);transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 7deg)) skew(var(--ring-skew-x-mid,0deg),var(--ring-skew-y-mid,0deg)) scale(var(--ring-mid-scale,2.8)) scaleX(var(--ring-stretch-y,1)) scaleY(var(--ring-stretch-x,1))}
-  72%{opacity:.24}
-  100%{opacity:0;border-radius:var(--ring-radius-end);transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 18deg)) skew(var(--ring-skew-x-end,0deg),var(--ring-skew-y-end,0deg)) scale(var(--ring-end-scale,5.4)) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));filter:blur(1.8px)}
-}
-
-@media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
-  .water-cursor,.water-ring{display:none!important}
-}
+@keyframes water-ring-fade{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--ring-rotate,0deg)) scale(.25)}12%{opacity:.65}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--ring-rotate,0deg)) scale(var(--ring-end-scale,3))}}
+html:not(.has-water-cursor) body{cursor:auto}
+html:not(.has-water-cursor) :is(a,button,[role="button"]){cursor:pointer}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.water-cursor,.water-ring{display:none!important}}

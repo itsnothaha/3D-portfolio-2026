@@ -10,15 +10,17 @@
 
   function start() {
     const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
+    const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, preserveDrawingBuffer: true, powerPreference: 'low-power' });
     if (!gl) return () => {};
     host.append(canvas);
     let dead = false, raf = 0, visible = false, selected = -1, previous = 0;
     let width = innerWidth, height = innerHeight, resolution = 1, slowFrames = 0;
+    let previousRect=null, fullRedraw=true;
     let px = -1000, py = -1000, movedAt = 0, strength = 0;
     const abort = new AbortController();
     const listen = (target, name, fn) => target.addEventListener(name, fn, { signal: abort.signal, passive: true });
     const seeds = [[.255,.427],[.929,.219],[.737,.568],[.046,.755]];
+    const maskRadii = [[.22,.35],[.17,.30],[.24,.35],[.17,.30]];
     const vertex = `attribute vec2 position; varying vec2 uv; void main(){uv=position*.5+.5;gl_Position=vec4(position,0.,1.);}`;
     const fragment = `
       precision mediump float;
@@ -26,6 +28,7 @@
       uniform sampler2D poster, fish0, fish1, fish2, fish3;
       uniform vec2 viewport, cover;
       uniform vec4 zones[4];
+      uniform vec4 crops[4];
       uniform vec3 trail[3];
       uniform vec4 ripples[8];
       vec2 imageUV(vec2 p){return (p-.5)*cover+.5;}
@@ -39,12 +42,24 @@
         vec2 q=imageUV(p);
         vec3 base=texture2D(poster,q).rgb;
         vec2 a=vec2(.255,.427),b=vec2(.929,.219),c=vec2(.737,.568),d=vec2(.046,.755);
-        float radius=clamp(viewport.x*.17,155.,235.);
-        float m0=(1.-smoothstep(radius*.25,radius,distance(p*viewport,zones[0].xy)))*zones[0].z*ownership(q,a,b,c,d);
-        float m1=(1.-smoothstep(radius*.25,radius,distance(p*viewport,zones[1].xy)))*zones[1].z*ownership(q,b,a,c,d);
-        float m2=(1.-smoothstep(radius*.25,radius,distance(p*viewport,zones[2].xy)))*zones[2].z*ownership(q,c,a,b,d);
-        float m3=(1.-smoothstep(radius*.25,radius,distance(p*viewport,zones[3].xy)))*zones[3].z*ownership(q,d,a,b,c);
-        return base*(1.-m0-m1-m2-m3)+texture2D(fish0,q).rgb*m0+texture2D(fish1,q).rgb*m1+texture2D(fish2,q).rgb*m2+texture2D(fish3,q).rgb*m3;
+
+        if(zones[0].z>.003){
+          float m=(1.-smoothstep(.76,1.,length((q-a)/vec2(0.22,0.35))))*zones[0].z*ownership(q,a,b,c,d);
+          if(m>0.)base=mix(base,texture2D(fish0,(q-crops[0].xy)/crops[0].zw).rgb,m);
+        }
+        if(zones[1].z>.003){
+          float m=(1.-smoothstep(.76,1.,length((q-b)/vec2(0.17,0.3))))*zones[1].z*ownership(q,b,a,c,d);
+          if(m>0.)base=mix(base,texture2D(fish1,(q-crops[1].xy)/crops[1].zw).rgb,m);
+        }
+        if(zones[2].z>.003){
+          float m=(1.-smoothstep(.76,1.,length((q-c)/vec2(0.24,0.35))))*zones[2].z*ownership(q,c,a,b,d);
+          if(m>0.)base=mix(base,texture2D(fish2,(q-crops[2].xy)/crops[2].zw).rgb,m);
+        }
+        if(zones[3].z>.003){
+          float m=(1.-smoothstep(.76,1.,length((q-d)/vec2(0.17,0.3))))*zones[3].z*ownership(q,d,a,b,c);
+          if(m>0.)base=mix(base,texture2D(fish3,(q-crops[3].xy)/crops[3].zw).rgb,m);
+        }
+        return base;
       }
       void main(){
         vec2 p=vec2(uv.x,1.-uv.y), warped=p;
@@ -127,7 +142,9 @@
     const position = gl.getAttribLocation(program, 'position');
     gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const location = name => gl.getUniformLocation(program, name);
-    const uniforms = {viewport:location('viewport'),cover:location('cover'),zones:location('zones[0]'),trail:location('trail[0]'),ripples:location('ripples[0]')};
+    const uniforms = {viewport:location('viewport'),cover:location('cover'),zones:location('zones[0]'),trail:location('trail[0]'),ripples:location('ripples[0]'),crops:location('crops[0]')};
+    gl.uniform4fv(uniforms.crops,new Float32Array([0.0, 0.0, 0.5671875, 1.0, 0.55, 0.0, 0.45, 0.7611111111111111, 0.425, 0.0, 0.575, 1.0, 0.0, 0.20555555555555555, 0.403125, 0.7944444444444444]));
+    const textureSizes=Array.from({length:5},()=>[1,1]);
     for (let i=0; i<5; i++) {
       gl.activeTexture(gl.TEXTURE0+i);
       const texture=gl.createTexture(); textures.push(texture); gl.bindTexture(gl.TEXTURE_2D,texture);
@@ -142,7 +159,11 @@
     const wake = () => { if (!dead && ready && !document.hidden && !raf) raf=requestAnimationFrame(draw); };
     const upload = (index, image) => {
       gl.activeTexture(gl.TEXTURE0+index); gl.bindTexture(gl.TEXTURE_2D,textures[index]);
-      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image);
+      const w=image.videoWidth||image.naturalWidth, h=image.videoHeight||image.naturalHeight;
+      if(textureSizes[index][0]!==w || textureSizes[index][1]!==h){
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image);
+        textureSizes[index]=[w,h];
+      } else gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,gl.RGB,gl.UNSIGNED_BYTE,image);
     };
     const poster = new Image();
     poster.onload = () => {
@@ -151,7 +172,7 @@
       ready=true; host.classList.add('is-ready'); resize();
     };
     poster.onerror=cleanup;
-    poster.src='main page/FirstPageFon.png';
+    poster.src='main page/FirstPageFon.optimized.webp';
     for (let i=0;i<4;i++) {
       const video=document.createElement('video');
       video.muted=true; video.loop=true; video.playsInline=true; video.preload='auto';
@@ -177,8 +198,9 @@
       width=innerWidth; height=innerHeight;
       const scale=Math.max(width/1280,height/720);
       coverX=width/(1280*scale); coverY=height/(720*scale);
-      const dpr=Math.min(devicePixelRatio||1,1.35,Math.sqrt(1900000/(width*height)))*resolution;
+      const dpr=Math.min(devicePixelRatio||1,1,Math.sqrt(1250000/(width*height)))*resolution;
       canvas.width=Math.round(width*dpr); canvas.height=Math.round(height*dpr);
+      fullRedraw=true;previousRect=null;
       gl.viewport(0,0,canvas.width,canvas.height);
       gl.uniform2f(uniforms.viewport,width,height); gl.uniform2f(uniforms.cover,coverX,coverY);
       wake();
@@ -202,9 +224,11 @@
     }
     function draw(now) {
       raf=0; if(dead || !ready || document.hidden) return;
-      const elapsed=previous ? now-previous : 16.7;
+      const elapsed=previous ? now-previous : 33.4;
+      // Decorative water needs at most 30 fps; video textures update only when decoded.
+      if(previous && elapsed<32){wake();return;}
       const dt=Math.min(elapsed,50); previous=now;
-      if(strength>.002 && elapsed>27 && elapsed<150) slowFrames++; else slowFrames=Math.max(0,slowFrames-1);
+      if(strength>.002 && elapsed>48 && elapsed<150) slowFrames++; else slowFrames=Math.max(0,slowFrames-1);
       if(slowFrames>45 && resolution>.65) { resolution*=.8; slowFrames=0; resize(); }
       const targetStrength=visible ? Math.max(0,1-(now-movedAt)/900) : 0;
       strength+=(targetStrength-strength)*(1-Math.exp(-dt/130));
@@ -222,7 +246,7 @@
       });
       zones.forEach((zone,i) => {
         const wanted=visible && selected===i && !zone.failed;
-        if(wanted && !zone.loaded) {zone.loaded=true; zone.video.src='main page/fish-forward.mp4';zone.video.load();}
+        if(wanted && !zone.loaded) {zone.loaded=true; zone.video.src=`main page/fish-region-${i}.mp4`;zone.video.load();}
         const canStart=wanted && zone.video.readyState>=2 && !zone.resetting && !zone.video.seeking;
         if(canStart && !zone.started) {
           // Commit frame zero before play() can advance this region's independent clock.
@@ -237,21 +261,15 @@
           } else if(zone.exitAt===null) {
             zone.exitAt=now; zone.video.loop=false;
           }
-          // Keep normal motion for 450 ms, then ease forward to the current loop's end.
-          const coasting=zone.exitAt!==null && now-zone.exitAt>450;
-          const remaining=Math.max(0,zone.video.duration-zone.video.currentTime);
-          const rate=coasting ? Math.min(2.2,Math.max(1.25,remaining/1.65)) : 1;
-          const nextRate=zone.video.playbackRate+(rate-zone.video.playbackRate)*(1-Math.exp(-dt/300));
-          if(Math.abs(nextRate-zone.video.playbackRate)>.005)zone.video.playbackRate=nextRate;
-          if(Math.abs(rate-zone.video.playbackRate)>.01)active=true;
+          // Each fish finishes its own current cycle at the original speed.
+          if(zone.video.playbackRate!==1)zone.video.playbackRate=1;
         }
         const target=!zone.failed && (zone.started || (zone.settling && !zone.settled)) ? 1 : 0;
         zone.opacity+=(target-zone.opacity)*(1-Math.exp(-dt/(target?170:220)));
         if(zone.opacity<.004 && !target) {zone.opacity=0;if(zone.started || zone.settling)reset(zone);}
-        if(wanted) {
-          const lerp=zone.opacity<.01?1:1-Math.exp(-dt/65);
-          zone.x+=(px-zone.x)*lerp;zone.y+=(py-zone.y)*lerp;
-        }
+        // Keep the complete fish covered even after the pointer has moved to a neighbour.
+        zone.x=((seeds[i][0]-.5)/coverX+.5)*width;
+        zone.y=((seeds[i][1]-.5)/coverY+.5)*height;
         if(zone.opacity>0 && (zone.started || zone.settling) && (zone.dirty || (!zone.video.requestVideoFrameCallback && zone.time!==zone.video.currentTime))) {
           try {upload(i+1,zone.video);} catch {zone.failed=true;}
           zone.time=zone.video.currentTime;zone.dirty=false;
@@ -260,7 +278,26 @@
         if(Math.abs(target-zone.opacity)>.004 || (zone.opacity>0 && !zone.video.requestVideoFrameCallback))active=true;
       });
       gl.uniform4fv(uniforms.zones,zoneData);gl.uniform3fv(uniforms.trail,trailData);gl.uniform4fv(uniforms.ripples,rippleData);
-      gl.drawArrays(gl.TRIANGLES,0,6);
+      // Redraw only changed water/animation areas, including the previous bounds to erase trails.
+      let rect=null;
+      const include=(x,y,r,ry=r)=>{
+        const next=[Math.max(0,x-r),Math.max(0,y-ry),Math.min(width,x+r),Math.min(height,y+ry)];
+        if(next[2]<=next[0] || next[3]<=next[1])return;
+        rect=rect ? [Math.min(rect[0],next[0]),Math.min(rect[1],next[1]),Math.max(rect[2],next[2]),Math.max(rect[3],next[3])] : next;
+      };
+      zones.forEach((z,i)=>{if(z.opacity>.003)include(z.x,z.y,maskRadii[i][0]*width/coverX+12,maskRadii[i][1]*height/coverY+12);});
+      if(strength>.002)trails.forEach(t=>include(t.x,t.y,115));
+      ripples.forEach(r=>{const age=(now-r.born)/1000;if(age<1.85)include(r.x,r.y,40+age*82);});
+      let dirty=rect;
+      if(previousRect)dirty=dirty ? [Math.min(dirty[0],previousRect[0]),Math.min(dirty[1],previousRect[1]),Math.max(dirty[2],previousRect[2]),Math.max(dirty[3],previousRect[3])] : previousRect;
+      if(fullRedraw){gl.disable(gl.SCISSOR_TEST);gl.drawArrays(gl.TRIANGLES,0,6);fullRedraw=false;}
+      else if(dirty){
+        const sx=canvas.width/width,sy=canvas.height/height;
+        const left=Math.floor(dirty[0]*sx),bottom=Math.floor((height-dirty[3])*sy);
+        gl.enable(gl.SCISSOR_TEST);gl.scissor(left,bottom,Math.ceil(dirty[2]*sx)-left,Math.ceil((height-dirty[1])*sy)-bottom);
+        gl.drawArrays(gl.TRIANGLES,0,6);
+      }
+      previousRect=rect;
       if(active || strength>.002)wake(); else previous=0;
     }
     const updateIntent=now=>{

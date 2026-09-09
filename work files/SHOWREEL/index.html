@@ -4,9 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Showreel — Marakova Daria</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Grandiflora+One&family=Indie+Flower&family=Just+Another+Hand&family=Rock+3D&family=Send+Flowers&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#202020;
@@ -171,7 +168,7 @@
     body.page--showreel{
       color:#51687a;
       font-family:'Grandiflora One',serif;
-      background:#f4f0df url('../../main page/ShowreelPageFon.png') center/cover fixed no-repeat;
+      background:#f4f0df url('../../main page/ShowreelPageFon.optimized.webp') center/cover fixed no-repeat;
     }
     .page--showreel .page-head{
       background:linear-gradient(to bottom,rgba(244,240,223,.88),rgba(244,240,223,0));
@@ -208,7 +205,8 @@
       .page--showreel .showreel-frame{padding:0}
     }
   </style>
-  <link rel="stylesheet" href="../../water-cursor.css?v=20260909">
+  <link rel="stylesheet" href="../../water-cursor.css?v=perf1">
+  <link rel="stylesheet" href="../../Fonts/fonts.css?v=perf1">
 </head>
 <body class="page--showreel">
 
@@ -224,8 +222,8 @@
     <section class="showreel-group" aria-labelledby="showreel-2025">
       <h1 id="showreel-2025">SHOWREEL 2025</h1>
       <div class="showreel-frame">
-        <button class="showreel-card magnetic" type="button" data-video="showreel2025-26.mp4" aria-label="Open Showreel 2025 video">
-          <img src="intro_Showreel2025.png" alt="Showreel 2025 preview" loading="eager" />
+        <button class="showreel-card magnetic" type="button" data-video="showreel2025-26.web.mp4" aria-label="Open Showreel 2025 video">
+          <img width="1000" height="563" decoding="async" src="intro_Showreel2025.optimized.webp" alt="Showreel 2025 preview" loading="eager" />
         </button>
       </div>
     </section>
@@ -233,8 +231,8 @@
     <section class="showreel-group" aria-labelledby="showreel-2024">
       <h2 id="showreel-2024">SHOWREEL 2024</h2>
       <div class="showreel-frame">
-        <button class="showreel-card magnetic" type="button" data-video="SHOWREEL_2024.mp4" aria-label="Open Showreel 2024 video">
-          <img src="intro_showreel2024.png" alt="Showreel 2024 preview" loading="lazy" />
+        <button class="showreel-card magnetic" type="button" data-video="SHOWREEL_2024.web.mp4" aria-label="Open Showreel 2024 video">
+          <img width="1000" height="563" decoding="async" src="intro_showreel2024.optimized.webp" alt="Showreel 2024 preview" loading="lazy" />
         </button>
       </div>
     </section>
@@ -275,66 +273,7 @@
     modal?.addEventListener('click', event => { if (!event.target.closest('video')) closeVideo(); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape') closeVideo(); });
 
-    const cursor = document.querySelector('.cursor');
-    const dot = document.querySelector('.cursor-dot');
-    const canvas = document.querySelector('#starCanvas');
-    const ctx = canvas?.getContext('2d');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const finePointer = window.matchMedia('(pointer: fine)').matches;
-    let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, lastX = x, lastY = y, stars = [];
-
-    function resizeCanvas() {
-      if (!canvas || !ctx) return;
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(innerWidth * ratio);
-      canvas.height = Math.floor(innerHeight * ratio);
-      canvas.style.width = `${innerWidth}px`;
-      canvas.style.height = `${innerHeight}px`;
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    }
-    function addStar(px, py, force = 1) {
-      if (!finePointer || reduceMotion) return;
-      stars.push({x:px,y:py,size:(Math.random()*5+3)*force,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8-.35,rotation:Math.random()*Math.PI,spin:(Math.random()-.5)*.12,life:1,decay:Math.random()*.015+.015,points:Math.random()>.55?4:5});
-      if (stars.length > 120) stars.splice(0, stars.length - 120);
-    }
-    function drawStar(star) {
-      if (!ctx) return;
-      ctx.save(); ctx.translate(star.x, star.y); ctx.rotate(star.rotation); ctx.beginPath();
-      const outer = star.size, inner = star.size * .42, steps = star.points * 2;
-      for (let i = 0; i <= steps; i++) {
-        const radius = i % 2 === 0 ? outer : inner;
-        const angle = (Math.PI * 2 * i / steps) - Math.PI / 2;
-        const px = Math.cos(angle) * radius, py = Math.sin(angle) * radius;
-        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-      }
-      ctx.closePath(); ctx.fillStyle = `rgba(244,244,244,${0.70 * star.life})`; ctx.shadowColor = `rgba(244,244,244,${0.65 * star.life})`; ctx.shadowBlur = 10; ctx.fill(); ctx.restore();
-    }
-    function animateCursor() {
-      if (cursor) { cursor.style.left = `${x}px`; cursor.style.top = `${y}px`; }
-      if (dot) { dot.style.left = `${x}px`; dot.style.top = `${y}px`; }
-      if (ctx) {
-        ctx.clearRect(0, 0, innerWidth, innerHeight);
-        stars.forEach(star => { star.x += star.vx; star.y += star.vy; star.rotation += star.spin; star.life -= star.decay; star.size += .015; drawStar(star); });
-        stars = stars.filter(star => star.life > 0);
-      }
-      requestAnimationFrame(animateCursor);
-    }
-    if (canvas && ctx && finePointer && !reduceMotion) {
-      resizeCanvas(); addEventListener('resize', resizeCanvas);
-      window.addEventListener('mousemove', event => {
-        x = event.clientX; y = event.clientY;
-        if (dot) { dot.style.left = `${x}px`; dot.style.top = `${y}px`; }
-        const distance = Math.hypot(x - lastX, y - lastY);
-        if (distance > 10) { for (let i = 0; i < Math.min(4, Math.floor(distance / 22) + 1); i++) addStar(x + (Math.random()-.5)*18, y + (Math.random()-.5)*18, Math.min(1.5, distance / 80)); lastX = x; lastY = y; }
-      });
-      animateCursor();
-    }
-    document.querySelectorAll('a,button,.showreel-card').forEach(el => {
-      el.addEventListener('mouseenter', () => { document.body.classList.add('cursor-big'); for (let i = 0; i < 10; i++) addStar(x + (Math.random()-.5)*34, y + (Math.random()-.5)*34, 1.2); });
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
-      el.addEventListener('click', () => { for (let i = 0; i < 20; i++) addStar(x + (Math.random()-.5)*52, y + (Math.random()-.5)*52, 1.6); });
-    });
   </script>
-  <script src="../../water-cursor.js?v=20260909"></script>
+  <script src="../../water-cursor.js?v=perf1"></script>
 </body>
 </html>

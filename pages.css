@@ -50,7 +50,7 @@ img{display:block;max-width:100%}
 
 /* Home */
 .page--home{
-  background:url('main page/FirstPageFon.png') center/cover no-repeat;
+  background:url('main page/FirstPageFon.optimized.webp') center/cover no-repeat;
   overflow:hidden;
 }
 .home-screen{position:relative;min-height:100svh;width:100%}
@@ -102,7 +102,7 @@ img{display:block;max-width:100%}
 
 /* About */
 .page--about{
-  background:url('main page/AboutFon.jpg') center/cover fixed no-repeat;
+  background:url('main page/AboutFon.optimized.webp') center/cover fixed no-repeat;
   color:var(--gray);
 }
 .about-page{position:relative;min-height:100svh;padding:clamp(18px,1.8vw,32px) clamp(30px,4vw,82px) clamp(20px,2.5vw,42px)}
@@ -148,7 +148,7 @@ img{display:block;max-width:100%}
 .about-skills p{margin:0;text-transform:uppercase}
 
 /* Work landing */
-.page--work{background:url('main page/WorkFonPage.jpg') center/cover fixed no-repeat}
+.page--work{background:url('main page/WorkFonPage.optimized.webp') center/cover fixed no-repeat}
 .work-page{position:relative;min-height:100svh;padding:clamp(30px,4vw,66px) clamp(24px,2.8vw,58px) clamp(42px,5vw,84px)}
 .work-heading{text-align:center;color:var(--pink)}
 .work-heading h1{margin:0;font-family:'Rock 3D',system-ui,sans-serif;font-size:clamp(66px,7vw,132px);font-weight:400;line-height:.82}
@@ -175,7 +175,7 @@ img{display:block;max-width:100%}
 .work-category:hover .work-category-title{color:var(--coral)}
 
 /* Contacts */
-.page--contacts{background:url('main page/ContactPageFon.png') center/cover no-repeat;overflow:hidden}
+.page--contacts{background:url('main page/ContactPageFon.optimized.webp') center/cover no-repeat;overflow:hidden}
 .contacts-page{position:relative;min-height:100svh;width:100%}
 .contact-title{
   position:absolute;
@@ -198,7 +198,7 @@ img{display:block;max-width:100%}
 .contact-instagram{right:8%;bottom:15%;color:#e33d61}
 
 /* CGI / VFX mosaic */
-.page--cgi{background:url('main page/CGIfon.png') center top/cover fixed no-repeat;color:#858585}
+.page--cgi{background:url('main page/CGIfon.optimized.webp') center top/cover fixed no-repeat;color:#858585}
 .cgi-page{min-height:100svh;padding:clamp(26px,2.5vw,54px) clamp(18px,3.4vw,70px) clamp(42px,5vw,92px)}
 .cgi-header{position:relative;width:min(100%,1940px);margin:0 auto clamp(28px,3vw,62px)}
 .cgi-header h1{
@@ -275,7 +275,7 @@ img{display:block;max-width:100%}
 @media (max-width:720px){
   .page-home-link{position:fixed;top:14px;right:16px;font-size:24px}
   .site-nav{top:16px;right:14px;gap:14px;font-size:15px;background:transparent;box-shadow:none;backdrop-filter:none}
-  .page--home{background-image:url('main page/MobileFonMain.png');background-position:center top;background-size:cover;background-repeat:no-repeat;overflow:hidden}
+  .page--home{background-image:url('main page/MobileFonMain.optimized.webp');background-position:center top;background-size:cover;background-repeat:no-repeat;overflow:hidden}
   .home-screen{min-height:100svh;padding:0}
   .home-title{position:absolute;top:clamp(80px,10.5svh,104px);left:18px;max-width:calc(100% - 36px);font-size:clamp(42px,12.8vw,58px);line-height:.88;white-space:nowrap}
   .home-nav{top:22px;right:16px;left:16px;justify-content:center;gap:clamp(22px,7vw,42px);font-size:clamp(18px,5.6vw,26px)}
@@ -297,7 +297,7 @@ img{display:block;max-width:100%}
   .work-grid{grid-template-columns:1fr;margin:66px auto 0;gap:42px}
   .work-category{gap:11px}.work-category-title{font-size:38px}
 
-  .page--contacts{overflow:hidden;background-image:url('main page/mobileContactFon.png');background-position:center -18px;background-size:auto calc(100svh + 18px);background-repeat:no-repeat}
+  .page--contacts{overflow:hidden;background-image:url('main page/mobileContactFon.optimized.webp');background-position:center -18px;background-size:auto calc(100svh + 18px);background-repeat:no-repeat}
   .contacts-page{min-height:100svh}
   .contact-title{top:90px;font-family:'Rock 3D',system-ui,sans-serif;font-size:clamp(44px,13vw,58px);text-transform:uppercase;transform:translateX(-50%)}
   .contact-links{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:clamp(42px,8svh,68px);padding-top:clamp(190px,24svh,220px);font-size:clamp(34px,10vw,46px);text-transform:uppercase}
@@ -324,3 +324,62 @@ img{display:block;max-width:100%}
 @media (prefers-reduced-motion:reduce){
   .page,.mosaic-item,.home-nav a,.contact-links a,.work-category img{transition:none}
 }
+
+/* Soft, translucent water lettering. Static CSS highlights add no animation cost. */
+:is(.home-title,.about-title,.contact-title,.work-heading h1).water-title{
+  font-family:'Bagel Fat One',system-ui,sans-serif;
+  font-weight:400;
+  line-height:1.06;
+  letter-spacing:.015em;
+  text-transform:none;
+  color:rgba(113,172,190,.28);
+  -webkit-text-stroke:0;
+  background:linear-gradient(175deg,transparent 0 20%,rgba(255,255,255,.95) 22%,rgba(255,255,255,.65) 24%,transparent 29%),linear-gradient(180deg,rgba(199,230,235,.55),rgba(151,185,199,.32) 48%,rgba(122,187,205,.42) 73%,rgba(91,151,179,.52));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.75));
+}
+.about-title.water-title{margin-bottom:12px}
+.work-heading .water-title{margin-bottom:8px}
+@media(max-width:720px){
+  :is(.home-title,.about-title,.contact-title,.work-heading h1).water-title{-webkit-text-stroke:0}
+  .home-title.water-title{font-size:clamp(43px,12.5vw,58px)}
+}
+
+/* Reference layouts: central home navigation and pastel shell contacts. */
+.home-nav{
+  top:26%;left:50%;right:auto;width:max-content;max-width:94%;height:52%;
+  transform:translateX(-50%);flex-direction:column;justify-content:space-between;gap:0;
+  font-family:'Bagel Fat One',system-ui,sans-serif;font-size:clamp(48px,6.3vw,126px);
+  line-height:1.05;text-transform:uppercase;color:rgba(108,137,157,.54);
+}
+.home-nav a:hover,.home-nav a:focus-visible{color:rgba(93,128,151,.88);text-shadow:none;transform:translateY(-2px)}
+.home-role{left:3vw;right:auto;top:20%;bottom:auto;color:#f17839;font-size:clamp(28px,3.2vw,65px)}
+.work-category-title{font-family:'Bagel Fat One',system-ui,sans-serif;font-weight:400;font-size:clamp(25px,2.65vw,53px);-webkit-text-stroke:0}
+.page--contacts{background:#dee5e5 url('main page/contact-shells.webp') center bottom/cover no-repeat}
+body .contact-title.water-title{
+  left:2%;top:3%;transform:none;font-size:clamp(56px,6.5vw,132px);text-transform:uppercase;
+  color:rgba(255,255,255,.86);-webkit-text-fill-color:rgba(255,255,255,.86);background:none;filter:none;
+}
+.contact-links{
+  position:absolute;left:62%;right:9%;top:8.5%;height:54%;padding:0;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  font-family:'Bagel Fat One',system-ui,sans-serif;font-size:clamp(30px,4.25vw,85px);line-height:1.08;text-transform:uppercase;
+}
+.contact-links a{position:static;white-space:nowrap}
+.contact-instagram{order:1;color:#e7cce0}.contact-pinterest{order:2;color:#e2c2c3}
+.contact-linkedin{order:3;color:#98bbd3}.contact-mail{order:4;color:#a5ceb2}
+.contact-links a:hover{transform:scale(1.025);text-shadow:none}
+.contact-page-nav{top:auto;bottom:15px;right:24px;font-size:16px;background:rgba(239,246,247,.72);border-radius:20px;padding:7px 15px}
+@media(max-width:720px){
+  .home-nav{top:34%;left:50%;right:auto;height:43%;width:max-content;font-size:clamp(38px,12vw,64px);gap:0}
+  .home-role{left:20px;top:clamp(145px,18svh,170px);right:auto;bottom:auto;font-size:clamp(24px,7.3vw,34px)}
+  .work-category-title{font-size:clamp(28px,8vw,42px)}
+  .page--contacts{background-size:auto 48svh;background-position:65% bottom}
+  body .contact-title.water-title{left:20px;top:30px;font-size:clamp(48px,13vw,68px)}
+  .contact-links{left:5%;right:5%;top:20%;height:43%;padding:0;font-size:clamp(32px,10vw,48px)}
+  .contact-page-nav{left:auto;right:12px;bottom:12px;top:auto;font-size:15px;gap:20px}
+}
+
+@media(min-width:721px) and (max-aspect-ratio:4/3){.page--contacts{background-size:100% auto}.contact-links{top:16%;height:40%}}

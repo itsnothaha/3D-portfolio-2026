@@ -2,99 +2,44 @@
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  if (finePointer.matches && !reducedMotion.matches) {
+  let disposeCursor=()=>{};
+  function setupCursor(){
+    disposeCursor();
+    if(!finePointer.matches || reducedMotion.matches)return;
+    const abort=new AbortController(), rings=new Set();
+    const cursor=document.createElement('div');cursor.className='water-cursor';cursor.setAttribute('aria-hidden','true');document.body.append(cursor);
     document.documentElement.classList.add('has-water-cursor');
-
-    const cursor = document.createElement('div');
-    cursor.className = 'water-cursor';
-    cursor.setAttribute('aria-hidden', 'true');
-    document.body.append(cursor);
-
-    let pointerX = window.innerWidth / 2;
-    let pointerY = window.innerHeight / 2;
-    let cursorX = pointerX;
-    let cursorY = pointerY;
-    let lastRingX = pointerX;
-    let lastRingY = pointerY;
-    let lastRingAt = 0;
-
-    const addRipple = (x, y, click = false) => {
-      const count = click ? 4 : 3;
-      const existingRings = document.querySelectorAll('.water-ring');
-      if (existingRings.length > 42) {
-        [...existingRings].slice(0,existingRings.length - 36).forEach(ring => ring.remove());
-      }
-
-      for (let index = 0; index < count; index += 1) {
-        const ring = document.createElement('span');
-        const width = 8 + index * 4 + Math.random() * 4;
-        const height = width * (.72 + Math.random() * .38);
-        const irregularRadius = () => {
-          const values = Array.from({length:8}, () => 27 + Math.round(Math.random() * 46));
-          return `${values.slice(0,4).map(value => `${value}%`).join(' ')} / ${values.slice(4).map(value => `${value}%`).join(' ')}`;
-        };
-        const skewX = Math.random() * 16 - 8;
-        const skewY = Math.random() * 10 - 5;
-        const endScale = 4.5 + index * .6 + Math.random() * .5;
-        ring.className = click ? 'water-ring water-ring--click' : 'water-ring';
-        ring.style.left = `${x + (Math.random() - .5) * 7}px`;
-        ring.style.top = `${y + (Math.random() - .5) * 7}px`;
-        ring.style.setProperty('--ring-width',`${width.toFixed(1)}px`);
-        ring.style.setProperty('--ring-height',`${height.toFixed(1)}px`);
-        ring.style.setProperty('--ring-radius-start',irregularRadius());
-        ring.style.setProperty('--ring-radius-mid',irregularRadius());
-        ring.style.setProperty('--ring-radius-end',irregularRadius());
-        ring.style.setProperty('--ring-rotate',`${(Math.random() * 34 - 17).toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-x',`${skewX.toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-y',`${skewY.toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-x-mid',`${(-skewX * .7).toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-y-mid',`${(-skewY * .8).toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-x-end',`${(skewX * .45).toFixed(1)}deg`);
-        ring.style.setProperty('--ring-skew-y-end',`${(-skewY * .5).toFixed(1)}deg`);
-        ring.style.setProperty('--ring-stretch-x',`${(.86 + Math.random() * .3).toFixed(2)}`);
-        ring.style.setProperty('--ring-stretch-y',`${(.86 + Math.random() * .3).toFixed(2)}`);
-        ring.style.setProperty('--ring-delay',`${index * 42}ms`);
-        ring.style.setProperty('--ring-duration',`${(1.02 + index * .1 + Math.random() * .12).toFixed(2)}s`);
-        ring.style.setProperty('--ring-mid-scale',`${(endScale * .55).toFixed(2)}`);
-        ring.style.setProperty('--ring-end-scale',endScale.toFixed(2));
-        ring.style.setProperty('--ring-glow',`${(7 + index * 2)}px`);
-        ring.setAttribute('aria-hidden','true');
-        document.body.append(ring);
-        ring.addEventListener('animationend',() => ring.remove(),{once:true});
+    let x=0,y=0,cx=0,cy=0,frame=0,lastAt=0,lastX=0,lastY=0,seen=false;
+    const on=(target,name,fn)=>target.addEventListener(name,fn,{passive:true,signal:abort.signal});
+    const animate=()=>{
+      frame=0;cx+=(x-cx)*.4;cy+=(y-cy)*.4;
+      cursor.style.transform=`translate3d(${cx}px,${cy}px,0) translate(-50%,-50%)`;
+      if(Math.abs(x-cx)+Math.abs(y-cy)>.25)frame=requestAnimationFrame(animate);
+    };
+    const ripple=(px,py,click=false)=>{
+      for(let i=0;i<(click?3:2);i++){
+        if(rings.size>=16){const oldest=rings.values().next().value;oldest.remove();rings.delete(oldest);}
+        const ring=document.createElement('span');ring.className='water-ring';ring.setAttribute('aria-hidden','true');
+        ring.style.left=`${px}px`;ring.style.top=`${py}px`;
+        ring.style.setProperty('--ring-delay',`${i*85}ms`);
+        ring.style.setProperty('--ring-rotate',`${(px+py)%40-20}deg`);
+        ring.style.setProperty('--ring-end-scale',click?'3.8':'3');
+        ring.addEventListener('animationend',()=>{rings.delete(ring);ring.remove();},{once:true});
+        rings.add(ring);document.body.append(ring);
       }
     };
-
-    const animate = () => {
-      cursorX += (pointerX - cursorX) * .34;
-      cursorY += (pointerY - cursorY) * .34;
-      cursor.style.left = `${cursorX}px`;
-      cursor.style.top = `${cursorY}px`;
-      window.requestAnimationFrame(animate);
-    };
-
-    window.addEventListener('pointermove', event => {
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      cursor.classList.add('is-visible');
-
-      const now = performance.now();
-      const distance = Math.hypot(pointerX - lastRingX, pointerY - lastRingY);
-      if (distance > 30 && now - lastRingAt > 55) {
-        addRipple(pointerX, pointerY);
-        lastRingX = pointerX;
-        lastRingY = pointerY;
-        lastRingAt = now;
-      }
-    }, {passive:true});
-
-    window.addEventListener('pointerdown', event => addRipple(event.clientX, event.clientY, true));
-    document.documentElement.addEventListener('mouseleave', () => cursor.classList.remove('is-visible'));
-    document.addEventListener('mouseover', event => {
-      cursor.classList.toggle('is-active', Boolean(event.target.closest('a,button,[role="button"],video')));
+    on(window,'pointermove',e=>{
+      x=e.clientX;y=e.clientY;if(!seen){cx=x;cy=y;seen=true;}
+      cursor.classList.add('is-visible');if(!frame)frame=requestAnimationFrame(animate);
+      const now=performance.now();if(now-lastAt>100 && Math.hypot(x-lastX,y-lastY)>35){ripple(x,y);lastX=x;lastY=y;lastAt=now;}
     });
-
-    animate();
+    on(window,'pointerdown',e=>ripple(e.clientX,e.clientY,true));
+    on(document.documentElement,'pointerleave',()=>{cursor.classList.remove('is-visible');seen=false;});
+    on(document,'mouseover',e=>cursor.classList.toggle('is-active',!!e.target.closest('a,button,[role="button"],video')));
+    on(document,'visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;rings.forEach(r=>r.remove());rings.clear();cursor.classList.remove('is-visible');seen=false;}});
+    disposeCursor=()=>{abort.abort();cancelAnimationFrame(frame);cursor.remove();rings.forEach(r=>r.remove());document.documentElement.classList.remove('has-water-cursor');};
   }
+  finePointer.addEventListener('change',setupCursor);reducedMotion.addEventListener('change',setupCursor);setupCursor();
 
   const parallaxPage = document.querySelector('[data-parallax-background]');
   if (parallaxPage && !reducedMotion.matches) {
