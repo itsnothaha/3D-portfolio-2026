@@ -34,9 +34,9 @@
     width:var(--ring-width,10px);
     height:var(--ring-height,10px);
     border:1px solid rgba(95,137,164,.42);
-    border-radius:var(--ring-radius,48% 52% 46% 54% / 53% 45% 55% 47%);
+    border-radius:var(--ring-radius-start,48% 52% 46% 54% / 53% 45% 55% 47%);
     pointer-events:none;
-    transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) scale(.35);
+    transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) skew(var(--ring-skew-x,0deg),var(--ring-skew-y,0deg)) scale(.35) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));
     box-shadow:0 0 var(--ring-glow,9px) rgba(125,165,190,.18),inset 0 0 5px rgba(255,255,255,.28);
     animation:water-ring-fade var(--ring-duration,1.12s) cubic-bezier(.17,.67,.3,1) var(--ring-delay,0ms) forwards;
     will-change:transform,opacity,filter;
@@ -49,9 +49,10 @@
 }
 
 @keyframes water-ring-fade{
-  0%{opacity:.68;transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) scale(.35);filter:blur(0)}
-  68%{opacity:.28}
-  100%{opacity:0;transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 12deg)) scale(var(--ring-end-scale,5.4));filter:blur(1.5px)}
+  0%{opacity:.68;border-radius:var(--ring-radius-start);transform:translate3d(-50%,-50%,0) rotate(var(--ring-rotate,0deg)) skew(var(--ring-skew-x,0deg),var(--ring-skew-y,0deg)) scale(.35) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));filter:blur(0)}
+  48%{opacity:.42;border-radius:var(--ring-radius-mid);transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 7deg)) skew(var(--ring-skew-x-mid,0deg),var(--ring-skew-y-mid,0deg)) scale(var(--ring-mid-scale,2.8)) scaleX(var(--ring-stretch-y,1)) scaleY(var(--ring-stretch-x,1))}
+  72%{opacity:.24}
+  100%{opacity:0;border-radius:var(--ring-radius-end);transform:translate3d(-50%,-50%,0) rotate(calc(var(--ring-rotate,0deg) + 18deg)) skew(var(--ring-skew-x-end,0deg),var(--ring-skew-y-end,0deg)) scale(var(--ring-end-scale,5.4)) scaleX(var(--ring-stretch-x,1)) scaleY(var(--ring-stretch-y,1));filter:blur(1.8px)}
 }
 
 @media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
