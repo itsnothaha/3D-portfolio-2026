@@ -9,14 +9,23 @@
   <link rel="stylesheet" href="water-cursor.css?v=layout2">
   <link rel="stylesheet" href="Fonts/fonts.css?v=layout2">
   <link rel="preload" href="Fonts/bagelfatone-full.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="main page/contact-shells.webp" as="image">
+  <link rel="stylesheet" href="contact-motion.css?v=contacts3">
+  <link rel="preload" href="main page/contact-seabed.webp" as="image" media="(min-width:901px), (min-width:721px) and (orientation:landscape)">
+  <link rel="preload" href="main page/contact-seabed-mobile.webp" as="image" media="(max-width:720px), (max-width:900px) and (orientation:portrait)">
 </head>
 <body class="page page--contacts is-entering">
   <main class="contacts-page">
+    <div class="contact-scene" aria-hidden="true">
+      <picture>
+        <source media="(max-width:720px), (max-width:900px) and (orientation:portrait)" srcset="main%20page/contact-seabed-mobile.webp">
+        <img src="main page/contact-seabed.webp" alt="" width="1280" height="716" fetchpriority="high" decoding="async">
+      </picture>
+      <div class="contact-motion"></div>
+    </div>
     <nav class="site-nav page-nav contact-page-nav" aria-label="Main navigation">
       <a href="about.html">About</a>
-      <a href="work.html">Work</a>
       <a href="index.html">Home</a>
+      <a href="work.html">Work</a>
     </nav>
     <h1 class="contact-title water-title">Contact</h1>
     <nav class="contact-links" aria-label="Contact links">
@@ -28,5 +37,6 @@
   </main>
   <script src="pages.js?v=layout2"></script>
   <script src="water-cursor.js?v=layout2"></script>
+  <script src="contact-motion.js?v=contacts3"></script>
 </body>
 </html>
