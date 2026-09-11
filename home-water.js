@@ -321,8 +321,10 @@
       const distance=Math.hypot(px-lastRippleX,py-lastRippleY);
       if(!wasVisible || (distance>32 && movedAt-lastRippleAt>105))addRipple(px,py,movedAt,.8);
       const x=(px/width-.5)*coverX+.5, y=(py/height-.5)*coverY+.5;
-      let best=Infinity;
-      seeds.forEach((seed,i)=>{const d=Math.hypot((x-seed[0])*imageWidth,(y-seed[1])*imageHeight);if(d<best){best=d;selected=i;}});
+      // Activation is tighter than the reveal mask: water at the edges does not wake fish.
+      const hit=portrait ? [[.32,.17],[0,0],[0,0],[.16,.14]] : [[.145,.18],[.12,.14],[.15,.17],[.075,.14]];
+      let best=1;selected=-1;
+      seeds.forEach((seed,i)=>{if(!hit[i][0])return;const d=Math.hypot((x-seed[0])/hit[i][0],(y-seed[1])/hit[i][1]);if(d<best){best=d;selected=i;}});
       updateIntent(movedAt);
       wake();
     };
@@ -330,7 +332,7 @@
     listen(window,'pointerdown',event=>{
       if(event.target.closest('a,button'))return;
       if(event.pointerType!=='mouse')touchId=event.pointerId;
-      move(event);zones[selected].requested=true;
+      move(event);if(selected>=0)zones[selected].requested=true;
       addRipple(event.clientX,event.clientY,performance.now(),1.15);
     });
     const leave=()=>{visible=false;selected=-1;updateIntent(performance.now());wake();};
