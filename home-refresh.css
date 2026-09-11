@@ -1,0 +1,7 @@
+.page--home{background-image:url('main page/home-desktop.webp')}
+@media(max-width:720px){.page--home{background-image:url('main page/home-mobile.webp');background-size:cover;background-position:center}}
+@media(prefers-reduced-motion:no-preference){
+.fish-reveal{position:absolute;z-index:1;inset:0;display:block;overflow:hidden;pointer-events:none;opacity:0;contain:strict}
+.fish-reveal.is-ready{opacity:1}.fish-reveal canvas{display:block;width:100%;height:100%}
+.home-title,.home-nav,.home-role{z-index:2}
+}

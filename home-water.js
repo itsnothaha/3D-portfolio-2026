@@ -2,13 +2,16 @@
   'use strict';
   const host = document.querySelector('.fish-reveal');
   if (!host) return;
-  const enabled = matchMedia('(min-width:721px) and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)');
+  const enabled = matchMedia('(prefers-reduced-motion:no-preference)');
+  const mobile = matchMedia('(max-width:720px)');
   let dispose = () => {};
   const sync = () => { dispose(); dispose = enabled.matches ? start() : () => {}; };
   enabled.addEventListener('change', sync);
+  mobile.addEventListener('change', sync);
   sync();
 
   function start() {
+    const portrait=mobile.matches, imageWidth=portrait?720:1280, imageHeight=portrait?1280:720;
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, preserveDrawingBuffer: true, powerPreference: 'low-power' });
     if (!gl) return () => {};
@@ -19,8 +22,9 @@
     let px = -1000, py = -1000, movedAt = 0, strength = 0;
     const abort = new AbortController();
     const listen = (target, name, fn) => target.addEventListener(name, fn, { signal: abort.signal, passive: true });
-    const seeds = [[.255,.427],[.929,.219],[.737,.568],[.046,.755]];
-    const maskRadii = [[.22,.35],[.17,.30],[.24,.35],[.17,.30]];
+    const seeds = portrait ? [[.75,.427],[3,3],[4,4],[.13,.755]] : [[.255,.427],[.929,.219],[.737,.568],[.046,.755]];
+    const maskRadii = portrait ? [[.66,.35],[.01,.01],[.01,.01],[.45,.30]] : [[.22,.35],[.17,.30],[.24,.35],[.17,.30]];
+    const vec = values => `vec2(${values.map(v=>Number(v).toFixed(6)).join(",")})`;
     const vertex = `attribute vec2 position; varying vec2 uv; void main(){uv=position*.5+.5;gl_Position=vec4(position,0.,1.);}`;
     const fragment = `
       precision mediump float;
@@ -33,7 +37,7 @@
       uniform vec4 ripples[8];
       vec2 imageUV(vec2 p){return (p-.5)*cover+.5;}
       float ownership(vec2 p,vec2 seed,vec2 b,vec2 c,vec2 d){
-        vec2 aspect=vec2(1.777778,1.);
+        vec2 aspect=vec2(${(imageWidth/imageHeight).toFixed(6)},1.);
         float a=distance(p*aspect,seed*aspect);
         float other=min(distance(p*aspect,b*aspect),min(distance(p*aspect,c*aspect),distance(p*aspect,d*aspect)));
         return smoothstep(-.045,.045,other-a);
@@ -41,22 +45,22 @@
       vec3 scene(vec2 p){
         vec2 q=imageUV(p);
         vec3 base=texture2D(poster,q).rgb;
-        vec2 a=vec2(.255,.427),b=vec2(.929,.219),c=vec2(.737,.568),d=vec2(.046,.755);
+        vec2 a=${vec(seeds[0])},b=${vec(seeds[1])},c=${vec(seeds[2])},d=${vec(seeds[3])};
 
         if(zones[0].z>.003){
-          float m=(1.-smoothstep(.76,1.,length((q-a)/vec2(0.22,0.35))))*zones[0].z*ownership(q,a,b,c,d);
+          float m=(1.-smoothstep(.76,1.,length((q-a)/${vec(maskRadii[0])})))*zones[0].z*ownership(q,a,b,c,d);
           if(m>0.)base=mix(base,texture2D(fish0,(q-crops[0].xy)/crops[0].zw).rgb,m);
         }
         if(zones[1].z>.003){
-          float m=(1.-smoothstep(.76,1.,length((q-b)/vec2(0.17,0.3))))*zones[1].z*ownership(q,b,a,c,d);
+          float m=(1.-smoothstep(.76,1.,length((q-b)/${vec(maskRadii[1])})))*zones[1].z*ownership(q,b,a,c,d);
           if(m>0.)base=mix(base,texture2D(fish1,(q-crops[1].xy)/crops[1].zw).rgb,m);
         }
         if(zones[2].z>.003){
-          float m=(1.-smoothstep(.76,1.,length((q-c)/vec2(0.24,0.35))))*zones[2].z*ownership(q,c,a,b,d);
+          float m=(1.-smoothstep(.76,1.,length((q-c)/${vec(maskRadii[2])})))*zones[2].z*ownership(q,c,a,b,d);
           if(m>0.)base=mix(base,texture2D(fish2,(q-crops[2].xy)/crops[2].zw).rgb,m);
         }
         if(zones[3].z>.003){
-          float m=(1.-smoothstep(.76,1.,length((q-d)/vec2(0.17,0.3))))*zones[3].z*ownership(q,d,a,b,c);
+          float m=(1.-smoothstep(.76,1.,length((q-d)/${vec(maskRadii[3])})))*zones[3].z*ownership(q,d,a,b,c);
           if(m>0.)base=mix(base,texture2D(fish3,(q-crops[3].xy)/crops[3].zw).rgb,m);
         }
         return base;
@@ -143,7 +147,7 @@
     gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const location = name => gl.getUniformLocation(program, name);
     const uniforms = {viewport:location('viewport'),cover:location('cover'),zones:location('zones[0]'),trail:location('trail[0]'),ripples:location('ripples[0]'),crops:location('crops[0]')};
-    gl.uniform4fv(uniforms.crops,new Float32Array([0.0, 0.0, 0.5671875, 1.0, 0.55, 0.0, 0.45, 0.7611111111111111, 0.425, 0.0, 0.575, 1.0, 0.0, 0.20555555555555555, 0.403125, 0.7944444444444444]));
+    gl.uniform4fv(uniforms.crops,new Float32Array(portrait ? [0,0,1,.8, 0,0,1,1, 0,0,1,1, 0,.45,.7,.55] : [0.0, 0.0, 0.5671875, 1.0, 0.55, 0.0, 0.45, 0.7611111111111111, 0.425, 0.0, 0.575, 1.0, 0.0, 0.20555555555555555, 0.403125, 0.7944444444444444]));
     const textureSizes=Array.from({length:5},()=>[1,1]);
     for (let i=0; i<5; i++) {
       gl.activeTexture(gl.TEXTURE0+i);
@@ -172,11 +176,11 @@
       ready=true; host.classList.add('is-ready'); resize();
     };
     poster.onerror=cleanup;
-    poster.src='main page/FirstPageFon.optimized.webp';
+    poster.src=`main page/home-${portrait?'mobile':'desktop'}.webp`;
     for (let i=0;i<4;i++) {
       const video=document.createElement('video');
       video.muted=true; video.loop=true; video.playsInline=true; video.preload='auto';
-      const zone={video, opacity:0, x:-1000, y:-1000, loaded:false, dirty:false, started:false, resetting:false, failed:false, exitAt:null, settling:false, settled:false, time:-1, callback:null};
+      const zone={video, requested:false, opacity:0, x:-1000, y:-1000, loaded:false, dirty:false, started:false, resetting:false, failed:false, exitAt:null, settling:false, settled:false, time:-1, callback:null};
       zones.push(zone);
       const decoded=() => { zone.dirty=true; wake(); if(!dead) zone.callback=video.requestVideoFrameCallback(decoded); };
       if(video.requestVideoFrameCallback) zone.callback=video.requestVideoFrameCallback(decoded);
@@ -196,8 +200,8 @@
     let coverX=1, coverY=1;
     function resize() {
       width=innerWidth; height=innerHeight;
-      const scale=Math.max(width/1280,height/720);
-      coverX=width/(1280*scale); coverY=height/(720*scale);
+      const scale=Math.max(width/imageWidth,height/imageHeight);
+      coverX=width/(imageWidth*scale); coverY=height/(imageHeight*scale);
       const dpr=Math.min(devicePixelRatio||1,1,Math.sqrt(1250000/(width*height)))*resolution;
       canvas.width=Math.round(width*dpr); canvas.height=Math.round(height*dpr);
       fullRedraw=true;previousRect=null;
@@ -245,13 +249,13 @@
         if(age<1.85)active=true;
       });
       zones.forEach((zone,i) => {
-        const wanted=visible && selected===i && !zone.failed;
-        if(wanted && !zone.loaded) {zone.loaded=true; zone.video.src=`main page/fish-region-${i}.mp4`;zone.video.load();}
+        const wanted=((visible && selected===i) || zone.requested) && !zone.failed;
+        if(wanted && !zone.loaded) {zone.loaded=true; zone.video.src=`main page/home-${portrait?'mobile':'desktop'}-${i}.mp4`;zone.video.load();}
         const canStart=wanted && zone.video.readyState>=2 && !zone.resetting && !zone.video.seeking;
         if(canStart && !zone.started) {
           // Commit frame zero before play() can advance this region's independent clock.
           try {upload(i+1,zone.video);} catch {zone.failed=true;return;}
-          zone.dirty=false; zone.started=true; zone.settling=false; zone.settled=false;
+          zone.requested=false; zone.dirty=false; zone.started=true; zone.settling=false; zone.settled=false;
           zone.exitAt=null; zone.video.loop=true; zone.video.playbackRate=1;
           zone.video.play().catch(error => { if(dead || error.name==='AbortError') return; zone.failed=true;wake(); });
         }
@@ -310,26 +314,35 @@
         else if(zone.exitAt===null)zone.exitAt=now;
       });
     };
-    listen(window,'pointermove',event => {
+    let touchId=null;
+    const move=event => {
       const wasVisible=visible; visible=true; px=event.clientX; py=event.clientY; movedAt=performance.now();
       if(!wasVisible)trails.forEach(t=>{t.x=px;t.y=py;});
       const distance=Math.hypot(px-lastRippleX,py-lastRippleY);
       if(!wasVisible || (distance>32 && movedAt-lastRippleAt>105))addRipple(px,py,movedAt,.8);
       const x=(px/width-.5)*coverX+.5, y=(py/height-.5)*coverY+.5;
       let best=Infinity;
-      seeds.forEach((seed,i)=>{const d=Math.hypot((x-seed[0])*1280,(y-seed[1])*720);if(d<best){best=d;selected=i;}});
+      seeds.forEach((seed,i)=>{const d=Math.hypot((x-seed[0])*imageWidth,(y-seed[1])*imageHeight);if(d<best){best=d;selected=i;}});
       updateIntent(movedAt);
       wake();
+    };
+    listen(window,'pointermove',event=>{if(event.pointerType==='mouse' || event.pointerId===touchId)move(event);});
+    listen(window,'pointerdown',event=>{
+      if(event.target.closest('a,button'))return;
+      if(event.pointerType!=='mouse')touchId=event.pointerId;
+      move(event);zones[selected].requested=true;
+      addRipple(event.clientX,event.clientY,performance.now(),1.15);
     });
-    listen(window,'pointerdown',event=>addRipple(event.clientX,event.clientY,performance.now(),1.15));
     const leave=()=>{visible=false;selected=-1;updateIntent(performance.now());wake();};
+    listen(window,'pointerup',event=>{if(event.pointerId===touchId){touchId=null;leave();}});
+    listen(window,'pointercancel',event=>{if(event.pointerId===touchId){touchId=null;leave();}});
     listen(document.documentElement,'pointerleave',leave);
     listen(window,'blur',leave);
     const suspend=()=>{
       visible=false;selected=-1;strength=0;previous=0;
       ripples.forEach(ripple=>{ripple.born=-10000;ripple.power=0;});
       cancelAnimationFrame(raf);raf=0;
-      zones.forEach(zone=>{zone.opacity=0;reset(zone);});
+      zones.forEach(zone=>{zone.requested=false;zone.opacity=0;reset(zone);});
     };
     listen(document,'visibilitychange',()=>{if(document.hidden)suspend();else wake();});
     listen(window,'pagehide',suspend);
