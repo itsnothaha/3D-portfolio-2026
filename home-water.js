@@ -179,7 +179,7 @@
     poster.src=`main page/home-${portrait?'mobile':'desktop'}.webp`;
     for (let i=0;i<4;i++) {
       const video=document.createElement('video');
-      video.muted=true; video.loop=true; video.playsInline=true; video.preload='auto';
+      video.muted=true; video.loop=false; video.playsInline=true; video.preload='auto';
       const zone={video, requested:false, opacity:0, x:-1000, y:-1000, loaded:false, dirty:false, started:false, resetting:false, failed:false, exitAt:null, settling:false, settled:false, time:-1, callback:null};
       zones.push(zone);
       const decoded=() => { zone.dirty=true; wake(); if(!dead) zone.callback=video.requestVideoFrameCallback(decoded); };
@@ -220,7 +220,7 @@
       wake();
     };
     function reset(zone) {
-      zone.video.pause(); zone.video.playbackRate=1; zone.video.loop=true;
+      zone.video.pause(); zone.video.playbackRate=1; zone.video.loop=false;
       zone.started=false; zone.time=-1; zone.exitAt=null; zone.settling=false; zone.settled=false;
       if(zone.video.readyState>=2 && zone.video.currentTime>.001) {
         zone.resetting=true; zone.video.currentTime=0;
@@ -249,24 +249,15 @@
         if(age<1.85)active=true;
       });
       zones.forEach((zone,i) => {
-        const wanted=((visible && selected===i) || zone.requested) && !zone.failed;
+        const wanted=zone.requested && !zone.failed;
         if(wanted && !zone.loaded) {zone.loaded=true; zone.video.src=`main page/home-${portrait?'mobile':'desktop'}-${i}.mp4`;zone.video.load();}
-        const canStart=wanted && zone.video.readyState>=2 && !zone.resetting && !zone.video.seeking;
+        const canStart=wanted && !zone.settling && zone.video.readyState>=2 && !zone.resetting && !zone.video.seeking;
         if(canStart && !zone.started) {
           // Commit frame zero before play() can advance this region's independent clock.
           try {upload(i+1,zone.video);} catch {zone.failed=true;return;}
           zone.requested=false; zone.dirty=false; zone.started=true; zone.settling=false; zone.settled=false;
-          zone.exitAt=null; zone.video.loop=true; zone.video.playbackRate=1;
+          zone.exitAt=null; zone.video.loop=false; zone.video.playbackRate=1;
           zone.video.play().catch(error => { if(dead || error.name==='AbortError') return; zone.failed=true;wake(); });
-        }
-        if(zone.started && !zone.failed) {
-          if(wanted) {
-            zone.exitAt=null; zone.video.loop=true;
-          } else if(zone.exitAt===null) {
-            zone.exitAt=now; zone.video.loop=false;
-          }
-          // Each fish finishes its own current cycle at the original speed.
-          if(zone.video.playbackRate!==1)zone.video.playbackRate=1;
         }
         const target=!zone.failed && (zone.started || (zone.settling && !zone.settled)) ? 1 : 0;
         zone.opacity+=(target-zone.opacity)*(1-Math.exp(-dt/(target?170:220)));
@@ -304,17 +295,25 @@
       previousRect=rect;
       if(active || strength>.002)wake(); else previous=0;
     }
-    const updateIntent=now=>{
-      zones.forEach((zone,i)=>{
-        if(!zone.started)return;
-        const wanted=visible && selected===i;
-        // Disable looping in the input event itself, even immediately before the seam.
-        zone.video.loop=wanted;
-        if(wanted)zone.exitAt=null;
-        else if(zone.exitAt===null)zone.exitAt=now;
-      });
+    // Busy fish discard new requests: there is no replay queue.
+    const requestCycle=index=>{
+      const zone=zones[index];
+      if(zone && !zone.started && !zone.settling && !zone.resetting && !zone.failed)zone.requested=true;
     };
     let touchId=null;
+    // Feeding reuses the existing fish clips and water ripple renderer.
+    listen(window,'fishfeed',event=>{
+      const {x,y}=event.detail;
+      const imageX=(x/width-.5)*coverX+.5, imageY=(y/height-.5)*coverY+.5;
+      let nearest=-1, distance=Infinity;
+      seeds.forEach((seed,i)=>{
+        if(portrait && i!==0 && i!==3)return;
+        const d=Math.hypot(imageX-seed[0],imageY-seed[1]);
+        if(d<distance){distance=d;nearest=i;}
+      });
+      if(nearest>=0)requestCycle(nearest);
+      addRipple(x,y,performance.now(),1.15);wake();
+    });
     const move=event => {
       const wasVisible=visible; visible=true; px=event.clientX; py=event.clientY; movedAt=performance.now();
       if(!wasVisible)trails.forEach(t=>{t.x=px;t.y=py;});
@@ -323,19 +322,20 @@
       const x=(px/width-.5)*coverX+.5, y=(py/height-.5)*coverY+.5;
       // Activation is tighter than the reveal mask: water at the edges does not wake fish.
       const hit=portrait ? [[.32,.17],[0,0],[0,0],[.16,.14]] : [[.145,.18],[.12,.14],[.15,.17],[.075,.14]];
+      const previousSelection=selected;
       let best=1;selected=-1;
       seeds.forEach((seed,i)=>{if(!hit[i][0])return;const d=Math.hypot((x-seed[0])/hit[i][0],(y-seed[1])/hit[i][1]);if(d<best){best=d;selected=i;}});
-      updateIntent(movedAt);
+      if(selected>=0 && selected!==previousSelection)requestCycle(selected);
       wake();
     };
     listen(window,'pointermove',event=>{if(event.pointerType==='mouse' || event.pointerId===touchId)move(event);});
     listen(window,'pointerdown',event=>{
       if(event.target.closest('a,button'))return;
       if(event.pointerType!=='mouse')touchId=event.pointerId;
-      move(event);if(selected>=0)zones[selected].requested=true;
+      move(event);
       addRipple(event.clientX,event.clientY,performance.now(),1.15);
     });
-    const leave=()=>{visible=false;selected=-1;updateIntent(performance.now());wake();};
+    const leave=()=>{visible=false;selected=-1;wake();};
     listen(window,'pointerup',event=>{if(event.pointerId===touchId){touchId=null;leave();}});
     listen(window,'pointercancel',event=>{if(event.pointerId===touchId){touchId=null;leave();}});
     listen(document.documentElement,'pointerleave',leave);

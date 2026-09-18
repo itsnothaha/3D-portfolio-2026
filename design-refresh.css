@@ -1,0 +1,104 @@
+/* Figma refresh, shared by the four main pages. */
+body.page :is(.water-title,.glass-type,.work-category-title,.home-nav a,.site-nav a){
+  font-family:'Bagel Fat One',sans-serif;font-weight:400;text-transform:uppercase;
+  letter-spacing:0;line-height:1.08;
+  color:#d3d6d4;-webkit-text-fill-color:transparent;-webkit-text-stroke:.4px #c3c8cd;
+  background:linear-gradient(170deg,#bfc4c3 3%,#e1e2db 35%,#d7dad8 62%,#cdd5db 100%);
+  background-clip:text;-webkit-background-clip:text;
+  filter:drop-shadow(0 -1px 1px #8f93937a) drop-shadow(1px 2px 1px #8c9abc9c);
+  text-shadow:none;
+}
+body .home-title.water-title{top:3%;left:2%;max-width:96%;font-size:17.3vw;line-height:1.05;margin:0;pointer-events:none}
+.home-welcome{position:absolute;z-index:2;top:.5%;left:2.5%;margin:0;font-size:4.6vw;pointer-events:none}
+body .home-role{top:5px;right:10px;left:auto;bottom:auto;font:clamp(14px,1.5vw,30px)/1 'Just Another Hand',cursive;color:#92938f}
+body .home-nav,body .site-nav.site-nav{
+  position:fixed;z-index:90;top:auto;bottom:max(3.5vh,env(safe-area-inset-bottom));left:50%;right:auto;
+  transform:translateX(-50%);display:flex;flex-direction:row;align-items:center;justify-content:space-around;
+  width:38%;max-width:none;height:auto;gap:12px;margin:0;padding:6px 15px;
+  border:1px solid #ffffff30;border-radius:20px;background:#d4d7d33d;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 #ffffff25;
+  font-size:2.25vw;line-height:1;
+}
+body .home-nav a,body .site-nav.site-nav a{padding:0}
+a:focus-visible,button:focus-visible{outline:2px solid #738fa8;outline-offset:5px}
+.fish-food{position:absolute;z-index:4;left:1.5%;bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:end;gap:0}
+.fish-food button{width:3.6vw;min-width:40px;border:0;background:none;padding:0;cursor:grab;touch-action:none;user-select:none;transition:opacity .2s}
+.fish-food button img{transform:rotate(-25deg) scale(1.65)}
+.fish-food img{width:100%;height:auto;pointer-events:none}
+.fish-food button.is-used{visibility:hidden;pointer-events:none}
+.food-drag{position:fixed;z-index:100;width:65px;pointer-events:none;transform:translate(-50%,-50%) rotate(-35deg)}
+.food-grain{position:fixed;z-index:5;width:4px;height:5px;border-radius:45%;background:#b18d50;box-shadow:0 1px 1px #fff7;pointer-events:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.work-page{padding:2vh 4vw 110px}
+.work-heading h1.water-title{font-size:7.3vw;margin:0}
+.work-heading p{font-size:clamp(16px,1.2vw,26px);color:#979b99;margin:0}
+.work-grid{width:100%;gap:5.3vw;margin:20vh auto 0;align-items:start}
+.work-category{gap:1.7vw}
+.work-category-media{aspect-ratio:16/9;overflow:hidden;border-radius:1.1vw}
+.work-category img{object-fit:cover}
+body .work-category-title{font-size:2.9vw;white-space:nowrap}
+body .contact-title.water-title{top:1%;left:1.5%;font-size:12vw;transform:none;margin:0}
+.contact-links{left:30%;right:30%;top:29%;height:41%;font-size:4.2vw;gap:10px;justify-content:space-between}
+.contact-instagram{color:#edb9e9}.contact-pinterest{color:#e4c6c6}.contact-linkedin{color:#9cbed4}.contact-mail{color:#a5cdb1}
+.contact-telegram{order:5;color:#f9ecd0}
+.contact-scene img,.contact-motion video{object-fit:cover}
+.about-page{padding:1vh 1.5vw 100px}
+.about-title.water-title{position:absolute;z-index:2;top:1vh;left:1.5vw;font-size:7vw;margin:0;pointer-events:none}
+.about-layout{width:100%;margin:7vh auto 0}
+.about-portrait{width:47%;margin:2vh 1vw 0 -1vw;shape-margin:12px}
+.about-content{font-size:clamp(22px,1.65vw,34px);line-height:1.08}
+.about-bio p{margin:0 0 .13em}
+.about-emphasis{text-transform:uppercase}
+.about-columns{gap:1.2vw;grid-template-columns:.8fr 1.4fr 1.4fr;margin-top:5px}
+.about-skills{font-size:.68em;margin-left:52%;margin-top:8px}
+.about-additional{margin-top:.5em}
+.software-dock{justify-content:flex-start;max-width:none;width:48%;margin:10px 0 0;gap:.35vw;padding:0}
+.software-icon{width:5vw;height:5vw}
+@media(min-width:721px){
+  .about-page{min-height:max(100svh,54vw)}
+  .about-layout{margin-top:7vh}
+  .about-content{display:grid;grid-template-columns:44% 12% 23% 21%;align-items:start;row-gap:8px;font-size:1.5vw}
+  .about-portrait{position:absolute;top:8vh;left:-10vw;float:none;width:65vw;margin:0;shape-outside:none;pointer-events:none}
+  .about-bio{grid-column:2/5;margin-left:-17vw;position:relative;padding-left:0}
+  .about-bio p:nth-child(n+4){margin-left:2vw}
+  .about-columns{display:contents}
+  .about-column:first-child{grid-column:2;grid-row:2/5}
+  .about-experience{grid-column:3;grid-row:2}
+  .about-education{grid-column:4;grid-row:2}
+  .about-skills{grid-column:3/5;grid-row:3;margin:0;font-size:.72em}
+  .about-additional{grid-row:4}
+  .software-dock{position:absolute;left:1.5vw;bottom:10vh}
+}
+@media(max-width:720px){
+  body .home-nav,body .site-nav.site-nav{top:max(8px,env(safe-area-inset-top));bottom:auto;left:12px;right:12px;transform:none;width:auto;padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;justify-content:flex-end;gap:4vw;font-size:3.3vw}
+  body .home-nav a[href='work.html']{order:-1}
+  body .site-nav a[href='index.html']{margin-right:auto;order:-1}
+  body .home-title.water-title{top:9.2%;left:2.5%;font-size:17.1vw;max-width:95%;line-height:1.1}
+  .home-welcome{top:6%;left:3%;font-size:6vw}
+  body .home-role{display:none}
+  .fish-food{left:4%;bottom:max(15px,env(safe-area-inset-bottom))}
+  .fish-food button{width:8.5vw;min-width:34px}
+  .work-page{padding:24px 12px 24px}
+  .work-heading h1.water-title{font-size:9vw;line-height:1}
+  .work-heading p{font-size:4vw;margin:0 0 5px}
+  .work-grid{grid-template-columns:1fr;margin:4px auto 0;gap:8px}
+  .work-category{width:61%;margin:auto;gap:6px}
+  .work-category:nth-child(2){width:76%}
+  .work-category:nth-child(3){width:63%}
+  .work-category-media{border-radius:3vw}
+  body .work-category-title{font-size:5.1vw;line-height:1.15}
+  body .work-category:nth-child(2) .work-category-title{font-size:8vw;margin:4px 0}
+  body .contact-title.water-title{top:7%;left:12%;font-size:15vw}
+  .contact-links{left:8%;right:8%;top:22%;height:40%;gap:10px;font-size:10vw}
+  .about-page{padding:48px 18px 40px}
+  .about-title.water-title{position:relative;top:auto;left:auto;font-size:17vw}
+  .about-layout{margin:0}
+  .about-portrait{float:none;width:100%;margin:0 0 15px;shape-outside:none}
+  .about-content{font-size:25px;line-height:1.15}
+  .about-columns{grid-template-columns:1fr 1.3fr;gap:18px;margin-top:20px}
+  .about-education{grid-column:1/-1}
+  .about-skills{margin:22px 0 0;font-size:.8em}
+  .software-dock{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:35px 14px;margin-top:28px}
+  .software-icon{width:60px;height:60px}
+}
+@media(prefers-reduced-motion:reduce){.food-grain{transition:none}.fish-food button{transition:none}}

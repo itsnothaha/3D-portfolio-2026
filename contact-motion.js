@@ -49,7 +49,7 @@
     function measure(){
       const bounds=host.getBoundingClientRect();
       const width=portrait?716:1280,height=portrait?1280:716;
-      const scale=Math.min(bounds.width/width,bounds.height/height);
+      const scale=Math.max(bounds.width/width,bounds.height/height);
       const w=width*scale,h=height*scale,left=(bounds.width-w)/2,top=bounds.height-h;
       // Opaque core encloses all shell frames; feathering stays outside its motion.
       const cx=left+w*(portrait ? .74 : .80),cy=top+h*.81;
@@ -59,8 +59,9 @@
     }
     function update(event){
       const g=geometry,x=event.clientX-g.bounds.left,y=event.clientY-g.bounds.top;
-      const inside=x>=g.left && x<=g.left+g.w && y>=g.top+g.h*(portrait ? .60 : .52) && y<=g.top+g.h;
+      const inside=x>=0 && x<=g.bounds.width && y>=0 && y<=g.bounds.height;
       cursor.setActive(inside);
+      host.classList.toggle('has-pointer',inside);
       // Activate before the cursor mask reaches the shell; never reveal a partial shell.
       const near=inside && Math.hypot((x-g.cx)/(g.rx+g.radius*.7),(y-g.cy)/(g.ry+g.radius*.7))<=1;
       shell.setActive(near);
@@ -71,7 +72,7 @@
         });
       }
     }
-    function release(){cursor.setActive(false);shell.setActive(false);}
+    function release(){host.classList.remove('has-pointer');cursor.setActive(false);shell.setActive(false);}
     on(window,'pointermove',event=>{if(event.pointerType==='mouse' || event.pointerId===touchId)update(event);});
     on(window,'pointerdown',event=>{
       if(event.target.closest('a,button,input'))return;
@@ -82,11 +83,11 @@
     on(window,'pointercancel',event=>{if(event.pointerId===touchId){touchId=null;release();}});
     on(document.documentElement,'pointerleave',()=>{touchId=null;release();});
     on(window,'blur',release);
-    function suspend(){touchId=null;cursor.stop();shell.stop();}
+    function suspend(){touchId=null;host.classList.remove('has-pointer');cursor.stop();shell.stop();}
     on(document,'visibilitychange',()=>{if(document.hidden)suspend();});
     on(window,'pagehide',suspend);
     on(window,'resize',measure);on(window,'scroll',measure);measure();
-    dispose=()=>{dead=true;abort.abort();cancelAnimationFrame(raf);cursor.destroy();shell.destroy();};
+    dispose=()=>{dead=true;abort.abort();cancelAnimationFrame(raf);host.classList.remove('has-pointer');cursor.destroy();shell.destroy();};
   }
   mobile.addEventListener('change',setup);reduced.addEventListener('change',setup);setup();
 })();
