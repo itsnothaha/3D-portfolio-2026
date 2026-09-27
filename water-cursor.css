@@ -8,3 +8,5 @@
 html:not(.has-water-cursor) body{cursor:auto}
 html:not(.has-water-cursor) :is(a,button,[role="button"]){cursor:pointer}
 @media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.water-cursor,.water-ring{display:none!important}}
+/* Native fullscreen/top-layer video cannot display the body-mounted water cursor. */
+html.has-water-cursor video,html.has-water-cursor video *,html.has-water-cursor :fullscreen,html.has-water-cursor :fullscreen *,html.has-water-cursor .video-dialog,html.has-water-cursor .video-dialog *{cursor:auto!important}

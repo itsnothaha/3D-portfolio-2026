@@ -1,626 +1,182 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Footwear + Cloth - Marakova Daria</title>
-  <style>
-    :root{
-      --bg:#202020;
-      --line:#F7F4D5;
-      --text:#F7F4D5;
-      --pink:#D3968C;
-      --green:#105666;
-      --panel:#232323;
-      --header:52px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--bg)}
-    body{
-      margin:0;
-      min-height:100vh;
-      overflow-x:hidden;
-      color:var(--text);
-      background:var(--bg);
-      font-family:'Julius Sans One',system-ui,sans-serif;
-      cursor:none;
-    }
-    a,button{cursor:none}
-    button{font:inherit;color:inherit}
-    img{display:block;max-width:100%}
-    .page-head{
-      position:fixed;
-      inset:0 0 auto 0;
-      z-index:20;
-      min-height:var(--header);
-      display:flex;
-      align-items:center;
-      padding:9px clamp(14px,2.2vw,30px);
-      pointer-events:none;
-      background:linear-gradient(to bottom,rgba(32,32,32,.96),rgba(32,32,32,0));
-    }
-    .brand{
-      pointer-events:auto;
-      color:var(--pink);
-      font-family:'Darumadrop One',cursive;
-      font-size:clamp(14px,1.3vw,18px);
-      line-height:1;
-      text-decoration:none;
-      transition:transform .25s ease,filter .25s ease;
-    }
-    .brand:hover{transform:translateY(-2px);filter:drop-shadow(0 0 8px rgba(211,150,140,.5))}
-    .site-nav{width:100%;display:flex;justify-content:flex-end;align-items:center;gap:clamp(22px,2.8vw,52px);color:#a9c8d8;font-family:'Grandiflora One',serif;font-size:clamp(18px,1.55vw,30px);line-height:1;pointer-events:auto}
-    .site-nav a{transition:color .2s ease,transform .2s ease}
-    .site-nav a:hover{color:#D3968C;transform:translateY(-2px)}
-    .visually-hidden{
-      position:absolute;
-      width:1px;
-      height:1px;
-      padding:0;
-      margin:-1px;
-      overflow:hidden;
-      clip:rect(0,0,0,0);
-      white-space:nowrap;
-      border:0;
-    }
-    main{
-      width:100%;
-      padding:clamp(64px,7vh,86px) clamp(18px,2.4vw,42px) clamp(58px,8vh,98px);
-    }
-    .portfolio-section{
-      width:100%;
-      margin:0 0 clamp(68px,9vw,120px);
-      content-visibility:auto;
-      contain-intrinsic-size:900px;
-    }
-    .section-title{
-      margin:0 0 12px 12px;
-      color:var(--text);
-      font-family:'Darumadrop One',cursive;
-      font-size:clamp(25px,3.1vw,42px);
-      line-height:.95;
-      letter-spacing:.02em;
-    }
-    .section-frame{
-      width:100%;
-      border:2px solid rgba(247,244,213,.9);
-      border-radius:22px;
-      padding:clamp(14px,1.7vw,26px);
-      background:rgba(255,255,255,.012);
-      box-shadow:0 22px 44px rgba(0,0,0,.2);
-    }
-    .solidworks-layout{
-      display:grid;
-      grid-template-columns:minmax(0,2.25fr) minmax(250px,.8fr);
-      gap:clamp(16px,2.2vw,34px);
-      align-items:stretch;
-    }
-    .technical-grid{
-      display:grid;
-      grid-template-rows:repeat(2,minmax(0,1fr));
-      grid-auto-flow:column;
-      grid-auto-columns:calc((100% - clamp(8px,1vw,14px))/2);
-      gap:clamp(8px,1vw,14px);
-      height:clamp(430px,47vw,700px);
-      overflow-x:auto;
-      overflow-y:hidden;
-      padding-bottom:8px;
-      scroll-snap-type:x proximity;
-      scrollbar-width:thin;
-      scrollbar-color:rgba(247,244,213,.55) transparent;
-    }
-    .technical-grid::-webkit-scrollbar{height:7px}
-    .technical-grid::-webkit-scrollbar-thumb{background:rgba(247,244,213,.5);border-radius:999px}
-    .technical-grid .gallery-item{scroll-snap-align:start}
-    .sole-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:clamp(8px,1vw,14px);
-      align-content:center;
-    }
-    .sole-grid .gallery-item:nth-child(n+3){grid-column:1 / -1}
-    .gallery-item{
-      min-width:0;
-      min-height:0;
-      border:0;
-      border-radius:8px;
-      padding:0;
-      overflow:hidden;
-      background:#f5f5f5;
-      box-shadow:0 10px 22px rgba(0,0,0,.18);
-      transition:transform .2s ease,filter .2s ease;
-    }
-    .gallery-item:hover{transform:translateY(-3px);filter:brightness(1.04)}
-    .gallery-item img{
-      width:100%;
-      height:100%;
-      max-height:clamp(210px,23vw,390px);
-      object-fit:contain;
-      object-position:center;
-    }
-    .technical-grid .gallery-item img{aspect-ratio:auto}
-    .sole-grid .gallery-item img{aspect-ratio:1.15/1}
-    .dual-carousel{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:clamp(26px,4vw,66px);
-      align-items:start;
-    }
-    .image-carousel{
-      min-width:0;
-      display:grid;
-      gap:10px;
-    }
-    .carousel-stage{
-      display:grid;
-      grid-template-columns:clamp(34px,3.5vw,54px) minmax(0,1fr) clamp(34px,3.5vw,54px);
-      align-items:center;
-      min-width:0;
-    }
-    .carousel-image-button{
-      width:100%;
-      height:clamp(280px,34vw,540px);
-      border:0;
-      padding:0;
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      background:transparent;
-    }
-    .carousel-image-button img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      object-position:center;
-      filter:drop-shadow(0 14px 22px rgba(0,0,0,.22));
-      transition:opacity .16s ease,transform .22s ease;
-    }
-    .carousel-image-button:hover img{transform:scale(1.015)}
-    .carousel-image-button.is-changing img{opacity:.2}
-    .carousel-arrow{
-      width:clamp(34px,3.5vw,54px);
-      height:clamp(46px,5vw,72px);
-      border:0;
-      padding:0;
-      display:grid;
-      place-items:center;
-      background:transparent;
-      color:var(--line);
-      font-family:Arial,sans-serif;
-      font-size:clamp(40px,5vw,72px);
-      line-height:1;
-      transition:transform .2s ease,color .2s ease,filter .2s ease;
-    }
-    .carousel-arrow:hover{
-      color:var(--pink);
-      transform:scale(1.12);
-      filter:drop-shadow(0 0 10px rgba(211,150,140,.34));
-    }
-    .carousel-label{
-      margin:0;
-      color:var(--text);
-      font-family:'Darumadrop One',cursive;
-      font-size:clamp(19px,2.1vw,28px);
-      line-height:1;
-      text-align:center;
-      letter-spacing:.02em;
-    }
-    .lightbox{
-      position:fixed;
-      inset:0;
-      z-index:60;
-      display:grid;
-      place-items:center;
-      padding:clamp(24px,4vw,56px);
-      background:rgba(0,0,0,.82);
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .2s ease;
-    }
-    .lightbox.is-open{opacity:1;pointer-events:auto}
-    .lightbox img{
-      width:auto;
-      height:auto;
-      max-width:88vw;
-      max-height:86vh;
-      object-fit:contain;
-      border:2px solid var(--line);
-      border-radius:14px;
-      background:var(--panel);
-      box-shadow:0 28px 80px rgba(0,0,0,.5);
-    }
-    #starCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:100;pointer-events:none}
-    .cursor,.cursor-dot{position:fixed;left:0;top:0;z-index:101;pointer-events:none}
-    .cursor{
-      width:34px;
-      height:50px;
-      transform:translate(-50%,-42%);
-      transform-origin:50% 42%;
-      filter:drop-shadow(0 0 8px rgba(255,255,255,.92)) drop-shadow(0 0 18px rgba(128,143,255,.78)) drop-shadow(0 0 36px rgba(58,68,170,.66));
-      transition:transform .16s ease,filter .16s ease;
-    }
-    .cursor::before,.cursor::after{content:"";position:absolute}
-    .cursor::before{
-      inset:-11px;
-      border-radius:50%;
-      background:radial-gradient(circle,rgba(255,255,255,.46) 0 10%,rgba(133,150,255,.34) 28%,rgba(62,76,178,.24) 48%,transparent 72%);
-      filter:blur(3px);
-    }
-    .cursor::after{
-      inset:0;
-      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
-      background:radial-gradient(circle at 50% 42%,#fff 0 28%,#fff8f3 38%,#dfe6ff 54%,#8f9be9 74%,#29336f 100%);
-    }
-    .cursor-dot{
-      z-index:102;
-      width:18px;
-      height:26px;
-      transform:translate(-50%,-42%) rotate(45deg);
-      transform-origin:50% 42%;
-      clip-path:polygon(50% 0,56% 35%,100% 42%,57% 50%,50% 100%,43% 50%,0 42%,44% 35%);
-      background:radial-gradient(circle at 50% 42%,#fff 0 30%,#fff7f0 42%,#dfe6ff 63%,#8c9bea 100%);
-      filter:drop-shadow(0 0 7px rgba(255,255,255,.82)) drop-shadow(0 0 16px rgba(128,143,255,.55));
-      transition:transform .16s ease;
-    }
-    body.cursor-big .cursor{transform:translate(-50%,-42%) scale(1.12)}
-    body.cursor-big .cursor-dot{transform:translate(-50%,-42%) rotate(45deg) scale(1.12)}
-    @media (max-width:900px){
-      .solidworks-layout{grid-template-columns:1fr}
-      .sole-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-      .sole-grid .gallery-item:nth-child(n+3){grid-column:auto}
-      .gallery-item img{max-height:none}
-      .dual-carousel{gap:24px}
-      .carousel-image-button{height:clamp(230px,40vw,370px)}
-    }
-    @media (max-width:680px){
-      :root{--header:58px}
-      body{cursor:auto}
-      a,button{cursor:auto}
-      #starCanvas,.cursor,.cursor-dot{display:none}
-      .page-head{
-        position:absolute;
-        background:transparent;
-        box-shadow:none;
-        backdrop-filter:none;
-      }
-      main{padding:18px 11px 52px}
-      .portfolio-section{margin-bottom:64px;contain-intrinsic-size:1100px}
-      .section-title{margin-left:8px;font-size:clamp(28px,9vw,40px)}
-      .section-frame{padding:14px;border-radius:18px}
-      .technical-grid{
-        grid-auto-columns:calc((100% - 8px)/2);
-        height:min(86vw,330px);
-      }
-      .sole-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .dual-carousel{grid-template-columns:1fr;gap:48px}
-      .carousel-stage{grid-template-columns:38px minmax(0,1fr) 38px}
-      .carousel-arrow{width:38px;height:56px;font-size:48px}
-      .carousel-image-button{height:min(84vw,390px)}
-      .carousel-label{font-size:24px}
-      .lightbox{padding:30px}
-      .lightbox img{max-width:84vw;max-height:80vh}
-    }
-    @media (prefers-reduced-motion:reduce){
-      *{scroll-behavior:auto!important;transition:none!important}
-    }
-  </style>
-  <style>
-    body.page--footwear{
-      position:relative;
-      isolation:isolate;
-      color:#51687a;
-      background:#f4f0df;
-      font-family:'Grandiflora One',serif;
-    }
-    .page--footwear a{color:inherit;text-decoration:none}
-    .footwear-parallax{
-      position:fixed;
-      z-index:-1;
-      inset:0;
-      overflow:hidden;
-      background:#f4f0df;
-      pointer-events:none;
-      contain:strict;
-      transform:translateZ(0);
-      backface-visibility:hidden;
-    }
-    .footwear-parallax img{
-      position:absolute;
-      top:0;
-      left:50%;
-      width:var(--parallax-width,100vw);
-      height:auto;
-      max-width:none;
-      transform:translate3d(-50%,var(--parallax-offset,0px),0);
-      transform-origin:center top;
-      will-change:transform;
-      backface-visibility:hidden;
-    }
-    .page--footwear .page-head{
-      background:linear-gradient(to bottom,rgba(244,240,223,.9),rgba(244,240,223,0));
-    }
-    .page--footwear .site-nav{color:#536b7c;font-family:'Grandiflora One',serif}
-    .page--footwear .site-nav a:hover{color:#ef745b}
-    .page--footwear main{position:relative;z-index:1;padding-top:clamp(82px,9vh,112px)}
-    .page--footwear .section-title{
-      color:#e4a2a8;
-      font-family:'Indie Flower',cursive;
-      font-size:clamp(38px,4.1vw,70px);
-      font-weight:400;
-      letter-spacing:0;
-    }
-    .page--footwear .section-frame{
-      border:1.5px solid rgba(81,104,122,.55);
-      border-radius:8px;
-      background:rgba(244,240,223,.26);
-      box-shadow:0 18px 42px rgba(81,104,122,.12);
-      backdrop-filter:blur(2px);
-    }
-    .page--footwear .gallery-item{border-radius:6px;background:rgba(250,248,239,.78);box-shadow:0 8px 22px rgba(81,104,122,.14)}
-    .page--footwear .carousel-arrow{color:#51687a}
-    .page--footwear .carousel-arrow:hover{color:#ef745b;filter:none}
-    .page--footwear .carousel-label{
-      color:#51687a;
-      font-family:'Indie Flower',cursive;
-      font-size:clamp(24px,2.5vw,40px);
-      font-weight:400;
-    }
-    .page--footwear .carousel-image-button img{filter:drop-shadow(0 12px 20px rgba(81,104,122,.16))}
-    .page--footwear .technical-grid{scrollbar-color:rgba(81,104,122,.5) transparent}
-    .page--footwear .technical-grid::-webkit-scrollbar-thumb{background:rgba(81,104,122,.46)}
-    .page--footwear .lightbox img{border-color:#f4f0df;border-radius:8px;background:#f4f0df}
-    @media (max-width:680px){
-      .page--footwear .page-head{background:transparent;box-shadow:none;backdrop-filter:none}
-      .page--footwear main{padding-top:72px}
-      .page--footwear .section-title{font-size:clamp(38px,11vw,52px)}
-      .page--footwear .section-frame{background:rgba(244,240,223,.38);backdrop-filter:none}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .footwear-parallax img{width:max(100vw,56vh);transform:translate3d(-50%,0,0)}
-    }
-  </style>
-  <link rel="stylesheet" href="../../water-cursor.css?v=perf1">
-  <link rel="stylesheet" href="../../Fonts/fonts.css?v=grandstander1">
-  <link rel="stylesheet" href="../../glass-nav.css?v=nav1">
-  <link rel="stylesheet" href="../../design-refresh.css?v=2">
-  <link rel="stylesheet" href="../../refinements.css?v=3">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Footwear modeling, pattern development and visualization by Daria Marakova.">
+<title>Footwear & Cloth | Daria Marakova</title>
+<link rel="stylesheet" href="../../pages.css?v=layout2">
+<link rel="stylesheet" href="../../water-cursor.css?v=fullscreen2">
+<link rel="stylesheet" href="../../Fonts/fonts.css?v=grandstander1">
+<link rel="stylesheet" href="../../glass-nav.css?v=nav1">
+<link rel="stylesheet" href="../../design-refresh.css?v=2">
+<link rel="stylesheet" href="../../refinements.css?v=4">
+<link rel="stylesheet" href="../../spatial-carousel.css?v=2">
+<link rel="stylesheet" href="../../footwear-gallery.css?v=1">
 </head>
-<body class="page--footwear" data-parallax-background>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="../../about.html">About</a>
-      <a href="../../index.html">Home</a>
-      <a href="../../contacts.html">Contact</a>
-    </nav>
-  <div class="footwear-parallax" aria-hidden="true">
-    <img width="1600" height="2867" decoding="async" src="../../main page/FootwearPageFon.optimized.webp" alt="">
-  </div>
-
-  <header class="page-head">
-    
-  </header>
-
-  <main aria-label="Footwear and cloth portfolio">
-    <h1 class="visually-hidden">Footwear and Cloth</h1>
-
-    <section class="portfolio-section" aria-labelledby="solidworks-title">
-      <h2 class="section-title" id="solidworks-title">SOLIDWORKS + CLO</h2>
-      <div class="section-frame">
-        <div class="solidworks-layout">
-          <div class="technical-grid" aria-label="Solidworks and CLO process gallery">
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="740" data-full-src="solidworksClo/1.png" decoding="async" src="solidworksClo/1.optimized.webp" alt="Tent model and CLO pattern development" loading="eager" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="839" data-full-src="solidworksClo/3.png" decoding="async" src="solidworksClo/3.optimized.webp" alt="Tent model and pattern development in CLO" loading="eager" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="650" data-full-src="solidworksClo/Скриншот 14-05-2025 095649.jpg" decoding="async" src="solidworksClo/Скриншот 14-05-2025 095649.optimized.webp" alt="Tent construction in Solidworks" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="650" data-full-src="solidworksClo/Скриншот 14-05-2025 100446.jpg" decoding="async" src="solidworksClo/Скриншот 14-05-2025 100446.optimized.webp" alt="Solidworks final technical view" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="649" data-full-src="solidworksClo/Скриншот 14-05-2025 095734.jpg" decoding="async" src="solidworksClo/Скриншот 14-05-2025 095734.optimized.webp" alt="Solidworks development screenshot" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="650" data-full-src="solidworksClo/Скриншот 14-05-2025 100237.jpg" decoding="async" src="solidworksClo/Скриншот 14-05-2025 100237.optimized.webp" alt="Solidworks project screenshot" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="649" data-full-src="solidworksClo/Скриншот 14-05-2025 100327.jpg" decoding="async" src="solidworksClo/Скриншот 14-05-2025 100327.optimized.webp" alt="Solidworks technical development" loading="lazy" /></button>
-          </div>
-          <div class="sole-grid" aria-label="Footwear sole development gallery">
-            <button class="gallery-item magnetic" type="button"><img width="919" height="1098" data-full-src="solidworksClo/IMG_7986.JPG" decoding="async" src="solidworksClo/IMG_7986.optimized.webp" alt="Footwear sole technical drawing" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="642" data-full-src="solidworksClo/IMG_7987.JPG" decoding="async" src="solidworksClo/IMG_7987.optimized.webp" alt="Footwear sole technical view" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1200" height="753" data-full-src="solidworksClo/IMG_7988.JPG" decoding="async" src="solidworksClo/IMG_7988.optimized.webp" alt="Footwear sole side view" loading="lazy" /></button>
-            <button class="gallery-item magnetic" type="button"><img width="1098" height="1111" data-full-src="solidworksClo/IMG_7989.JPG" decoding="async" src="solidworksClo/IMG_7989.optimized.webp" alt="Footwear sole construction view" loading="lazy" /></button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="portfolio-section" aria-labelledby="icad-title">
-      <h2 class="section-title" id="icad-title">ICAD+</h2>
-      <div class="section-frame">
-        <div class="dual-carousel">
-          <article class="image-carousel" data-carousel="icadViewport">
-            <div class="carousel-stage">
-              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous ICAD viewport image">&#10094;</button>
-              <button class="carousel-image-button magnetic" type="button" aria-label="Open ICAD viewport image">
-                <img alt="" decoding="async" />
-              </button>
-              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next ICAD viewport image">&#10095;</button>
-            </div>
-            <h3 class="carousel-label">viewport</h3>
-          </article>
-
-          <article class="image-carousel" data-carousel="icadRender">
-            <div class="carousel-stage">
-              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous ICAD render">&#10094;</button>
-              <button class="carousel-image-button magnetic" type="button" aria-label="Open ICAD render">
-                <img alt="" decoding="async" />
-              </button>
-              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next ICAD render">&#10095;</button>
-            </div>
-            <h3 class="carousel-label">render</h3>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="portfolio-section" aria-labelledby="clo-title">
-      <h2 class="section-title" id="clo-title">CLO</h2>
-      <div class="section-frame">
-        <div class="dual-carousel">
-          <article class="image-carousel" data-carousel="cloRender">
-            <div class="carousel-stage">
-              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous CLO render">&#10094;</button>
-              <button class="carousel-image-button magnetic" type="button" aria-label="Open CLO render">
-                <img alt="" decoding="async" />
-              </button>
-              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next CLO render">&#10095;</button>
-            </div>
-            <h3 class="carousel-label">render</h3>
-          </article>
-
-          <article class="image-carousel" data-carousel="cloViewport">
-            <div class="carousel-stage">
-              <button class="carousel-arrow magnetic" type="button" data-step="-1" aria-label="Previous CLO viewport image">&#10094;</button>
-              <button class="carousel-image-button magnetic" type="button" aria-label="Open CLO viewport image">
-                <img alt="" decoding="async" />
-              </button>
-              <button class="carousel-arrow magnetic" type="button" data-step="1" aria-label="Next CLO viewport image">&#10095;</button>
-            </div>
-            <h3 class="carousel-label">viewport</h3>
-          </article>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div class="lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Expanded project image">
-    <img decoding="async" id="lightboxImage" alt="" />
-  </div>
-
-  <script>
-    const carouselSets = {
-      icadViewport: [
-        ['ICAD/Снимок экрана 2026-07-12 130600.optimized.webp', 'ICAD viewport 1', 'ICAD/Снимок экрана 2026-07-12 130600.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 130622.optimized.webp', 'ICAD viewport 2', 'ICAD/Снимок экрана 2026-07-12 130622.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 130850.optimized.webp', 'ICAD viewport 3', 'ICAD/Снимок экрана 2026-07-12 130850.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131104.optimized.webp', 'ICAD viewport 4', 'ICAD/Снимок экрана 2026-07-12 131104.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131156.optimized.webp', 'ICAD viewport 5', 'ICAD/Снимок экрана 2026-07-12 131156.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131213.optimized.webp', 'ICAD viewport 6', 'ICAD/Снимок экрана 2026-07-12 131213.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131247.optimized.webp', 'ICAD viewport 7', 'ICAD/Снимок экрана 2026-07-12 131247.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131316.optimized.webp', 'ICAD viewport 8', 'ICAD/Снимок экрана 2026-07-12 131316.jpg'],
-        ['ICAD/Снимок экрана 2026-07-12 131501.optimized.webp', 'ICAD viewport 9', 'ICAD/Снимок экрана 2026-07-12 131501.jpg']
-      ],
-      icadRender: [
-        ['ICAD/RENDER/demix1.optimized.webp', 'ICAD Demix render 1', 'ICAD/RENDER/demix1.png'],
-        ['ICAD/RENDER/demix2.optimized.webp', 'ICAD Demix render 2', 'ICAD/RENDER/demix2.png'],
-        ['ICAD/RENDER/demix3.optimized.webp', 'ICAD Demix render 3', 'ICAD/RENDER/demix3.png'],
-        ['ICAD/RENDER/demix4.optimized.webp', 'ICAD Demix render 4', 'ICAD/RENDER/demix4.png'],
-        ['ICAD/RENDER/sensana1.optimized.webp', 'ICAD Sensana render 1', 'ICAD/RENDER/sensana1.png'],
-        ['ICAD/RENDER/sensana2.optimized.webp', 'ICAD Sensana render 2', 'ICAD/RENDER/sensana2.png']
-      ],
-      cloRender: [
-        ['CLO/render/demix137250__Final for PRESENTATION_2.optimized.webp', 'CLO footwear render 1', 'CLO/render/demix137250__Final for PRESENTATION_2.png'],
-        ['CLO/render/136394_Final for PRESENTATION 2.optimized.webp', 'CLO footwear render 2', 'CLO/render/136394_Final for PRESENTATION 2.png'],
-        ['CLO/render/140535_khaki - Y3 5.optimized.webp', 'CLO footwear render 3', 'CLO/render/140535_khaki - Y3 5.png'],
-        ['CLO/render/122370 Northland_Final for PRESENTATION_NEW OPTION.optimized.webp', 'CLO footwear render 4', 'CLO/render/122370 Northland_Final for PRESENTATION_NEW OPTION.png'],
-        ['CLO/render/118493 green-beige 5.optimized.webp', 'CLO footwear render 5', 'CLO/render/118493 green-beige 5.png'],
-        ['CLO/render/136439_FILA_Final for PRESENTATION 2.optimized.webp', 'CLO footwear render 6', 'CLO/render/136439_FILA_Final for PRESENTATION 2.png'],
-        ['CLO/render/140509_grey - 91 5.optimized.webp', 'CLO footwear render 7', 'CLO/render/140509_grey - 91 5.png']
-      ],
-      cloViewport: [
-        ['CLO/demix137250__Final for PRESENTATION.optimized.webp', 'CLO viewport 1', 'CLO/demix137250__Final for PRESENTATION.png'],
-        ['CLO/118493 Fila_Final for PRESENTATION.optimized.webp', 'CLO viewport 2', 'CLO/118493 Fila_Final for PRESENTATION.png'],
-        ['CLO/136439_FILA_Final for PRESENTATION.optimized.webp', 'CLO viewport 3', 'CLO/136439_FILA_Final for PRESENTATION.png'],
-        ['CLO/122370 Northland_Final for PRESENTATION.optimized.webp', 'CLO viewport 4', 'CLO/122370 Northland_Final for PRESENTATION.png'],
-        ['CLO/136394_Final for PRESENTATION.optimized.webp', 'CLO viewport 5', 'CLO/136394_Final for PRESENTATION.png'],
-        ['CLO/137250_new.optimized.webp', 'CLO viewport 6', 'CLO/137250_new.png'],
-        ['CLO/140535____Final for PRESENTATION.optimized.webp', 'CLO viewport 7', 'CLO/140535____Final for PRESENTATION.png'],
-        ['CLO/140509____Final for PRESENTATION.optimized.webp', 'CLO viewport 8', 'CLO/140509____Final for PRESENTATION.png']
-      ]
-    };
-
-    const lightbox = document.querySelector('#imageLightbox');
-    const lightboxImage = document.querySelector('#lightboxImage');
-
-    function openLightbox(src, alt) {
-      if (!lightbox || !lightboxImage || !src) return;
-      lightboxImage.src = src;
-      lightboxImage.alt = alt || '';
-      lightbox.classList.add('is-open');
-      lightbox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      if (!lightbox || !lightboxImage) return;
-      lightbox.classList.remove('is-open');
-      lightbox.setAttribute('aria-hidden', 'true');
-      lightboxImage.removeAttribute('src');
-      lightboxImage.alt = '';
-      document.body.style.overflow = '';
-    }
-
-    document.querySelectorAll('.gallery-item').forEach(button => {
-      button.addEventListener('click', () => {
-        const image = button.querySelector('img');
-        if (image) openLightbox(image.dataset.fullSrc || image.currentSrc || image.src, image.alt);
-      });
-    });
-
-    document.querySelectorAll('[data-carousel]').forEach(carousel => {
-      const items = carouselSets[carousel.dataset.carousel] || [];
-      const imageButton = carousel.querySelector('.carousel-image-button');
-      const image = imageButton?.querySelector('img');
-      let index = 0;
-      let pointerStart = null;
-
-      function preload(position) {
-        if (!items.length) return;
-        const nextImage = new Image();
-        nextImage.src = items[(position + items.length) % items.length][0];
-      }
-
-      function render(animate = false) {
-        if (!image || !items.length) return;
-        const [src, alt] = items[index];
-        if (animate) imageButton.classList.add('is-changing');
-        image.dataset.fullSrc=items[index][2] || src;
-        image.src = src;
-        image.alt = alt;
-        image.onload = () => imageButton.classList.remove('is-changing');
-        if (animate && !navigator.connection?.saveData) preload(index + 1);
-      }
-
-      function move(step) {
-        index = (index + step + items.length) % items.length;
-        render(true);
-      }
-
-      carousel.querySelectorAll('[data-step]').forEach(button => {
-        button.addEventListener('click', () => move(Number(button.dataset.step)));
-      });
-
-      imageButton?.addEventListener('click', () => openLightbox(image.dataset.fullSrc || image.currentSrc || image.src, image.alt));
-      imageButton?.addEventListener('pointerdown', event => { pointerStart = event.clientX; });
-      imageButton?.addEventListener('pointerup', event => {
-        if (pointerStart === null) return;
-        const delta = event.clientX - pointerStart;
-        pointerStart = null;
-        if (Math.abs(delta) > 42) move(delta < 0 ? 1 : -1);
-      });
-      carousel.addEventListener('keydown', event => {
-        if (event.key === 'ArrowLeft') move(-1);
-        if (event.key === 'ArrowRight') move(1);
-      });
-
-      if ('IntersectionObserver' in window) {
-        const observer=new IntersectionObserver(entries=>{
-          if(entries.some(entry=>entry.isIntersecting)){render();observer.disconnect();}
-        },{rootMargin:'250px'});
-        observer.observe(carousel);
-      } else render();
-    });
-
-    lightbox?.addEventListener('click', event => {
-      if (event.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeLightbox();
-    });
-
-  </script>
-  <script src="../../water-cursor.js?v=perf1"></script>
-  <script src="../../glass-text.js?v=3"></script>
+<body class="page page--footwear is-entering">
+<nav class="site-nav" aria-label="Main navigation">
+<a href="../../about.html">About</a>
+<a href="../../index.html">Home</a>
+<a href="../../work.html">Work</a>
+</nav>
+<main class="footwear-page">
+<h1 class="sr-only">Footwear and cloth</h1>
+<section class="footwear-section" aria-labelledby="clo-title">
+<h2 class="footwear-heading water-title" id="clo-title">CLO</h2>
+<p class="footwear-copy">These shoes were made entirely in CLO 3D, from patterns to final visualization.</p>
+<div class="spatial-carousel" data-spatial-carousel data-shoes="true" data-initial="3" role="region" aria-roledescription="carousel" aria-label="CLO footwear">
+ <div class="spatial-viewport" tabindex="0" aria-label="CLO footwear: scroll or use arrow keys">
+ <div class="spatial-track">
+<div class="spatial-stage">
+<button type="button" data-image="NEW look/web/Clo_5.webp" data-name="Olive and cream FILA sneaker" aria-label="Enlarge Olive and cream FILA sneaker">
+<img src="NEW look/web/Clo_5.webp" width="594" height="344" alt="Olive and cream FILA sneaker" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_6.webp" data-name="Charcoal high-top sneaker" aria-label="Enlarge Charcoal high-top sneaker">
+<img src="NEW look/web/Clo_6.webp" width="524" height="363" alt="Charcoal high-top sneaker" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_7.webp" data-name="Olive trail shoe" aria-label="Enlarge Olive trail shoe">
+<img src="NEW look/web/Clo_7.webp" width="629" height="383" alt="Olive trail shoe" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_main.webp" data-name="Grey and teal technical sneaker" aria-label="Enlarge Grey and teal technical sneaker">
+<img src="NEW look/web/Clo_main.webp" width="594" height="378" alt="Grey and teal technical sneaker" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_2.webp" data-name="Silver and blue FILA sneaker" aria-label="Enlarge Silver and blue FILA sneaker">
+<img src="NEW look/web/Clo_2.webp" width="594" height="328" alt="Silver and blue FILA sneaker" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_3.webp" data-name="Grey trail sneaker" aria-label="Enlarge Grey trail sneaker">
+<img src="NEW look/web/Clo_3.webp" width="594" height="305" alt="Grey trail sneaker" decoding="async" loading="eager">
+</button>
+<button type="button" data-image="NEW look/web/Clo_4.webp" data-name="Black and gold winter boot" aria-label="Enlarge Black and gold winter boot">
+<img src="NEW look/web/Clo_4.webp" width="594" height="459" alt="Black and gold winter boot" decoding="async" loading="eager">
+</button>
+</div>
+</div>
+</div>
+ <div class="spatial-controls">
+<button class="spatial-arrow" type="button" data-carousel-prev aria-label="Previous shoe">&#8592;</button>
+<div class="spatial-dots" aria-label="Choose a shoe">
+</div>
+<button class="spatial-arrow" type="button" data-carousel-next aria-label="Next shoe">&#8594;</button>
+</div>
+ <p class="spatial-hint">Scroll or drag to explore · Select the centre shoe to view</p>
+<p class="spatial-status" aria-live="polite" aria-atomic="true">
+</p>
+</div>
+</section>
+<section class="footwear-section" aria-labelledby="icad-title">
+<h2 class="footwear-heading water-title" id="icad-title">iCAD</h2>
+<div class="process-grid">
+<button class="gallery-image" type="button" data-image="NEW look/web/IcadImage1.webp" aria-label="Enlarge iCAD model and pattern development — project 1">
+<img src="NEW look/web/IcadImage1.webp" width="710" height="423" alt="iCAD model and pattern development — project 1" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/IcadImage2.webp" aria-label="Enlarge iCAD model and pattern development — project 2">
+<img src="NEW look/web/IcadImage2.webp" width="724" height="421" alt="iCAD model and pattern development — project 2" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/IcadImage3.webp" aria-label="Enlarge iCAD model and pattern development — project 3">
+<img src="NEW look/web/IcadImage3.webp" width="716" height="421" alt="iCAD model and pattern development — project 3" decoding="async" loading="lazy">
+</button>
+</div>
+<p class="footwear-copy process-caption">Some of the models I created entirely in iCAD.</p>
+<div class="spatial-carousel" data-spatial-carousel data-shoes="true" data-initial="5" role="region" aria-roledescription="carousel" aria-label="iCAD footwear">
+ <div class="spatial-viewport" tabindex="0" aria-label="iCAD footwear: scroll or use arrow keys">
+ <div class="spatial-track">
+<div class="spatial-stage">
+<button type="button" data-image="NEW look/web/Icad_6.webp" data-name="Navy leather sneaker" aria-label="Enlarge Navy leather sneaker">
+<img src="NEW look/web/Icad_6.webp" width="762" height="398" alt="Navy leather sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_7.webp" data-name="Sage mesh sneaker" aria-label="Enlarge Sage mesh sneaker">
+<img src="NEW look/web/Icad_7.webp" width="711" height="442" alt="Sage mesh sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_8.webp" data-name="Blue and lime kids sneaker" aria-label="Enlarge Blue and lime kids sneaker">
+<img src="NEW look/web/Icad_8.webp" width="822" height="473" alt="Blue and lime kids sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_9.webp" data-name="Ivory sandal" aria-label="Enlarge Ivory sandal">
+<img src="NEW look/web/Icad_9.webp" width="796" height="427" alt="Ivory sandal" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_10.webp" data-name="Olive and orange kids sneaker" aria-label="Enlarge Olive and orange kids sneaker">
+<img src="NEW look/web/Icad_10.webp" width="947" height="418" alt="Olive and orange kids sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_Main.webp" data-name="Dusty rose suede sneaker" aria-label="Enlarge Dusty rose suede sneaker">
+<img src="NEW look/web/Icad_Main.webp" width="792" height="416" alt="Dusty rose suede sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_1.webp" data-name="Olive technical sneaker" aria-label="Enlarge Olive technical sneaker">
+<img src="NEW look/web/Icad_1.webp" width="682" height="392" alt="Olive technical sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_2.webp" data-name="Graphite strap sneaker" aria-label="Enlarge Graphite strap sneaker">
+<img src="NEW look/web/Icad_2.webp" width="699" height="363" alt="Graphite strap sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_3.webp" data-name="Taupe suede sneaker" aria-label="Enlarge Taupe suede sneaker">
+<img src="NEW look/web/Icad_3.webp" width="703" height="374" alt="Taupe suede sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_4.webp" data-name="Black athletic sneaker" aria-label="Enlarge Black athletic sneaker">
+<img src="NEW look/web/Icad_4.webp" width="656" height="394" alt="Black athletic sneaker" decoding="async" loading="lazy">
+</button>
+<button type="button" data-image="NEW look/web/Icad_5.webp" data-name="Ivory and rose sneaker" aria-label="Enlarge Ivory and rose sneaker">
+<img src="NEW look/web/Icad_5.webp" width="760" height="376" alt="Ivory and rose sneaker" decoding="async" loading="lazy">
+</button>
+</div>
+</div>
+</div>
+ <div class="spatial-controls">
+<button class="spatial-arrow" type="button" data-carousel-prev aria-label="Previous shoe">&#8592;</button>
+<div class="spatial-dots" aria-label="Choose a shoe">
+</div>
+<button class="spatial-arrow" type="button" data-carousel-next aria-label="Next shoe">&#8594;</button>
+</div>
+ <p class="spatial-hint">Scroll or drag to explore · Select the centre shoe to view</p>
+<p class="spatial-status" aria-live="polite" aria-atomic="true">
+</p>
+</div>
+</section>
+<section class="footwear-section solidworks-section" aria-labelledby="solidworks-title">
+<h2 class="footwear-heading water-title" id="solidworks-title">SolidWorks</h2>
+<div class="sole-layout">
+<div class="sole-grid">
+<button class="gallery-image" type="button" data-image="NEW look/web/SolidworksSole1_2.webp" aria-label="Enlarge Sole tread design — first model">
+<img src="NEW look/web/SolidworksSole1_2.webp" width="400" height="478" alt="Sole tread design — first model" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/SolidworksSole2_2.webp" aria-label="Enlarge Sole tread design — second model">
+<img src="NEW look/web/SolidworksSole2_2.webp" width="400" height="478" alt="Sole tread design — second model" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/SolidworksSole1_1.webp" aria-label="Enlarge First sole in section">
+<img src="NEW look/web/SolidworksSole1_1.webp" width="632" height="392" alt="First sole in section" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/SolidworksSole2_1.webp" aria-label="Enlarge Second sole in section">
+<img src="NEW look/web/SolidworksSole2_1.webp" width="632" height="397" alt="Second sole in section" decoding="async" loading="lazy">
+</button>
+</div>
+<p class="footwear-copy">Two soles created in SolidWorks for analysis.</p>
+</div>
+<div class="tent-section">
+<p class="footwear-copy">These two tents were created in SolidWorks from illustrations, forming a framework for developing patterns in CLO 3D.</p>
+<div class="tent-grid">
+<button class="gallery-image" type="button" data-image="NEW look/web/SolidworksTent.webp" aria-label="Enlarge Tent framework in SolidWorks">
+<img src="NEW look/web/SolidworksTent.webp" width="736" height="447" alt="Tent framework in SolidWorks" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/tent1.webp" aria-label="Enlarge First tent and CLO 3D patterns">
+<img src="NEW look/web/tent1.webp" width="736" height="454" alt="First tent and CLO 3D patterns" decoding="async" loading="lazy">
+</button>
+<button class="gallery-image" type="button" data-image="NEW look/web/tent2.webp" aria-label="Enlarge Second tent and CLO 3D patterns">
+<img src="NEW look/web/tent2.webp" width="735" height="451" alt="Second tent and CLO 3D patterns" decoding="async" loading="lazy">
+</button>
+</div>
+</div>
+</section>
+</main>
+<dialog class="image-dialog" aria-label="Project image">
+<button class="dialog-close" type="button" aria-label="Close image">&times;</button>
+<img alt="">
+</dialog>
+<script src="../../spatial-carousel.js?v=2">
+</script>
+<script src="../../footwear-gallery.js?v=1">
+</script>
+<script src="../../pages.js?v=layout2">
+</script>
+<script src="../../water-cursor.js?v=fullscreen2">
+</script>
+<script src="../../glass-text.js?v=4">
+</script>
 </body>
 </html>

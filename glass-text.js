@@ -16,7 +16,8 @@
     frame = 0;
     for (const target of targets) {
       const style = getComputedStyle(target);
-      const box = target.getBoundingClientRect();
+      // Layout dimensions stay stable while a carousel card rotates and scales.
+      const box = {width:target.offsetWidth,height:target.offsetHeight};
       if (!box.width || !box.height) continue;
       const text = [...target.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent).join('').trim();
       const label = style.textTransform === 'uppercase' ? text.toUpperCase() : text;

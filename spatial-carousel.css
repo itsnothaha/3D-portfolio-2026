@@ -1,0 +1,49 @@
+.spatial-carousel{position:relative;width:100%;--carousel-height:clamp(340px,32vw,480px);--item-width:clamp(260px,31vw,480px)}
+.spatial-stage{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.spatial-stage>*{width:280px}
+.spatial-controls{display:none}
+.spatial-carousel.is-enhanced .spatial-viewport{height:var(--carousel-height);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory;touch-action:pan-x pan-y;cursor:grab;position:relative}
+.spatial-viewport::-webkit-scrollbar{display:none}
+.spatial-carousel.is-dragging .spatial-viewport{scroll-snap-type:none;cursor:grabbing}
+.spatial-carousel.is-enhanced .spatial-track{position:relative}
+.spatial-carousel.is-enhanced .spatial-stage{position:sticky;left:0;top:0;display:block;width:var(--stage-width);height:var(--stage-height);perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d;isolation:isolate;z-index:1;user-select:none}
+.spatial-snap{position:absolute;pointer-events:none;scroll-snap-align:start}
+.spatial-carousel.is-enhanced .spatial-item{position:absolute;left:50%;top:50%;width:var(--item-width);margin:0;transform-origin:center;backface-visibility:hidden;will-change:transform;transition:none;user-select:none}
+.spatial-carousel[data-shoes] .spatial-item{border:0;padding:0;background:none;cursor:pointer}
+.spatial-carousel[data-shoes] .spatial-item img{width:100%;height:clamp(200px,25vw,360px);object-fit:contain;filter:drop-shadow(0 22px 15px #42484620);pointer-events:none}
+.spatial-carousel.is-enhanced .spatial-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin:12px 0 0}
+.spatial-arrow{width:42px;height:42px;border:1px solid #ffffffa6;border-radius:50%;background:#f9faf52e;backdrop-filter:blur(8px);color:#7d8993;font:22px/1 sans-serif;cursor:pointer;transition:background .2s}
+.spatial-arrow:hover{background:#ffffff73}.spatial-arrow:disabled{opacity:.25;cursor:default}
+.spatial-dots{display:flex;align-items:center;justify-content:center;gap:3px}
+.spatial-dots button{width:20px;height:30px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center}
+.spatial-dots button::before{content:'';width:5px;height:5px;border-radius:50%;background:#8c9ca363;transition:transform .2s,background .2s}
+.spatial-dots button[aria-pressed=true]::before{transform:scale(1.65);background:#738792}
+.spatial-hint{margin:12px 0 0;text-align:center;font:12px/1.4 'Grandstander',sans-serif;color:#8a9395}
+.spatial-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.page--work .spatial-carousel{margin-top:5vh;--carousel-height:clamp(330px,53vh,600px);--item-width:39vw}
+.page--work .spatial-item.work-category{display:grid;gap:22px;max-width:none}
+.page--work .spatial-item .work-category-media{border-radius:20px;box-shadow:0 28px 35px -28px #465a6c80;overflow:hidden;aspect-ratio:16/9}
+.page--work .spatial-item .work-category-media img{width:100%;height:100%;object-fit:cover;transform:none;filter:none}
+body.page--work .spatial-item.work-category .work-category-title{font-size:2.7vw;white-space:nowrap;text-align:center;margin:0}
+.page--work .spatial-item:hover .work-category-title{color:inherit}
+@media(max-width:720px){
+ .spatial-carousel{--carousel-height:clamp(460px,64svh,620px);--item-width:80vw}
+ .spatial-carousel.is-enhanced .spatial-viewport{overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;touch-action:pan-y pinch-zoom}
+ .spatial-carousel.is-dragging .spatial-viewport{scroll-snap-type:none}
+ .spatial-carousel[data-shoes] .spatial-item img{height:200px;filter:drop-shadow(0 15px 10px #42484620)}
+ .page--footwear .spatial-hint{display:none}
+ .spatial-carousel.is-enhanced .spatial-controls{gap:12px;margin-top:4px}
+ .spatial-arrow{width:38px;height:38px;transform:rotate(90deg)}
+ .spatial-dots{gap:0}.spatial-dots button{width:19px}
+ .page--work .spatial-carousel{margin-top:8px;--carousel-height:clamp(490px,73svh,730px);--item-width:74vw}
+ .page--work .spatial-item.work-category{gap:12px}
+ body.page--work .spatial-item.work-category .work-category-title{font-size:5.4vw;margin:0}
+ .page--work .spatial-item .work-category-media{border-radius:14px}
+}
+@media(prefers-reduced-motion:reduce){.spatial-carousel *{scroll-behavior:auto!important;transition:none!important}}
+/* The orbit is animated by one frame loop; native scroll snapping must not compete. */
+.spatial-carousel.is-enhanced .spatial-viewport{overflow:hidden;scroll-snap-type:none;touch-action:pan-x pinch-zoom}
+.spatial-carousel.is-enhanced .spatial-track{width:100%;height:100%}
+.spatial-carousel.is-enhanced .spatial-stage{position:relative}
+.spatial-carousel[data-shoes] .spatial-item img{filter:none}
+@media(min-width:721px){.spatial-carousel.is-enhanced .spatial-viewport{touch-action:pan-y pinch-zoom}}

@@ -75,3 +75,9 @@ body .about-emphasis{text-transform:none;font-size:1em}
   .about-skills{font-size:13px}
   .work-heading p{font-size:3vw}
 }
+/* Scale the glass edge with its lettering, including compact phone navigation. */
+body[class] :is(.water-title,.glass-type,.work-category-title,.home-nav a,.site-nav a){
+ -webkit-text-stroke:clamp(.55px,.018em,1.2px) #7e91abb3;
+}
+/* Keep moving cards on inexpensive compositing layers instead of refiltering each frame. */
+.spatial-item .glass-surface{-webkit-backdrop-filter:blur(2.5px) saturate(.85);backdrop-filter:blur(2.5px) saturate(.85)}

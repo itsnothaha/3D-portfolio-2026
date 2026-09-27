@@ -29,11 +29,13 @@
       }
     };
     on(window,'pointermove',e=>{
+      if(document.fullscreenElement || e.target.closest('video,.video-dialog')){cursor.classList.remove('is-visible');seen=false;return;}
       x=e.clientX;y=e.clientY;if(!seen){cx=x;cy=y;seen=true;}
       cursor.classList.add('is-visible');if(!frame)frame=requestAnimationFrame(animate);
       const now=performance.now();if(now-lastAt>100 && Math.hypot(x-lastX,y-lastY)>35){ripple(x,y);lastX=x;lastY=y;lastAt=now;}
     });
-    on(window,'pointerdown',e=>ripple(e.clientX,e.clientY,true));
+    on(window,'pointerdown',e=>{if(!document.fullscreenElement && !e.target.closest('video,.video-dialog'))ripple(e.clientX,e.clientY,true);});
+    on(document,'fullscreenchange',()=>{cursor.classList.remove('is-visible');seen=false;rings.forEach(r=>r.remove());rings.clear();});
     on(document.documentElement,'pointerleave',()=>{cursor.classList.remove('is-visible');seen=false;});
     on(document,'mouseover',e=>cursor.classList.toggle('is-active',!!e.target.closest('a,button,[role="button"],video')));
     on(document,'visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;rings.forEach(r=>r.remove());rings.clear();cursor.classList.remove('is-visible');seen=false;}});

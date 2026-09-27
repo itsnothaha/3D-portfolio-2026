@@ -1,0 +1,59 @@
+/* Float-based silhouette wrapping: the biography follows the photograph itself. */
+body.page--about .about-page{min-height:100svh;padding:2vh 3vw 110px}
+body.page--about .about-layout{margin:6vh 0 0;width:100%}
+body.page--about .about-content{display:flow-root;font:clamp(13px,1.1vw,19px)/1.35 'Grandstander',sans-serif;color:#8b8e8e}
+body.page--about .about-portrait{position:relative;float:left;top:auto;left:auto;width:min(68vw,108vh);height:auto;max-width:none;margin:0 1.5vw 0 -10vw;shape-outside:polygon(0 0,50% 0,53% 8%,57% 27%,60% 32%,73% 40%,83% 82%,81% 94%,0 100%);shape-margin:16px;pointer-events:none}
+body.page--about .about-bio{display:block;margin:0;padding:0;position:static}
+body.page--about .about-bio p{margin:0 0 .5em}
+body.page--about .about-bio p:nth-child(n+4){margin-left:0}
+body.page--about .about-emphasis{text-transform:none;font-size:1em}
+body.page--about .about-title.has-glass-surface{position:absolute;top:1vh;left:2vw;font-size:min(8.5vw,14vh);margin:0}
+.about-accordion{position:relative;margin:22px 4% 0 59%;padding-bottom:10px}
+body .about-disclosure{position:relative;margin:0 0 clamp(18px,3.1vh,34px)}
+body .about-disclosure h2{margin:0;font-size:inherit}
+.about-toggle{display:block;border:0;padding:5px 0;background:none;font:400 clamp(22px,1.8vw,34px)/1.15 'Bagel Fat One',sans-serif;text-transform:uppercase;color:var(--section-color);text-align:left;cursor:pointer;transition:filter .2s}
+.about-toggle:hover{filter:brightness(.91)}
+.about-disclosure[data-section=experience]{--section-color:#d88e96}
+.about-disclosure[data-section=software]{--section-color:#c69f6b}
+.about-disclosure[data-section=education]{--section-color:#a4a4c1}
+.about-disclosure[data-section=skills]{--section-color:#cf91b2}
+.about-disclosure[data-section=additional]{--section-color:#9ac8d9}
+.about-panel{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .42s cubic-bezier(.2,.7,.2,1),opacity .3s,visibility .42s}
+.about-panel-inner{overflow:hidden;min-height:0;padding:0 4px;font-size:clamp(13px,1.05vw,18px);line-height:1.4}
+.about-panel-inner p{margin:12px 0}.about-panel-inner ul{margin:12px 0;padding-left:20px}
+.about-disclosure.is-open .about-panel{grid-template-rows:1fr;opacity:1;visibility:visible}
+.about-disclosure[data-section=software] ul{columns:2;column-gap:20px}
+.tap-hints{position:absolute;left:min(76%,265px);top:-12px;width:95px;height:64px;pointer-events:none;font:14px 'Grandstander',sans-serif;color:#8d8789}
+.tap-hints span{position:absolute;animation:tap-breathe 3.6s ease-in-out infinite;opacity:.2}
+.tap-hints span:nth-child(1){left:40px;top:0;transform:rotate(38deg)}
+.tap-hints span:nth-child(2){left:6px;top:39px;transform:rotate(-30deg);animation-delay:1.2s}
+.tap-hints span:nth-child(3){left:68px;top:44px;transform:rotate(-12deg);animation-delay:2.4s}
+@keyframes tap-breathe{0%,70%,100%{opacity:.15}28%{opacity:.9}}
+body.page--about .software-dock{position:absolute;left:3vw;top:min(79vh,53vw);bottom:auto;width:46%;max-width:none;display:flex;gap:.5vw;flex-wrap:nowrap;margin:0;padding:0;clear:both}
+body.page--about .software-icon{width:min(5.1vw,8.5vh);height:min(5.1vw,8.5vh);flex-shrink:0}
+@media(max-width:900px){
+ body.page--about .about-page{padding:58px 20px 100px}
+ body.page--about .about-title.has-glass-surface{position:relative;top:auto;left:auto;font-size:17vw}
+ body.page--about .about-layout{margin:8px 0 0}
+ body.page--about .about-content{font-size:14px;line-height:1.45}
+ body.page--about .about-portrait{width:69%;margin:0 12px 10px -12%;shape-margin:8px}
+ .about-accordion{clear:both;margin:25px 4% 0 8%;padding:0}
+ .about-toggle{font-size:25px}.about-panel-inner{font-size:14px}
+ body .about-disclosure{margin-bottom:22px}
+ .tap-hints{left:auto;right:10px}
+ body.page--about .software-dock{position:static;width:100%;margin:30px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px 12px}
+ body.page--about .software-icon{width:54px;height:54px}
+}
+@media(prefers-reduced-motion:reduce){.about-panel{transition:none}.tap-hints span{animation:none;opacity:.65}}
+@media(min-width:901px){
+ .about-panel-inner{font-size:clamp(12px,.98vw,17px)}
+ .about-panel-inner p{margin:8px 0}
+}
+
+
+/* Stable geometry: opening a panel only moves the content following it. */
+html:has(body.page--about){scrollbar-gutter:stable}
+body.page--about{overflow-anchor:none}
+.about-panel-inner ul{list-style:none;padding-left:0}
+.about-panel-inner li{position:relative;padding-left:1.45em;margin:8px 0;break-inside:avoid}
+.about-panel-inner li::before{content:"";position:absolute;left:0;top:.27em;width:.8em;height:.8em;background:var(--section-color);clip-path:polygon(50% 0%,59% 28%,85% 15%,72% 41%,100% 50%,72% 59%,85% 85%,59% 72%,50% 100%,41% 72%,15% 85%,28% 59%,0% 50%,28% 41%,15% 15%,41% 28%)}
