@@ -47,3 +47,12 @@ body.page--work .spatial-item.work-category .work-category-title{font-size:2.7vw
 .spatial-carousel.is-enhanced .spatial-stage{position:relative}
 .spatial-carousel[data-shoes] .spatial-item img{filter:none}
 @media(min-width:721px){.spatial-carousel.is-enhanced .spatial-viewport{touch-action:pan-y pinch-zoom}}
+
+/* Horizontal swipes control the vertical mobile scene; vertical swipes scroll the page. */
+@media(max-width:720px){
+ .spatial-carousel.is-enhanced .spatial-viewport{touch-action:pan-y pinch-zoom;overflow:hidden}
+ .spatial-carousel[data-shoes]{--item-width:min(76vw,340px)}
+ .spatial-carousel[data-shoes] .spatial-item img{height:180px}
+ .spatial-arrow{transform:none}
+ .page--footwear .spatial-hint{display:block;padding:0 16px;font-size:11px}
+}

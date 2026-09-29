@@ -29,7 +29,7 @@
         const angle = (i - position) * Math.PI * 2 / count;
         const front = Math.cos(angle), side = Math.sin(angle);
         const vertical = mobile.matches;
-        const x = vertical ? (shoes ? (1-front) * width * .22 + side * width * .10 : 0) : side * width * .43;
+        const x = vertical ? 0 : side * width * .43;
         const y = vertical ? side * height * .40 : shoes ? (front-1) * height * .24 + height * .10 : 0;
         const z = (front-1) * (shoes ? 340 : 220);
         const scale = shoes ? .76 + .24 * front : .88 + .12 * front;
@@ -88,7 +88,7 @@
       else move(Math.round(target)+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1));
     });
     viewport.addEventListener('wheel',event=>{
-      if(event.ctrlKey) return;
+      if(event.ctrlKey || (mobile.matches && Math.abs(event.deltaY) >= Math.abs(event.deltaX))) return;
       event.preventDefault();
       const delta = Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;
       const pixels = delta*(event.deltaMode===1?16:event.deltaMode===2?height:1);
@@ -98,20 +98,29 @@
     viewport.addEventListener('pointerdown',event=>{
       if(event.button!==0 || dragging) return;
       clearTimeout(settle);
-      dragging={id:event.pointerId,start:mobile.matches?event.clientY:event.clientX,position:target,moved:false};
+      dragging={id:event.pointerId,start:event.clientX,startY:event.clientY,position:target,moved:false};
     });
     viewport.addEventListener('pointermove',event=>{
       if(!dragging||event.pointerId!==dragging.id) return;
-      const delta=(mobile.matches?event.clientY:event.clientX)-dragging.start;
+      const delta=event.clientX-dragging.start;
+      const deltaY=event.clientY-dragging.startY;
+      // Let the browser own vertical touch gestures, including over the shoes.
+      if(!dragging.moved && event.pointerType!=='mouse' && Math.abs(deltaY)>Math.abs(delta) && Math.abs(deltaY)>6){dragging=null;return;}
       if(Math.abs(delta)>6&&!dragging.moved){dragging.moved=true;viewport.setPointerCapture(event.pointerId);root.classList.add('is-dragging');}
       if(dragging.moved){event.preventDefault();target=dragging.position-delta/step;schedule();}
     });
     function release(event){
       if(!dragging || (event.pointerId!==undefined && event.pointerId!==dragging.id)) return;
-      const {id,moved}=dragging;dragging=null;
+      const {id,moved,position:startPosition}=dragging;dragging=null;
       if(viewport.hasPointerCapture(id)) viewport.releasePointerCapture(id);
       root.classList.remove('is-dragging');
-      if(moved){suppressUntil=performance.now()+350;move(Math.round(target));}
+      if(moved){
+        suppressUntil=performance.now()+350;
+        const travel=target-startPosition;
+        const destination=mobile.matches && Math.abs(travel)>.16 && Math.abs(travel)<.5
+          ? Math.round(startPosition)+Math.sign(travel) : Math.round(target);
+        move(destination);
+      }
     }
     window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);window.addEventListener('blur',release);
     viewport.addEventListener('lostpointercapture',release);
