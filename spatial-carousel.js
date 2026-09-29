@@ -15,6 +15,14 @@
     const touchZone = document.createElement('div');
     touchZone.className = 'spatial-touch-zone';
     touchZone.setAttribute('aria-hidden', 'true');
+    const nativeTrack = document.createElement('div');
+    nativeTrack.className = 'spatial-native-track';
+    const nativeStops = Array.from({length:count * 5 + 1}, () => {
+      const stop = document.createElement('span');
+      nativeTrack.append(stop);
+      return stop;
+    });
+    touchZone.append(nativeTrack);
     viewport.append(touchZone);
     touchZone.addEventListener('click', event => {
       if (performance.now() < suppressUntil) return;
@@ -25,6 +33,38 @@
     let position = Number(root.dataset.initial ?? Math.floor(count / 2));
     let target = position, active = -1, width = 1, height = 1, step = 1;
     let frame = 0, lastTime = 0, settle = 0, dragging = null, suppressUntil = 0, focusOnSettle = false;
+    let nativeFrame = 0, nativeSettle = 0, touchDown = false, measuredMobile = null;
+    const nativeOrigin = count * 2;
+    function nativeScroll(value, smooth = false) {
+      touchZone.scrollTo({top:(nativeOrigin + value) * step, behavior:smooth && !reduced.matches ? 'smooth' : 'instant'});
+    }
+    function finishNative() {
+      clearTimeout(nativeSettle);
+      if (!mobile.matches || touchDown || dragging) return;
+      const value = Math.round(touchZone.scrollTop / step - nativeOrigin);
+      // Rebase only at rest, by whole revolutions: never interrupt native momentum.
+      if (value < 0 || value >= count) nativeScroll(wrap(value,count));
+      root.classList.remove('is-scrolling');
+      status.textContent = items[active].dataset.name || items[active].textContent.trim();
+      if(focusOnSettle){focusOnSettle=false;items[active].focus({preventScroll:true});}
+    }
+    touchZone.addEventListener('scroll', () => {
+      if (!mobile.matches) return;
+      suppressUntil=performance.now()+180;
+      root.classList.add('is-scrolling');
+      if (!nativeFrame) nativeFrame=requestAnimationFrame(() => {
+        nativeFrame=0;
+        position=target=touchZone.scrollTop/step-nativeOrigin;
+        draw();
+      });
+      clearTimeout(nativeSettle);
+      nativeSettle=setTimeout(finishNative,220);
+    },{passive:true});
+    touchZone.addEventListener('scrollend',finishNative,{passive:true});
+    touchZone.addEventListener('touchstart',()=>{touchDown=true;clearTimeout(nativeSettle);},{passive:true});
+    const endTouch=()=>{touchDown=false;clearTimeout(nativeSettle);nativeSettle=setTimeout(finishNative,220);};
+    touchZone.addEventListener('touchend',endTouch,{passive:true});
+    touchZone.addEventListener('touchcancel',endTouch,{passive:true});
     const buttons = items.map((item, i) => {
       item.classList.add('spatial-item');
       item.querySelectorAll('img').forEach(img => {img.draggable = false; img.loading = 'eager';});
@@ -76,15 +116,24 @@
       }
     }
     function schedule() {if (!frame) frame=requestAnimationFrame(animate);}
-    function move(value) {clearTimeout(settle);target=value;schedule();}
+    function move(value) {clearTimeout(settle);target=value;if(mobile.matches){nativeScroll(value,true);}else schedule();}
     function select(index) {
       const delta = wrap(index-wrap(target,count)+count/2,count)-count/2;
       move(target+delta);
     }
     function measure() {
-      width=viewport.clientWidth;height=viewport.clientHeight;
+      const nextWidth=viewport.clientWidth, nextHeight=viewport.clientHeight;
+      if(nextWidth===width && nextHeight===height && measuredMobile===mobile.matches) return;
+      cancelAnimationFrame(frame);frame=0;lastTime=0;
+      width=nextWidth;height=nextHeight;measuredMobile=mobile.matches;
       step=mobile.matches ? Math.max(150,height*.33) : Math.max(220,width*.24);
       root.style.setProperty('--stage-width',width+'px');root.style.setProperty('--stage-height',height+'px');
+      if(mobile.matches){
+        nativeTrack.style.height=(step*count*5+height)+'px';
+        nativeStops.forEach((stop,i)=>{stop.style.top=(i*step)+'px';});
+        position=target=wrap(position,count);
+        nativeScroll(position);
+      }
       draw();
     }
     root.classList.add('is-enhanced');measure();
@@ -99,7 +148,7 @@
       else move(Math.round(target)+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1));
     });
     viewport.addEventListener('wheel',event=>{
-      if(event.ctrlKey || (mobile.matches && event.target !== touchZone)) return;
+      if(event.ctrlKey || mobile.matches) return;
       event.preventDefault();
       const delta = Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;
       const pixels = delta*(event.deltaMode===1?16:event.deltaMode===2?height:1);
@@ -107,7 +156,7 @@
       settle=setTimeout(()=>move(Math.round(target)),120);
     },{passive:false});
     viewport.addEventListener('pointerdown',event=>{
-      if(event.button!==0 || dragging || (mobile.matches && event.target !== touchZone)) return;
+      if(event.button!==0 || dragging || (mobile.matches && (event.pointerType!=='mouse' || !touchZone.contains(event.target)))) return;
       clearTimeout(settle);
       dragging={id:event.pointerId,start:event.clientX,startY:event.clientY,position:target,moved:false};
     });
@@ -115,7 +164,7 @@
       if(!dragging||event.pointerId!==dragging.id) return;
       const delta=mobile.matches ? event.clientY-dragging.startY : event.clientX-dragging.start;
       if(Math.abs(delta)>6&&!dragging.moved){dragging.moved=true;viewport.setPointerCapture(event.pointerId);root.classList.add('is-dragging');}
-      if(dragging.moved){event.preventDefault();target=dragging.position-delta/step;schedule();}
+      if(dragging.moved){event.preventDefault();target=dragging.position-delta/step;if(mobile.matches)nativeScroll(target);else schedule();}
     });
     function release(event){
       if(!dragging || (event.pointerId!==undefined && event.pointerId!==dragging.id)) return;
