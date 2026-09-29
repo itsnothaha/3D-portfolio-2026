@@ -11,6 +11,17 @@
     const status = root.querySelector('.spatial-status');
     const dots = root.querySelector('.spatial-dots');
     const shoes = root.dataset.shoes === 'true';
+    // A real hit area lets the browser decide touch ownership before a gesture starts.
+    const touchZone = document.createElement('div');
+    touchZone.className = 'spatial-touch-zone';
+    touchZone.setAttribute('aria-hidden', 'true');
+    viewport.append(touchZone);
+    touchZone.addEventListener('click', event => {
+      if (performance.now() < suppressUntil) return;
+      const hit = document.elementsFromPoint(event.clientX,event.clientY)
+        .map(element => element.closest('.spatial-item')).find(Boolean);
+      if (hit) hit.click();
+    });
     let position = Number(root.dataset.initial ?? Math.floor(count / 2));
     let target = position, active = -1, width = 1, height = 1, step = 1;
     let frame = 0, lastTime = 0, settle = 0, dragging = null, suppressUntil = 0, focusOnSettle = false;
@@ -88,7 +99,7 @@
       else move(Math.round(target)+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1));
     });
     viewport.addEventListener('wheel',event=>{
-      if(event.ctrlKey || (mobile.matches && Math.abs(event.deltaY) >= Math.abs(event.deltaX))) return;
+      if(event.ctrlKey || (mobile.matches && event.target !== touchZone)) return;
       event.preventDefault();
       const delta = Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;
       const pixels = delta*(event.deltaMode===1?16:event.deltaMode===2?height:1);
@@ -96,16 +107,13 @@
       settle=setTimeout(()=>move(Math.round(target)),120);
     },{passive:false});
     viewport.addEventListener('pointerdown',event=>{
-      if(event.button!==0 || dragging) return;
+      if(event.button!==0 || dragging || (mobile.matches && event.target !== touchZone)) return;
       clearTimeout(settle);
       dragging={id:event.pointerId,start:event.clientX,startY:event.clientY,position:target,moved:false};
     });
     viewport.addEventListener('pointermove',event=>{
       if(!dragging||event.pointerId!==dragging.id) return;
-      const delta=event.clientX-dragging.start;
-      const deltaY=event.clientY-dragging.startY;
-      // Let the browser own vertical touch gestures, including over the shoes.
-      if(!dragging.moved && event.pointerType!=='mouse' && Math.abs(deltaY)>Math.abs(delta) && Math.abs(deltaY)>6){dragging=null;return;}
+      const delta=mobile.matches ? event.clientY-dragging.startY : event.clientX-dragging.start;
       if(Math.abs(delta)>6&&!dragging.moved){dragging.moved=true;viewport.setPointerCapture(event.pointerId);root.classList.add('is-dragging');}
       if(dragging.moved){event.preventDefault();target=dragging.position-delta/step;schedule();}
     });

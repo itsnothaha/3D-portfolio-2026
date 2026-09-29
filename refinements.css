@@ -82,15 +82,37 @@ body[class] :is(.water-title,.glass-type,.work-category-title,.home-nav a,.site-
 /* Keep moving cards on inexpensive compositing layers instead of refiltering each frame. */
 .spatial-item .glass-surface{-webkit-backdrop-filter:blur(2.5px) saturate(.85);backdrop-filter:blur(2.5px) saturate(.85)}
 
-/* Mobile glass uses a translucent face and directional highlights, never an outline. */
+/* Mobile glass: a hairline edge, a translucent face and gentle refraction. */
 @media(max-width:720px){
  body[class] :is(.water-title,.glass-type,.work-category-title,.home-nav a,.site-nav a){
-  -webkit-text-stroke:0 transparent;
-  background-image:linear-gradient(155deg,rgba(255,255,255,.78) 0%,rgba(235,240,239,.25) 38%,rgba(188,203,219,.28) 70%,rgba(255,255,255,.6) 100%);
-  text-shadow:0 -.5px 1px #ffffff80,.6px 1.3px 1.6px #7185a347;
+  -webkit-text-stroke:.22px #8295ad73;
+  background-image:linear-gradient(165deg,#ffffff66 0%,#aebccb33 28%,#dce6e91a 45%,#ffffff52 52%,#93a6bd40 78%,#e6edf033 100%);
+  text-shadow:0 -.7px .5px #ffffff80,0 .8px .5px #8598b54d,0 1.5px 1px #7184a333;
  }
  .glass-surface{
-  background:linear-gradient(150deg,#ffffff4d,#e7eee91f 50%,#d7e3ee38);
+  background:linear-gradient(150deg,#ffffff26,#e7eee90d 50%,#aabbd51a);
   -webkit-backdrop-filter:blur(2px) saturate(.9);backdrop-filter:blur(2px) saturate(.9);
+ }
+}
+
+@media(max-width:720px){
+ @supports(backdrop-filter:url('#glass-refraction-mobile')){
+  body .glass-surface{-webkit-backdrop-filter:blur(1px) url('#glass-refraction-mobile') saturate(.95);backdrop-filter:blur(1px) url('#glass-refraction-mobile') saturate(.95)}
+ }
+}
+
+/* Rim lighting must not paint a text-shadow silhouette inside the glass. */
+.glass-edge{display:none;pointer-events:none}
+@media(max-width:720px){
+ body[class] :is(.water-title,.glass-type,.work-category-title,.home-nav a,.site-nav a){
+  background:none;-webkit-text-fill-color:transparent;color:transparent;text-shadow:none;
+  -webkit-text-stroke:.22px #8295ad73;
+ }
+ body .glass-surface{background:#ffffff08;-webkit-backdrop-filter:blur(.35px) saturate(1);backdrop-filter:blur(.35px) saturate(1)}
+ .glass-edge{display:block;position:absolute;inset:0;-webkit-mask-image:var(--edge-mask);mask-image:var(--edge-mask);-webkit-mask-size:100% 100%;mask-size:100% 100%;mask-repeat:no-repeat}
+ .glass-edge--highlight{background:#ffffffbf}
+ .glass-edge--depth{background:#778cad99}
+ @supports(backdrop-filter:url('#glass-refraction-mobile')){
+  body .glass-surface{-webkit-backdrop-filter:blur(.35px) url('#glass-refraction-mobile');backdrop-filter:blur(.35px) url('#glass-refraction-mobile')}
  }
 }

@@ -56,3 +56,9 @@ body.page--work .spatial-item.work-category .work-category-title{font-size:2.7vw
  .spatial-arrow{transform:none}
  .page--footwear .spatial-hint{display:block;padding:0 16px;font-size:11px}
 }
+
+.spatial-touch-zone{display:none}
+@media(max-width:720px){
+ .spatial-touch-zone{display:block;position:absolute;z-index:200;inset:0 18%;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+ .spatial-arrow{transform:rotate(90deg)}
+}

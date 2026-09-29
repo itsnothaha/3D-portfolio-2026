@@ -9,6 +9,10 @@
   svg.setAttribute('aria-hidden', 'true');
   svg.style.cssText = 'position:fixed;width:0;height:0;pointer-events:none';
   svg.innerHTML = '<filter id="glass-refraction" x="-5%" y="-10%" width="110%" height="120%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.018 0.035" numOctaves="2" seed="8" result="texture"/><feDisplacementMap in="SourceGraphic" in2="texture" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter>';
+  const mobileRefraction = svg.firstElementChild.cloneNode(true);
+  mobileRefraction.id = 'glass-refraction-mobile';
+  mobileRefraction.querySelector('feDisplacementMap').setAttribute('scale', '3');
+  svg.append(mobileRefraction);
   document.body.append(svg);
   const surfaces = new Map();
   let frame = 0;
@@ -47,7 +51,23 @@
         surface.setAttribute('aria-hidden', 'true');
         target.classList.add('has-glass-surface');
         target.append(surface);
+        for (const side of ['highlight','depth']) {
+          const edge = document.createElement('span');
+          edge.className = 'glass-edge glass-edge--' + side;
+          edge.setAttribute('aria-hidden','true');
+          target.append(edge);
+        }
         surfaces.set(target, surface);
+      }
+      // Subtract an offset glyph to illuminate only its rim, not its transparent centre.
+      for (const [side, direction] of [['highlight',1],['depth',-1]]) {
+        const rim = document.createElement('canvas');
+        rim.width = canvas.width; rim.height = canvas.height;
+        const paint = rim.getContext('2d');
+        paint.drawImage(canvas,0,0);
+        paint.globalCompositeOperation = 'destination-out';
+        paint.drawImage(canvas,0,direction * ratio * .9);
+        target.querySelector('.glass-edge--'+side).style.setProperty('--edge-mask', `url("${rim.toDataURL()}")`);
       }
       surface.style.setProperty('--glass-mask', `url("${canvas.toDataURL()}")`);
     }
