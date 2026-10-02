@@ -1,21 +1,33 @@
-PORTFOLIO-SITE-2026
+PORTFOLIO — Daria Marakova
 
-Как открыть:
-1. Открой папку Portfolio-site-2026 в VS Code.
-2. Запусти index.html через Live Server.
+Local preview:
+  python -m http.server 8000 --bind 127.0.0.1
+  http://localhost:8000/
 
-Где менять картинки:
-- main page/base.png — большая картинка в hero
-- main page/fish.png — рыба в контактах
-- main page/photo_of_me.png — фото в About
-- main page/seabed.png — дно в контактах
+Pages:
+  index.html, about.html, contacts.html, work.html
+  work files/CGI-VFX/index.html
+  work files/SHOWREEL/index.html
+  work files/SHOES_AND_CLOSES/index.html
 
-Картинки для переключения в WORK:
-- work files/SHOWREEL/showreel.png
-- work files/CGI/cgi.png
-- work files/VFX/vfx.png
-- work files/SHOES_AND_CLOSES/footwear-and-cloth.png
-- work files/AI/ai.png
+Assets:
+  main page/ — backgrounds, fish animations, portrait, icons and contact GLB
+  work files/home_previews/NEW/ — Work category previews
+  work files/CGI-VFX/ — web video and preview images
+  work files/SHOWREEL/ — web showreels and previews
+  work files/SHOES_AND_CLOSES/NEW look/web/ — displayed footwear images
+  Fonts/ — local fonts and licenses
+  vendor/model-viewer/ — local 3D viewer and license
 
-Названия и порядок вкладок меняются в script.js в массиве works.
-Каждая карточка ведет на index.html внутри своей папки.
+Development:
+  node --test tests/fish-cycle.test.cjs
+  scripts/optimize-footwear.py regenerates footwear WebP files from the
+  retained PNG inputs in work files/SHOES_AND_CLOSES/NEW look/ (requires Pillow).
+
+Cleanup, 2026-10-02:
+  Removed 628 unused files (1.06 GB): obsolete scenes/code, old galleries,
+  frame sequences and original media replaced by web copies.
+  Runtime-generated fish filenames were checked separately.
+  Git history, licenses, tests and footwear optimizer inputs are retained.
+  PERFORMANCE.md describes earlier historical measurements; its statements
+  about retained original media predate this cleanup.

@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="water-cursor.css?v=fullscreen2">
   <link rel="stylesheet" href="Fonts/fonts.css?v=grandstander1">
   <link rel="preload" href="Fonts/bagelfatone-full.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="contact-motion.css?v=contacts3">
-  <link rel="preload" href="main page/contact-seabed.webp" as="image" media="(min-width:901px), (min-width:721px) and (orientation:landscape)">
-  <link rel="preload" href="main page/contact-seabed-mobile.webp" as="image" media="(max-width:720px), (max-width:900px) and (orientation:portrait)">
   <link rel="stylesheet" href="glass-nav.css?v=nav1">
   <link rel="stylesheet" href="design-refresh.css?v=1">
   <link rel="stylesheet" href="refinements.css?v=8">
+  <link rel="stylesheet" href="contact-computer.css?v=2">
+  <script type="module" src="vendor/model-viewer/model-viewer.min.js"></script>
 </head>
 <body class="page page--contacts is-entering">
     <nav class="site-nav page-nav contact-page-nav" aria-label="Main navigation">
@@ -25,11 +24,17 @@
   <main class="contacts-page">
     <div class="contact-scene" aria-hidden="true">
       <picture>
-        <source media="(max-width:720px), (max-width:900px) and (orientation:portrait)" srcset="main%20page/contact-seabed-mobile.webp">
-        <img src="main page/contact-seabed.webp" alt="" width="1280" height="716" fetchpriority="high" decoding="async">
+        <source media="(max-width:900px) and (orientation:portrait)" srcset="main%20page/ContactFonMobileNEW.webp">
+        <img src="main page/ContactFonDEKSTOPNEW.webp" alt="" width="2351" height="1316" fetchpriority="high" decoding="async">
       </picture>
-      <div class="contact-motion"></div>
     </div>
+    <model-viewer class="contact-computer" src="main%20page/portfolio%20contact%20mac%20model.glb"
+      alt="Blue vintage iMac with keyboard and mouse" loading="eager"
+      camera-orbit="-125deg 68deg 85%" field-of-view="30deg"
+      environment-image="legacy" exposure="0.9" shadow-intensity="0"
+      camera-controls disable-pan touch-action="none"
+      min-camera-orbit="auto 5deg 45%" max-camera-orbit="auto 175deg 160%"
+      interaction-prompt="none"></model-viewer>
     
     <h1 class="contact-title water-title">Contact</h1>
     <nav class="contact-links" aria-label="Contact links">
@@ -42,7 +47,7 @@
   </main>
   <script src="pages.js?v=layout2"></script>
   <script src="water-cursor.js?v=fullscreen2"></script>
-  <script src="contact-motion.js?v=full2"></script>
   <script src="glass-text.js?v=6"></script>
+  <script src="contact-computer.js?v=2"></script>
 </body>
 </html>

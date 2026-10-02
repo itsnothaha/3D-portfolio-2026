@@ -175,7 +175,7 @@ img{display:block;max-width:100%}
 .work-category:hover .work-category-title{color:var(--coral)}
 
 /* Contacts */
-.page--contacts{background:url('main page/ContactPageFon.optimized.webp') center/cover no-repeat;overflow:hidden}
+.page--contacts{background:none center/cover no-repeat;overflow:hidden}
 .contacts-page{position:relative;min-height:100svh;width:100%}
 .contact-title{
   position:absolute;
@@ -297,7 +297,7 @@ img{display:block;max-width:100%}
   .work-grid{grid-template-columns:1fr;margin:66px auto 0;gap:42px}
   .work-category{gap:11px}.work-category-title{font-size:38px}
 
-  .page--contacts{overflow:hidden;background-image:url('main page/mobileContactFon.optimized.webp');background-position:center -18px;background-size:auto calc(100svh + 18px);background-repeat:no-repeat}
+  .page--contacts{overflow:hidden;background-image:none;background-position:center -18px;background-size:auto calc(100svh + 18px);background-repeat:no-repeat}
   .contacts-page{min-height:100svh}
   .contact-title{top:90px;font-family:'Rock 3D',system-ui,sans-serif;font-size:clamp(44px,13vw,58px);text-transform:uppercase;transform:translateX(-50%)}
   .contact-links{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:clamp(42px,8svh,68px);padding-top:clamp(190px,24svh,220px);font-size:clamp(34px,10vw,46px);text-transform:uppercase}
