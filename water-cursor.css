@@ -10,3 +10,8 @@ html:not(.has-water-cursor) :is(a,button,[role="button"]){cursor:pointer}
 @media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.water-cursor,.water-ring{display:none!important}}
 /* Native fullscreen/top-layer video cannot display the body-mounted water cursor. */
 html.has-water-cursor video,html.has-water-cursor video *,html.has-water-cursor :fullscreen,html.has-water-cursor :fullscreen *,html.has-water-cursor .video-dialog,html.has-water-cursor .video-dialog *{cursor:auto!important}
+
+/* Dialogs are in the browser top layer, above a body-mounted custom cursor. */
+html.has-water-cursor:has(dialog[open]) *,html.has-water-cursor dialog[open]::backdrop{cursor:auto!important}
+html.has-water-cursor dialog[open] :is(button,a,[role="button"]){cursor:pointer!important}
+html:has(dialog[open]) :is(.water-cursor,.water-ring){display:none!important}
