@@ -27,7 +27,7 @@
 
 /* Centre lane owns object scrolling; outer quarters preserve normal page touch scroll. */
 @media(max-width:720px){
- .cloth-scroll{inset:0 25%;overflow-x:hidden;overflow-y:scroll;scroll-snap-type:y mandatory;touch-action:pan-y pinch-zoom;overscroll-behavior-y:contain;overscroll-behavior-x:auto}
+ .cloth-scroll{inset:0 25%;overflow-x:scroll;overflow-y:hidden;scroll-snap-type:x mandatory;touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;overscroll-behavior-y:auto}
  .cloth-scroll.is-dragging,.cloth-scroll.is-wheeling{scroll-snap-type:none}
- .cloth-viewport{touch-action:pan-y pinch-zoom}
+ .cloth-viewport{touch-action:pan-x pan-y pinch-zoom}
 }

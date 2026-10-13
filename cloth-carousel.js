@@ -32,8 +32,8 @@
       root.querySelector('.spatial-status').textContent=items[active].dataset.name;
     }
   }
-  const offset=()=>mobile.matches?scroller.scrollTop:scroller.scrollLeft;
-  function scrollToOffset(value,smooth=false){scroller.scrollTo({[mobile.matches?'top':'left']:value,behavior:smooth&&!reduced.matches?'smooth':'instant'});}
+  const offset=()=>scroller.scrollLeft;
+  function scrollToOffset(value,smooth=false){scroller.scrollTo({left:value,behavior:smooth&&!reduced.matches?'smooth':'instant'});}
   function go(value,smooth=true){scrollToOffset((origin+value)*step,smooth);} 
   function settle(){if(touching||drag||wheelStart!==null)return;clearTimeout(timer);
     if(position<0||position>=count)go(wrap(position),false);
@@ -41,9 +41,9 @@
   new ResizeObserver(()=>{
     if(width===viewport.clientWidth && height===viewport.clientHeight)return;
     width=viewport.clientWidth;height=viewport.clientHeight;step=Math.max(170,width*(width<720?.55:.26));
-    track.style.width=mobile.matches?'1px':(count*5*step+scroller.clientWidth)+'px';
-    track.style.height=mobile.matches?(count*5*step+height)+'px':'1px';
-    stops.forEach((el,i)=>{el.style.left=mobile.matches?'0px':i*step+'px';el.style.top=mobile.matches?i*step+'px':'0px';});
+    track.style.width=(count*5*step+scroller.clientWidth)+'px';
+    track.style.height='1px';
+    stops.forEach((el,i)=>{el.style.left=i*step+'px';el.style.top='0px';});
     position=wrap(position);go(position,false);draw();
   }).observe(viewport);
   scroller.addEventListener('scroll',()=>{
@@ -55,10 +55,10 @@
   scroller.addEventListener('touchstart',()=>{touching=true;},{passive:true});
   const endTouch=()=>{touching=false;clearTimeout(timer);timer=setTimeout(settle,220);};
   scroller.addEventListener('touchend',endTouch,{passive:true});scroller.addEventListener('touchcancel',endTouch,{passive:true});
-  scroller.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button===0)drag={id:e.pointerId,x:mobile.matches?e.clientY:e.clientX,left:offset(),moved:false};});
+  scroller.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button===0)drag={id:e.pointerId,x:e.clientX,left:offset(),moved:false};});
   scroller.addEventListener('pointermove',e=>{
     if(!drag||drag.id!==e.pointerId)return;
-    const delta=(mobile.matches?e.clientY:e.clientX)-drag.x;
+    const delta=e.clientX-drag.x;
     if(Math.abs(delta)>6){drag.moved=true;scroller.setPointerCapture(e.pointerId);scroller.classList.add('is-dragging');}
     if(drag.moved)scrollToOffset(drag.left-delta);
   });
@@ -71,7 +71,7 @@
   viewport.addEventListener('wheel',e=>{
     if(e.ctrlKey)return;
     // Mobile edge lanes remain owned by the document, even with a trackpad.
-    if(mobile.matches){const r=scroller.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right)return;}
+    if(mobile.matches){const r=scroller.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||Math.abs(e.deltaY)>=Math.abs(e.deltaX))return;}
     const raw=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
     if(!raw)return;
     e.preventDefault();
